@@ -235,18 +235,18 @@ class MX_Router extends CI_Router
 
 	public function set_class($class)
 	{
-		/* $suffix = strval($this->config->item('controller_suffix'));
+		// $suffix = $this->config->item('controller_suffix');
+		// if (strpos($class, $suffix) === FALSE)
+		// {
+		// 	$class .= $suffix;
+		// }
+		// parent::set_class($class);
+
 		$suffix = $this->config->item('controller_suffix');
-		if (strpos($class, $suffix) === FALSE)
-		{
-			$class .= $suffix;
-		} */
-
-		$suffix = (string) $this->config->item('controller_suffix');
-		if ($suffix && strpos($class, $suffix) === FALSE) {
-				$class .= $suffix;
-		}
-
-		parent::set_class($class);
+    if ($suffix && strpos($class, $suffix) === FALSE)
+    {
+        $class .= $suffix;
+    }
+    parent::set_class($class);
 	}
 }	

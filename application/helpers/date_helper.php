@@ -50,12 +50,3 @@ if (!function_exists('dynamic_year')) {
     return $years;
   }
 }
-
-if (!function_exists('title_case')) {
-  function title_case($name) {
-    $lower_name = strtolower($name);
-    $title_name = ucwords($lower_name);
-
-    return $title_name;
-  }
-}

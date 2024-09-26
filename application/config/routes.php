@@ -54,5 +54,5 @@ $route['404_override'] = 'notfound';
 $route['translate_uri_dashes'] = FALSE;
 
 /* API ROUTES */
-// -- icds
-$route['v1/icds'] = 'api/icds';
+// -- users
+$route['v1/users'] = 'api/users';

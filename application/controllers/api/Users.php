@@ -8,9 +8,7 @@ class Users extends RestController {
   public function __construct($config = 'rest')
   {
     parent::__construct($config);
-    // setting cross origin
     cross_origin();
-    $this->load->helper('jwt_helper'); // Load the JWT helper
   }
   
   public function index_get()

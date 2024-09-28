@@ -16,7 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 # Load phpdotenv
 // Use this code if your .env files on *CodeIgniter ROOT* folder
 $hook['pre_system'] = function() {
-	$dotenv = Dotenv\Dotenv::create(FCPATH);
+	$dotenv = Dotenv\Dotenv::createImmutable(FCPATH);
 	$dotenv->load();
 };
 

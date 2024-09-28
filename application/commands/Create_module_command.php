@@ -7,14 +7,17 @@ class Create_module_command
     if (empty($params)) {
       echo "Please specify the controller name.\n";
       return;
+			exit;
     }
     
     $module_name = strtolower($params[0]);
-    $module_path = APPPATH . "modules/$module_name}";
+		// controller path
+    $controller_path = APPPATH . "modules/{$module_name}/controllers/" . ucfirst($module_name) . ".php";
     
-    if (file_exists($module_path)) {
+    if (file_exists($controller_path)) {
       echo "Module '$module_name' already exists.\n";
       return;
+			exit;
     }
 
     // Create the module directory if it doesn't exist
@@ -24,9 +27,8 @@ class Create_module_command
       echo "Module '$module_name' created successfully.\n";
     }
 
-    // controller path
-    $controller_path = APPPATH . "modules/{$module_name}/controllers/" . ucfirst($module_name) . ".php";
     
+    // controller template
 		$controller_template = "<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class " . ucfirst($module_name) . " extends MX_Controller {

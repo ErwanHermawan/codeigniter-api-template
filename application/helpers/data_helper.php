@@ -147,8 +147,6 @@ if (!function_exists('data_message')) {
 	}
 }
 
-
-
 if (!function_exists('data_history')) {
 	function data_history($data) {
 		$ci =& get_instance();

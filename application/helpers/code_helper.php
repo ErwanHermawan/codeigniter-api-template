@@ -8,7 +8,7 @@ if (!function_exists('get_code'))
 		$ci->load->model('global_model');
 		
 		// Fetch the code from the database
-		$row = $ci->global_model->get_code($table, $column, $prefix)->row();
+		$row = $ci->global_model->get_code($table, $column, $prefix);
 		
 		// Extract the numeric portion of the code, assuming the code starts after the prefix
 		$last_code = isset($row->code) ? $row->code : $prefix . str_repeat('0', $length);
@@ -35,7 +35,7 @@ if (!function_exists('get_code_date'))
 		// Load model and get the code from the database
 		$ci = get_instance();
 		$ci->load->model('global_model');
-		$row = $ci->global_model->get_code($table, $column, $code_date)->row();
+		$row = $ci->global_model->get_code($table, $column, $code_date);
 		
 		// Default code if no previous code exists
 		$last_code = isset($row->code) ? $row->code : $code_date . '0000';

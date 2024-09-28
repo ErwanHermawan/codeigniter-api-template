@@ -12,20 +12,24 @@ if (!function_exists('generate_jwt')) {
 	* @return string The encoded JWT token
 	*/
 	function generate_jwt($data) {
-		$CI =& get_instance(); // Get the CodeIgniter instance
+		$CI = &get_instance(); // Get the CodeIgniter instance
 		$CI->load->config('jwt'); // Load the JWT config
-		$secret_key = $CI->config->item('jwt_key'); // Load secret key from config
-		$expiration = $CI->config->item('token_timeout'); // Load expiration time from config
-
-		// Convert minute to seconds
-    $expiration_seconds = $expiration * 60;
-
+		
+		// Retrieve secret key and token expiration from config
+		$secret_key = $CI->config->item('jwt_key');
+		$expiration_minutes = $CI->config->item('token_timeout');
+		
+		// Convert expiration from minutes to seconds
+		$expiration_seconds = $expiration_minutes * 60;
+		
+		// Define the payload
 		$token_data = [
 			"iat" => time(), // Issued at
 			"exp" => time() + $expiration_seconds, // Expiration time
-			"data" => $data
+			"data" => $data // Custom data payload
 		];
 		
+		// Encode the JWT using the secret key and HS256 algorithm
 		return JWT::encode($token_data, $secret_key, 'HS256');
 	}
 }
@@ -38,15 +42,23 @@ if (!function_exists('decode_jwt')) {
 	* @return mixed The decoded data or false on failure
 	*/
 	function decode_jwt($token) {
-		$CI =& get_instance(); // Get the CodeIgniter instance
-		$CI->load->config('jwt');
-		$secret_key = $CI->config->item('jwt_key'); // Load secret key from config
+		$CI = &get_instance(); // Get the CodeIgniter instance
+		$CI->load->config('jwt'); // Load the JWT config
+		
+		// Retrieve secret key from config
+		$secret_key = $CI->config->item('jwt_key');
+		
+		// Remove 'Bearer ' from the token if present
 		$token = str_replace('Bearer ', '', $token);
 		
 		try {
+			// Decode the JWT and return the data
 			return JWT::decode($token, new Key($secret_key, 'HS256'));
 		} catch (Exception $e) {
-			return false; // Return false on failure or handle the exception as needed
+			// Log the error message for debugging (optional)
+			log_message('error', 'JWT Decode Error: ' . $e->getMessage());
+			
+			return false; // Return false on failure
 		}
 	}
 }

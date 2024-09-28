@@ -2,7 +2,7 @@
 
 // Ensure the script is running in CLI mode
 if (PHP_SAPI !== 'cli') {
-    exit('This script can only be run from the command line.');
+	exit('This script can only be run from the command line.');
 }
 
 // Setup basic $_SERVER variables for CLI compatibility if needed
@@ -18,7 +18,7 @@ require_once __DIR__ . '/index.php';
 
 // Optionally load the command handler from HMVC modules (if necessary)
 if (file_exists(APPPATH . 'commands/Command_handler.php')) {
-    require_once APPPATH . 'commands/Command_handler.php';
+	require_once APPPATH . 'commands/Command_handler.php';
 } else {
-    echo "Command handler not found in commands folder.\n";
-}
+	echo "Command handler not found in commands folder.\n";
+}	

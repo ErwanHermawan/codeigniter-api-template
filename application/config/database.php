@@ -94,5 +94,4 @@ $db['default'] = array(
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE,
-	'socket' => '/opt/lampp/var/mysql/mysql.sock',
 );

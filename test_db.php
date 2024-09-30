@@ -18,7 +18,7 @@ $password = $_ENV['DB_PASSWORD'];
 $dbname = $_ENV['DB_NAME'];
 
 // Attempt to connect to MySQL
-$mysqli = new mysqli("localhost", "root", "root", "db_example");
+$mysqli = new mysqli($host, $user, $password, $dbname);
 
 // Check connection
 if ($mysqli->connect_error) {

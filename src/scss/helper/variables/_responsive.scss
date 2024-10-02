@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Mixin: Responsive
+   ========================================================================== */
+
+// large
+@mixin large {
+  @media only screen and (max-width: screen(large)) {
+    @content;
+  }
+}
+
+// medium
+@mixin medium {
+  @media only screen and (max-width: screen(medium)) {
+    @content;
+  }
+}
+
+// small
+@mixin small {
+  @media only screen and (max-width: screen(small)) {
+    @content;
+  }
+}
+
+// x-small
+@mixin x-small {
+  @media only screen and (max-width: screen(x-small)) {
+    @content;
+  }
+}
+
+// retina
+@mixin retina {
+  @media only screen and (max-width: screen(retina)) {
+    @content;
+  }
+}
+
+// custom
+@mixin mq($width) {
+  @media only screen and (max-width: $width) {
+    @content;
+  }
+}

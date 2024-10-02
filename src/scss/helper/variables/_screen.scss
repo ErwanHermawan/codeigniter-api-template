@@ -1,0 +1,17 @@
+/* ==========================================================================
+   Variable: Screen
+   ========================================================================== */
+
+// screen
+$screen: (
+  // Large screen / desktop
+  large: 1199.98px,
+  // Medium screen / tablet
+  medium: 991.98px,
+  // Small screen / phone
+  small: 767.98px,
+  // Extra small screen / phone
+  x-small: 575.86px,
+  // Retina iPhone
+  retina: 320px
+);

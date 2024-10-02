@@ -1,0 +1,128 @@
+/* ==========================================================================
+   Mixin
+   ========================================================================== */
+
+/* text-indent-hide
+  ========================================================================== */
+@mixin text-indent-hide {
+  text-indent: -9999999px;
+}
+
+/* ellipsis
+  ========================================================================== */
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* multiline-ellipsis
+  ========================================================================== */
+@mixin multiline-ellipsis($row) {
+  overflow: hidden;
+  display: block;
+  display: -webkit-box;
+  -webkit-line-clamp: $row;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+}
+
+/* Shadow
+   ========================================================================== */
+@mixin shadow($size) {
+  box-shadow: map-get($shadow, number(#{$size}));
+}
+
+/* Radius
+   ========================================================================== */
+@mixin radius($size) {
+  border-radius: map-get($radius, number(#{$size}));
+}
+
+/* clearfix
+    ========================================================================== */
+@mixin clearfix {
+  &::before,
+  &::after {
+    content: " ";
+    display: table;
+  }
+  &::after {
+    clear: both;
+  }
+}
+
+/* remove-tap-highlight
+  ========================================================================== */
+@mixin remove-tap-highlight {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  user-select: none;
+}
+
+/* scroll
+  ========================================================================== */
+@mixin scroll($coor, $scrolling: "no-touch", $scrollbar: "show") {
+  @if ($coor == "x") {
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+  } @else {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @if ($scrolling == "touch") {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @if ($scrollbar == "hide") {
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      display: none;
+      width: 0;
+    }
+  }
+}
+
+/* placeholder-color
+   ========================================================================== */
+@mixin placeholder-color($color) {
+  &::-webkit-input-placeholder {
+    color: $color;
+    -webkit-text-fill-color: $color;
+  }
+  &:-webkit-input-placeholder {
+    color: $color;
+    -webkit-text-fill-color: $color;
+  }
+  &::-moz-placeholder {
+    color: $color;
+    -webkit-text-fill-color: $color;
+  }
+  &:-moz-placeholder {
+    color: $color;
+    -webkit-text-fill-color: $color;
+  }
+  &::-ms-input-placeholder {
+    color: $color;
+    -webkit-text-fill-color: $color;
+  }
+  &:-ms-input-placeholder {
+    color: $color;
+    -webkit-text-fill-color: $color;
+  }
+  &:placeholder-shown {
+    color: $color;
+    -webkit-text-fill-color: $color;
+  }
+}
+
+/* firefox-browser
+  ========================================================================== */
+@mixin firefox-browser {
+  @-moz-document url-prefix() {
+    @content;
+  }
+}
+

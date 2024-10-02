@@ -35,3 +35,4 @@ vendor/
 # ENV File
 #-------------------------
 .env
+node_modules

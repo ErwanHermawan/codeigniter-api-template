@@ -68,6 +68,56 @@
           </ul>
           <!-- Master End -->
 
+					<!-- Report -->
+          <ul>
+            <li class="text-muted menu-title">Laporan</li>
+            <li class="has_sub">
+              <a href="javascript:void(0);" class="waves-effect <?= ($navigation_menu == 'report' ? 'subdrop active' : ''); ?>">
+                <i class="mdi mdi-file-document-outline"></i><span>Laporan Penjualan</span><span class="menu-arrow"></span>
+              </a>
+              <ul class="list-unstyled side-menu-dropdown">
+                <li>
+                  <a href="<?= base_url('report/sales-periode'); ?>">Periode</a>
+                </li>
+                <li>
+                  <a href="<?= base_url('report/sales-customer'); ?>" data-package="basic">Pelanggan</a>
+                </li>
+                <li>
+                  <a href="<?= base_url('report/sales-product'); ?>">Produk</a>
+                </li>
+                <li>
+                  <a href="<?= base_url('report/sales-category'); ?>">Kategori</a>
+                </li>
+                <li>
+                  <a href="<?= base_url('report/sales-payment'); ?>" data-package="basic">Metode Pembayaran</a>
+                </li>
+                <li>
+                  <a href="<?= base_url('report/sales-type'); ?>" data-package="basic">Jenis Pembayaran</a>
+                </li>
+                <li>
+                  <a href="<?= base_url('report/sales-served'); ?>" data-package="basic">Dilayani Oleh</a>
+                </li>
+              </ul>
+            </li>
+            <li class="has_sub">
+              <a href="javascript:void(0);" class="waves-effect <?= ($navigation_menu == 'accounting' ? 'subdrop active' : ''); ?>">
+                <i class="mdi mdi-calculator"></i><span>Accounting</span><span class="menu-arrow"></span>
+              </a>
+              <ul class="list-unstyled side-menu-dropdown">
+                <li>
+                  <a href="<?= base_url('accounting/cash-flow'); ?>">Data Arus Kas</a>
+                </li>
+                <li>
+                  <a href="<?= base_url('accounting/cash-detail'); ?>">Data Rincian Kas</a>
+                </li>
+                <li>
+                  <a href="<?= base_url('accounting/cash-netprofit'); ?>">Data Laba Rugi</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <!-- Report End -->
+
           <!-- Settings -->
           <ul>
             <li class="text-muted menu-title">Pengaturan</li>
@@ -86,19 +136,16 @@
                 <i class="mdi mdi-account-box"></i><span>Users</span>
               </a>
             </li>
-            <li>
-              <a href="<?= base_url('logout'); ?>" class="waves-effect text-danger js-logout <?= ($navigation_menu == 'logout' ? 'active' : ''); ?>">
-                <i class="mdi mdi-logout"></i><span>Logout</span>
-              </a>
-            </li>
             <!-- Settings End -->
           </ul>
-          <div class="clearfix"></div>
         </div>
         <!-- Sidebar -->
-        <div class="clearfix"></div>
-
       </div>
+			<div class="logout-item">
+				<a href="<?= base_url('logout'); ?>" class="waves-effect text-danger js-logout <?= ($navigation_menu == 'logout' ? 'active' : ''); ?>">
+					<i class="mdi mdi-logout"></i><span>Logout</span>
+				</a>
+			</div>
 
     </div>
 

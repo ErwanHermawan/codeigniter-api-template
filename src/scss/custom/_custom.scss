@@ -17,16 +17,23 @@
 	margin-top: 16px;
 }
 
-.logout-item {
+.btn-logout {
 	position: absolute !important;
 	background-color: #fff;
 	left: 0;
 	bottom: 0;
 	width: 100%;
 	display: block;
-	a {
+	button {
+		border: none;
+		outline: none;
+		background-color: transparent;
 		display: block;
 		padding: 24px 30px;
+		text-align-last: left;
+	}
+	i {
+		margin-right: 12px;
 	}
 }
 
@@ -38,11 +45,27 @@
 .user-profile {
 	display: block;
 	border-radius: 50%;
-	border: solid 1px #6ab058;
+	border: solid 1px $primary;
 	width: 40px;
 	height: 40px;
 	overflow: hidden;
 	&__el {
+		display: block;
+		width: 100%;
+		height: 100%;
+		background-position: center;
+		background-size: cover;
+	}
+}
+
+.user-avatar {
+	width: 48px;
+	height: 48px;
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 50%;
+	overflow: hidden;
+	&__img {
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -56,19 +79,18 @@
 	display: block;
 }
 
+.dashboard-logo img,
+.login-logo img {
+	height: 40px;
+	display: block;
+}
+
 .dashboard-logo {
 	margin: 16px 20px;
 }
 
 .login-logo img {
-	height: 68px;
-	display: block;
 	margin: 0 auto;
-}
-
-.dashboard-logo img {
-	height: 40px;
-	display: block;
 }
 
 .side-menu-dropdown a {
@@ -90,7 +112,7 @@
 }
 
 .side-menu-dropdown .active a::before {
-	background-color: #6ab058;
+	background-color: $primary;
 }
 
 .wg-db {
@@ -166,7 +188,55 @@
 	}
 }
 
-@media only screen and (max-width: 991.98px) {
+* .c-primary {
+	color: $primary;
+}
+
+.btn-icon {
+	padding: 4px 8px !important;
+	font-size: 16px;
+}
+
+.table > tbody > tr > td {
+	vertical-align: middle;
+}
+
+.table > thead > tr > th {
+	vertical-align: bottom;
+	border-bottom: solid 4px;
+	border-color: #ebeff2;
+}
+
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc_disabled:before,
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after {
+	font-family: "Roboto";
+}
+
+div#DataTables_Table_0_wrapper.dataTables_wrapper.container-fluid.dt-bootstrap4.no-footer {
+	padding: 0 !important;
+}
+
+.datatable-custom .dataTables_filter {
+	display: none;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
+	top: 50%;
+	left: 8px;
+	transform: translateY(-50%);
+	line-height: 16px;
+}
+
+@include medium {
 	#wrapper.enlarged .topbar .topbar-left,
 	.topbar .topbar-left {
 		position: absolute;
@@ -176,7 +246,7 @@
 	}
 }
 
-@media (max-width: 767px) {
+@include small {
 	.user-profile {
 		display: none;
 	}
@@ -186,7 +256,7 @@
 	}
 }
 
-@media only screen and (max-width: 575.86px) {
+@include x-small {
 	.side-menu {
 		display: none;
 	}

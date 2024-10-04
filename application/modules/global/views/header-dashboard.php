@@ -16,7 +16,7 @@
       <!-- LOGO -->
       <div class="topbar-left">
         <a href="<?= base_url(''); ?>" class="dashboard-logo">
-          <img src="<?= ASSETS_IMG; ?>logo/rzf-resto.png" alt="RZF Resto Logo" />
+          <img src="<?= ASSETS_IMG; ?>logo/logo.svg" alt="Company Logo" />
         </a>
       </div>
 
@@ -141,10 +141,10 @@
         </div>
         <!-- Sidebar -->
       </div>
-			<div class="logout-item">
-				<a href="<?= base_url('logout'); ?>" class="waves-effect text-danger js-logout <?= ($navigation_menu == 'logout' ? 'active' : ''); ?>">
+			<div class="btn-logout">
+				<button type="button" class="btn-logout waves-effect text-danger js-logout">
 					<i class="mdi mdi-logout"></i><span>Logout</span>
-				</a>
+				</button>
 			</div>
 
     </div>

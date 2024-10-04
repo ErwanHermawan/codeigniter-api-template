@@ -3,7 +3,7 @@
 @description: Indexing all core
 --------------------------------------------------------------------------------- */
 
-import DataTableInit from "./DataTableInit";
+import DataTable from "./DataTable";
 import SweetAlert from "./SweetAlert";
 import Dropify from "./Dropify";
 import TemporaryAlert from "./TemporaryAlert";
@@ -17,16 +17,16 @@ import Dropdown from "./Dropdown";
 import CheckBox from "./CheckBox";
 
 export {
-  DataTableInit,
-  SweetAlert,
-  Dropify,
-  TemporaryAlert,
-  BackButton,
-  DatePickerInput,
-  SelectInput,
-  EditableTables,
-  ChangeFormatNumber,
-  Password,
-  Dropdown,
-  CheckBox,
+	DataTable,
+	SweetAlert,
+	Dropify,
+	TemporaryAlert,
+	BackButton,
+	DatePickerInput,
+	SelectInput,
+	EditableTables,
+	ChangeFormatNumber,
+	Password,
+	Dropdown,
+	CheckBox,
 };

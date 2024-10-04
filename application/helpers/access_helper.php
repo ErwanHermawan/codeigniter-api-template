@@ -1,14 +1,17 @@
 <?php
-if (!function_exists('access_block')) {
+if (!function_exists('check_auth')) {
 	/**
 	* Check if access should be blocked based on user session status.
 	*
 	* @return bool Returns true if access should be blocked, false otherwise.
 	*/
-	function access_block() {
+	function check_auth() {
 		$ci =& get_instance();
 		
 		// Check if the user status is not '1' (assuming '1' means access is granted)
-		return $ci->session->userdata('status') !== '1';
+		if (!$ci->session->userdata('logged_in')) {
+			// Redirect to login page if not logged in
+			redirect('login');
+		}
 	}
 }

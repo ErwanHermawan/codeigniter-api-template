@@ -13,16 +13,20 @@ import SweetAlert from "./SweetAlert";
 import Validation from "./Validation";
 import Alert from "./Alert";
 import Scrolllable from "./Scrolllable";
+import Form from "./Form";
+import HttpRequest from "./HttpRequest";
 
 export {
-  Currency,
-  Session,
-  FilterData,
-  EditTable,
-  DeleteData,
-  SweetAlert,
-  // FormatNumber,
-  Validation,
-  Scrolllable,
-  Alert,
+	Currency,
+	Session,
+	FilterData,
+	EditTable,
+	DeleteData,
+	SweetAlert,
+	// FormatNumber,
+	Validation,
+	Scrolllable,
+	Alert,
+	Form,
+	HttpRequest,
 };

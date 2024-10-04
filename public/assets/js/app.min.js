@@ -25,7 +25,6 @@ var App = function () {
   var ready = function ready() {
     (function ($) {
       // -- core initialization
-      _core.DataTableInit.init();
       _core.SweetAlert.init();
       _core.Dropify.init();
       _core.TemporaryAlert.init();
@@ -37,6 +36,7 @@ var App = function () {
       _core.Password.init();
       _core.Dropdown.init();
       _core.CheckBox.init();
+      _core.DataTable.init();
 
       // -- components initialization
       _components.Header.init();
@@ -101,9 +101,9 @@ var Header = function () {
   // handleLogout
   var handleLogout = function handleLogout() {
     $(".js-logout").on("click", function (e) {
+      e.preventDefault();
       _utilities.Session.remove("userData");
       location.href = _variables.WEB_URL.login;
-      e.preventDefault();
     });
   };
 
@@ -118,30 +118,29 @@ var Header = function () {
 }();
 var _default = exports["default"] = Header;
 
-},{"../utilities":29,"../variables":33}],3:[function(require,module,exports){
+},{"../utilities":31,"../variables":35}],3:[function(require,module,exports){
 "use strict";
 
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 var _variables = require("../variables");
 var _utilities = require("../utilities");
-/* ------------------------------------------------------------------------------
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; } /* ------------------------------------------------------------------------------
 @name: Login
-@description: Login
---------------------------------------------------------------------------------- */
-
-// --- variables
-
+--------------------------------------------------------------------------------- */ // --- variables
 // --- utilities
-
-var _userData = JSON.parse(_utilities.Session.get("userData"));
+// Form Validation
 var ElementSelector = [{
   id: "email",
   validation: {
     required: true,
-    email: true
+    email: true,
+    invalid: true
   }
 }, {
   id: "password",
@@ -153,74 +152,66 @@ var ElementSelector = [{
 }];
 var ElementEvents = ["input", "blur"];
 var Login = function () {
-  // handleCheckLogged
-  var handleCheckLogged = function handleCheckLogged() {
-    if (_userData) {
-      if (_userData.logged) {
-        location.href = _variables.WEB_URL.base;
-      }
-    }
-  };
-
-  // handleRunValidation
+  // Handle Run Validation
   var handleRunValidation = function handleRunValidation() {
-    _utilities.Validation.config(ElementEvents, ElementSelector);
+    _utilities.Form.validation(ElementEvents, ElementSelector);
   };
 
   // Handle Click Validation
   var handleClickValidation = function handleClickValidation() {
     $('.js-auth-login button[type="submit"]').on("click", function (e) {
+      e.preventDefault();
       $.each(ElementSelector, function (i, v) {
         $("#" + v.id).blur();
       });
       if ($(".error").length === 0) {
-        handleLogin();
+        handleLoginUser();
       }
-      e.preventDefault();
     });
   };
-
-  // handleLogin
-  var handleLogin = function handleLogin() {
-    var _email = $(".js-auth-login").find("#email").val();
-    var _password = $(".js-auth-login").find("#password").val();
-    $.ajax({
-      url: _variables.API_URL.login,
-      method: "POST",
-      dataType: "JSON",
-      data: {
-        email: _email,
-        password: _password
-      },
-      beforeSend: function beforeSend() {
-        var _loader = "<span class=\"loader\"><span></span><span></span><span></span><span></span></span> Mengirim ....";
-        $(".js-auth-login button[type='submit']").html(_loader);
-      },
-      success: function success(response) {
-        var _data = response.data;
-        var _status = response.status;
-        var _message = response.message;
-        if (_status) {
-          _utilities.Session.set("userData", JSON.stringify(_data));
-          location.href = _variables.WEB_URL.base;
-        } else {
-          _utilities.Alert.enable(_message, "error");
+  var handleLoginUser = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var username, password, formData, data, response;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            username = $(".js-auth-login").find("#username").val();
+            password = $(".js-auth-login").find("#password").val();
+            formData = new FormData();
+            formData.append("username", username);
+            formData.append("password", password);
+            data = {
+              url: _variables.API_URL.login,
+              method: "POST",
+              data: formData
+            };
+            _context.next = 8;
+            return _utilities.HttpRequest.ajax(data);
+          case 8:
+            response = _context.sent;
+            console.log(response);
+            if (response.status) {
+              _utilities.Session.set("userData", JSON.stringify(response.data));
+              location.href = _variables.WEB_URL.dashboard;
+            } else {
+              _utilities.SweetAlert.config(response.message, "error");
+            }
+          case 11:
+          case "end":
+            return _context.stop();
         }
-        $(".js-auth-login button[type='submit']").html("Masuk");
-      },
-      error: function error(response) {
-        var _response = response.responseJSON;
-        var _message = _response.message;
-        _utilities.Alert.enable(_message, "error");
-        $(".js-auth-login button[type='submit']").html("Masuk");
-      }
-    });
-  };
+      }, _callee);
+    }));
+    return function handleLoginUser() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  // initx
   var init = function init() {
     if ($(".js-auth-login").length) {
-      handleCheckLogged();
-      handleRunValidation();
       handleClickValidation();
+      handleRunValidation();
     }
   };
   return {
@@ -229,7 +220,7 @@ var Login = function () {
 }();
 var _default = exports["default"] = Login;
 
-},{"../utilities":29,"../variables":33}],4:[function(require,module,exports){
+},{"../utilities":31,"../variables":35}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -334,7 +325,7 @@ var Meta = function () {
 }();
 var _default = exports["default"] = Meta;
 
-},{"../utilities":29,"../variables":33}],5:[function(require,module,exports){
+},{"../utilities":31,"../variables":35}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -343,6 +334,7 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _variables = require("../variables");
 var _utilities = require("../utilities");
+var _core = require("../core");
 /* ------------------------------------------------------------------------------
 @name: Users
 @description: Users
@@ -351,6 +343,10 @@ var _utilities = require("../utilities");
 // --- variables
 
 // --- utilities
+
+// --- core
+
+var userData = JSON.parse(_utilities.Session.get("userData"));
 
 // Form UserSelector
 var UserSelector = [{
@@ -389,307 +385,52 @@ var UserSelector = [{
 }];
 var ElementEvents = ["input", "blur"];
 var Users = function () {
-  // handleRunValidation
-  var handleRunValidation = function handleRunValidation() {
-    _utilities.Validation.config(ElementEvents, UserSelector);
-  };
-
-  // handleClickValidation
-  var handleClickValidation = function handleClickValidation() {
-    $('.js-form-user button[type="submit"]').on("click", function (e) {
-      var _user_id = $('input[name="user_id"]').val();
-      $.each(UserSelector, function (i, v) {
-        $("#" + v.id).blur();
-      });
-      if (!_variables.WHITESPACE.test(_user_id)) {
-        $('input[name="password"]').parents(".error").removeClass("error");
-        $('input[name="password"]').next(".form-alert").removeClass("error");
-        $('input[name="confirm_password"]').parents(".error").removeClass("error");
-        $('input[name="confirm_password"]').next(".form-alert").removeClass("error");
-      }
-      if ($(".error").length === 0) {
-        handleFormData();
-      }
-      e.preventDefault();
-    });
-  };
-
-  // handleGetData
-  var handleGetData = function handleGetData(_filter) {
-    $.ajax({
-      url: _variables.API_URL.usersPage(_filter.startPage),
+  // Handle Run DataTable
+  var handleRunDataTable = function handleRunDataTable() {
+    var dataSetting = {
+      selector: "js-data-users",
+      url: _variables.API_URL.USERS,
       method: "GET",
-      dataType: "JSON",
-      data: {
-        start_page: _filter.startPage,
-        limit_page: _filter.limitPage,
-        keyword: _filter.keyword
-      },
-      beforeSend: function beforeSend() {
-        var _loader = "<tr>\n                        <td colspan=\"8\" class=\"text-center\">\n                          <div class=\"spinner-border text-custom m-2\" role=\"status\">\n                            <span class=\"sr-only\">Loading...</span>\n                          </div>\n                        </td>\n                      </tr>";
-        $(".js-user-result").html(_loader);
-      },
-      success: function success(response) {
-        var _response = response;
-        var _data = _response.data.user;
-        var _pagination = _response.data.pagination;
-        var _start_page = _response.data.start_page;
-        var _status = _response.status;
-        if (_status) {
-          var _content = "";
-          if (_data.length) {
-            $.each(_data, function (i, v) {
-              // -- number
-              var _number = i + 1;
-              if (_start_page != 1) {
-                _number = _start_page + i + 1;
-              }
-              // -- role
-              var _role = "";
-              if (v.role == 1) {
-                _role = "Administrator";
-              } else if (v.role == 2) {
-                _role = "User";
-              }
-              // -- status
-              var _status = '<span data-toggle="tooltip" data-placement="left" title="Aktif" class="badge badge-success"><i class="mdi mdi-power"></i></span>';
-              if (v.status == 0) {
-                _status = '<span data-toggle="tooltip" data-placement="left" title="Tidak Aktif" class="badge badge-danger"><i class="mdi mdi-power"></i></span>';
-              }
-              if ($(".js-user-result").length) {
-                _content += "<tr>\n                              <td class=\"text-center\">\n                                <div class=\"custom-control custom-checkbox\">\n                                  <input type=\"checkbox\" class=\"custom-control-input js-select-data\" id=\"check-".concat(_number, "\" value=\"").concat(v.user_id, "\"/>\n                                  <label class=\"custom-control-label\" for=\"check-").concat(_number, "\"></label>\n                                </div>\n                              </td>\n                              <td class=\"text-center\">\n                                <span class=\"user-avatar\">\n                                  <img class=\"user-avatar__img\" src=\"").concat(v.photo, "\" alt=\"").concat(v.name, "\" />\n                                </span>\n                              </td>\n                              <td>").concat(v.name, "</td>\n                              <td>").concat(v.email, "</td>\n                              <td>").concat(v.phone !== null ? v.phone : "-", "</td>\n                              <td>").concat(_role, "</td>\n                              <td class=\"text-center\">").concat(_status, "</td>\n                              <td class=\"text-center\">\n                                <button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Edit\" class=\"btn btn-icon btn-primary btn-trans js-edit-data\" data-id=\"").concat(v.user_id, "\"><i class=\"mdi mdi-circle-edit-outline\"></i></button>\n                                <button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Delete\" class=\"btn btn-icon btn-danger btn-trans js-delete-data\" data-id=\"").concat(v.user_id, "\"><i class=\"mdi mdi-trash-can-outline\"></i></button>\n                              </td>\n                            </tr>");
-              }
-            });
-          } else {
-            _content += "<tr>\n                          <td colspan=\"8\" class=\"text-center\">\n                            <span>Data not found</span>\n                          </td>\n                        </tr>";
-          }
-          $(".js-user-result").html(_content);
-          // pagination
-          if (_pagination !== undefined) {
-            $(".js-pagination").html(_pagination);
-          } else {
-            $(".pagination").remove();
-          }
-        }
+      token: userData.token
+    };
+    var columnSetting = [{
+      targets: 1,
+      render: function render(dataSetting) {
+        return "<span class=\"user-avatar\">\n\t\t\t\t\t\t\t\t\t\t<img class=\"user-avatar__img\" src=\"".concat(dataSetting, "\" />\n\t\t\t\t\t\t\t\t\t</span>");
       }
-    });
-  };
-
-  // handleDeleteData
-  var handleDeleteData = function handleDeleteData(id) {
-    $.ajax({
-      url: _variables.API_URL.users,
-      method: "DELETE",
-      dataType: "JSON",
-      data: {
-        user_id: id
-      },
-      success: function success(response) {
-        _utilities.FilterData.handleLoadData();
-        var _type = "error";
-        if (response.status) {
-          _type = "success";
-        }
-        swal({
-          title: "Deleted!",
-          text: response.message,
-          type: _type,
-          timer: 1500
-        });
-      },
-      error: function error(response) {
-        var _response = response.responseJSON;
-        var _type = "error";
-        if (_response.status) {
-          _type = "success";
-        }
-        swal({
-          title: "Deleted!",
-          text: _response.message,
-          type: _type,
-          timer: 1500
-        });
+    }, {
+      targets: 6,
+      className: "text-center",
+      render: function render(dataSetting) {
+        return "<button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Edit\" class=\"btn btn-icon waves-effect btn-primary btn-trans js-edit-data\" data-id=\"".concat(dataSetting, "\"><i class=\"mdi mdi-pencil-outline\"></i></button>\n\t\t\t\t\t<button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Delete\" class=\"btn btn-icon waves-effect btn-danger btn-trans js-delete-data\" data-id=\"").concat(dataSetting, "\"><i class=\"mdi mdi-trash-can-outline\"></i></button>");
       }
-    });
-  };
-
-  // handlePostData
-  var handlePostData = function handlePostData(form_data, method) {
-    $.ajax({
-      url: _variables.API_URL.users,
-      method: method,
-      dataType: "JSON",
-      cache: false,
-      contentType: false,
-      processData: false,
-      data: form_data,
-      beforeSend: function beforeSend() {
-        var _loader = "<span class=\"custom-loader\"><span></span><span></span><span></span><span></span></span> Mengirim ....";
-        $(".js-form-user button[type='submit']").html(_loader);
-      },
-      success: function success(response) {
-        var _status = response.status;
-        var _message = response.message;
-        if (_status) {
-          $(".js-form-user button[type='submit']").html("<i class=\"mdi mdi-content-save-outline\"></i> Simpan");
-          $(".modal").modal("hide");
-          handleRemoveData();
-          _utilities.SweetAlert.config(_message);
-          setTimeout(function () {
-            _utilities.FilterData.handleLoadData();
-          }, 800);
-        }
-      }
-    });
-  };
-
-  // handleUpdateData
-  var handleUpdateData = function handleUpdateData() {
-    $("body").on("click", ".js-edit-data", function (e) {
-      var _this = $(e.currentTarget);
-      var _user_id = _this.attr("data-id");
-      $("#modal-users").modal("show");
-      $.ajax({
-        url: _variables.API_URL.users,
-        method: "GET",
-        dataType: "JSON",
-        data: {
-          user_id: _user_id
-        },
-        success: function success(response) {
-          var _data = response.data;
-          var _status = response.status;
-          var _photo = "<span class=\"user-avatar user-avatar--detail m-b-10\">\n                          <img class=\"user-avatar__img\" src=\"".concat(_data.photo, "\" alt=\"").concat(_data.name, "\" />\n                        </span>");
-          if (_status) {
-            if (_data.photo) {
-              $('label[for="photo"]').parent().find(".col-sm-8").prepend(_photo);
-            }
-            $('input[name="user_id"]').val(_data.user_id);
-            $('input[name="name"]').val(_data.name);
-            $('input[name="email"]').val(_data.email);
-            $('input[name="phone"]').val(_data.phone);
-            $('select[name="role"] option').each(function (i, e) {
-              var _this = $(e);
-              if (_this.val() == _data.role) {
-                _this.attr("selected", "selected");
-              }
-            });
-            if (_data.status == 1) {
-              $('input[name="status"]').trigger("click");
-              $('input[name="status"]').prop("checked", true);
-            }
-            if (_data.email_verified == 1) {
-              $('input[name="email_verified"]').trigger("click");
-              $('input[name="email_verified"]').prop("checked", true);
-            }
-          }
-        }
-      });
-    });
-  };
-
-  // handleFormData
-  var handleFormData = function handleFormData() {
-    var _id = $('input[name="user_id"]').val();
-    var _photo = $('input[name="photo"]').prop("files")[0];
-    var _name = $('input[name="name"]').val();
-    var _email = $('input[name="email"]').val();
-    var _phone = $('input[name="phone"]').val();
-    var _password = $('input[name="password"]').val();
-    var _confirmPassword = $('input[name="confirm_password"]').val();
-    var _role = $('select[name="role"]').val();
-    if ($('input[name="status"]:checked').length == 1) {
-      var _status = $('input[name="status"]').val();
-    } else {
-      var _status = $('input[name="status"]').val(0);
-    }
-    if ($('input[name="email_verified"]:checked').length == 1) {
-      var _email_verified = $('input[name="email_verified"]').val();
-    } else {
-      var _email_verified = $('input[name="email_verified"]').val(0);
-    }
-    if (!_variables.WHITESPACE.test(_name) && !_variables.WHITESPACE.test(_email) && !_variables.WHITESPACE.test(_role) && !_variables.WHITESPACE.test(_status)) {
-      var form_data = new FormData();
-      form_data.append("user_id", _id);
-      form_data.append("photo", _photo);
-      form_data.append("name", _name);
-      form_data.append("email", _email);
-      if (!_variables.WHITESPACE.test(_phone)) {
-        form_data.append("phone", _phone);
-      }
-      if (!_variables.WHITESPACE.test(_password) && !_variables.WHITESPACE.test(_confirmPassword)) {
-        form_data.append("password", _confirmPassword);
-      }
-      form_data.append("role", _role);
-      form_data.append("status", _status);
-      form_data.append("email_verified", _email_verified);
-      handlePostData(form_data, "POST");
-    }
-  };
-
-  // handleRemoveData
-  var handleRemoveData = function handleRemoveData() {
-    $('label[for="photo"]').parent().find(".user-avatar").remove();
-    $('input[name="user_id"]').removeAttr("value");
-    $('input[name="name"]').val("");
-    $('input[name="email"]').val("");
-    $('input[name="phone"]').val("");
-    $('input[name="password"]').val("");
-    $('input[name="confirm_password"]').val("");
-    $('select[name="role"] option').removeAttr("selected");
-    if ($('input[name="status"]').prop("checked", true)) {
-      $('input[name="status"]').trigger("click");
-      $('input[name="status"]').prop("checked", false);
-    }
-    if ($('input[name="email_verified"]').prop("checked", true)) {
-      $('input[name="email_verified"]').trigger("click");
-      $('input[name="email_verified"]').prop("checked", false);
-    }
-  };
-
-  // handleResetData
-  var handleResetData = function handleResetData() {
-    $('button[data-dismiss="modal"]').on("click", function (e) {
-      handleRemoveData();
-      $(".js-form-user").find(".error").removeClass("error");
-    });
-
-    // handle click body
-    $("body").on("click", function (e) {
-      handleRemoveData();
-      $(".js-form-user").find(".error").removeClass("error");
-    });
-
-    // stop progation
-    $("body").on("click", ".modal-content", function (e) {
-      e.stopPropagation();
-    });
+    }];
+    var filterSetting = [{
+      id: "dateRange",
+      event: "change"
+    }, {
+      id: "status",
+      event: "change"
+    }, {
+      id: "search",
+      event: "keyup"
+    }];
+    var sortSetting = {
+      id: "sort",
+      event: "change"
+    };
+    _core.DataTable.server(dataSetting, columnSetting, filterSetting, sortSetting);
   };
   var init = function init() {
-    if ($(".js-form-user").length) {
-      handleRunValidation();
-      handleClickValidation();
-    }
-    if ($(".js-user-result").length) {
-      // Filter Data
-      _utilities.FilterData.init();
-      // Delete Data
-      _utilities.DeleteData["delete"]();
-      _utilities.DeleteData.deleteAll();
-      // users
-      handleUpdateData();
-      handleResetData();
-    }
+    handleRunDataTable();
   };
   return {
-    init: init,
-    handleGetData: handleGetData,
-    handleDeleteData: handleDeleteData
+    init: init
   };
 }();
 var _default = exports["default"] = Users;
 
-},{"../utilities":29,"../variables":33}],6:[function(require,module,exports){
+},{"../core":19,"../utilities":31,"../variables":35}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -817,7 +558,7 @@ var ChangeFormatNumber = function () {
 }();
 var _default = exports["default"] = ChangeFormatNumber;
 
-},{"../utilities":29}],9:[function(require,module,exports){
+},{"../utilities":31}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -861,59 +602,93 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /* ------------------------------------------------------------------------------
-@name: Data Table
-@description: Data Table Activate
+@name: DataTable
 --------------------------------------------------------------------------------- */
 
-var DataTableInit = function () {
-  // run datatable
-  var handleRunDataTable = function handleRunDataTable() {
-    // data table default
+var DataTable = function () {
+  var handleDataTable = function handleDataTable() {
+    // data table defautl
     $(".js-datatable").DataTable({
       responsive: true,
       autoWidth: false,
-      stateSave: true,
-      pageLength: 10
-    });
-    $(".js-datatable-entry").DataTable({
-      responsive: true,
-      autoWidth: false,
-      lengthMenu: [50, 100, 150, 200, 250]
-    });
-    $(".js-sale-transaction").DataTable({
-      responsive: true,
-      lengthChange: false,
-      autoWidth: false,
-      stateSave: true,
-      ordering: false,
-      bPaginate: false,
-      bLengthChange: false,
-      bFilter: true,
-      bInfo: false,
-      buttons: ["csv", "excel"]
-    }).buttons().container().appendTo(".dataTables_wrapper .col-md-6:eq(0)");
-  };
-  var handleRunTableResponsive = function handleRunTableResponsive() {
-    $(".js-table-responsive").responsiveTable({
-      addDisplayAllBtn: false,
-      addFocusBtn: false,
-      stickyTableHeader: false
+      stateSave: true
     });
   };
+  var handleRunDataTableServer = function handleRunDataTableServer(dataSetting) {
+    var columnSetting = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+    var filterSetting = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+    var sortSetting = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+    var columnVisibleSetting = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
+    // --- datatable setting
+    var tableSetting = _defineProperty(_defineProperty({
+      // bLengthChange: false,
+      // ordering: false,
+      info: false,
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      autoWidth: false,
+      stateSave: true,
+      dom: '<"float-right"f>rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
+      // buttons: ["copy", "excel", "pdf"],
+      ajax: {
+        url: dataSetting.url,
+        type: dataSetting.method,
+        data: dataSetting ? dataSetting.data : "",
+        beforeSend: function beforeSend(xhr) {
+          // Add Bearer token to the request headers
+          xhr.setRequestHeader("Authorization", "Bearer " + dataSetting.token);
+        }
+      },
+      columnDefs: columnSetting
+    }, "processing", true), "language", {
+      processing: '<div class="loader"></div>'
+    });
+    var table = $("." + dataSetting.selector).DataTable(tableSetting);
+
+    // --- filter setting
+    $.each(filterSetting, function (i, v) {
+      if (v.event === "change") {
+        $("#" + v.id).on(v.event, function (e) {
+          table.draw();
+        });
+      } else {
+        $("#" + v.id).on(v.event, function (e) {
+          var value = $(e.currentTarget).val();
+          table.search(value).draw();
+        });
+      }
+    });
+
+    // --- sort setting
+    if (sortSetting !== 0) {
+      $("#" + sortSetting.id).on(sortSetting.event, function (e) {
+        var value = $(e.currentTarget).val();
+        table.page.len(value).draw();
+      });
+    }
+
+    // --- setting visibility column
+    if (columnVisibleSetting !== 0) {
+      table.columns(columnVisibleSetting.target).visible(columnVisibleSetting.visble);
+    }
+  };
+
+  // -- init
   var init = function init() {
-    if ($(".js-datatable").length || $(".js-sale-transaction").length || $(".js-datatable-entry").length) {
-      handleRunDataTable();
-    }
-    if ($(".js-table-responsive").length) {
-      handleRunTableResponsive();
-    }
+    handleDataTable();
   };
   return {
-    init: init
+    init: init,
+    server: handleRunDataTableServer
   };
 }();
-var _default = exports["default"] = DataTableInit;
+var _default = exports["default"] = DataTable;
 
 },{}],11:[function(require,module,exports){
 "use strict";
@@ -1132,7 +907,7 @@ var EditableTables = function () {
 }();
 var _default = exports["default"] = EditableTables;
 
-},{"../variables":33}],15:[function(require,module,exports){
+},{"../variables":35}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1342,10 +1117,10 @@ Object.defineProperty(exports, "CheckBox", {
     return _CheckBox["default"];
   }
 });
-Object.defineProperty(exports, "DataTableInit", {
+Object.defineProperty(exports, "DataTable", {
   enumerable: true,
   get: function get() {
-    return _DataTableInit["default"];
+    return _DataTable["default"];
   }
 });
 Object.defineProperty(exports, "DatePickerInput", {
@@ -1396,7 +1171,7 @@ Object.defineProperty(exports, "TemporaryAlert", {
     return _TemporaryAlert["default"];
   }
 });
-var _DataTableInit = _interopRequireDefault(require("./DataTableInit"));
+var _DataTable = _interopRequireDefault(require("./DataTable"));
 var _SweetAlert = _interopRequireDefault(require("./SweetAlert"));
 var _Dropify = _interopRequireDefault(require("./Dropify"));
 var _TemporaryAlert = _interopRequireDefault(require("./TemporaryAlert"));
@@ -1410,7 +1185,7 @@ var _Dropdown = _interopRequireDefault(require("./Dropdown"));
 var _CheckBox = _interopRequireDefault(require("./CheckBox"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./BackButton":7,"./ChangeFormatNumber":8,"./CheckBox":9,"./DataTableInit":10,"./DatePickerInput":11,"./Dropdown":12,"./Dropify":13,"./EditableTables":14,"./Password":15,"./SelectInput":16,"./SweetAlert":17,"./TemporaryAlert":18}],20:[function(require,module,exports){
+},{"./BackButton":7,"./ChangeFormatNumber":8,"./CheckBox":9,"./DataTable":10,"./DatePickerInput":11,"./Dropdown":12,"./Dropify":13,"./EditableTables":14,"./Password":15,"./SelectInput":16,"./SweetAlert":17,"./TemporaryAlert":18}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1467,7 +1242,7 @@ var Alert = function () {
 }();
 var _default = exports["default"] = Alert;
 
-},{"./Scrolllable.js":25}],21:[function(require,module,exports){
+},{"./Scrolllable.js":27}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2016,7 +1791,404 @@ var FilterData = function () {
 }();
 var _default = exports["default"] = FilterData;
 
-},{"../components":6,"../variables":33}],25:[function(require,module,exports){
+},{"../components":6,"../variables":35}],25:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _variables = require("../variables");
+var _index = require("./index");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); } /* ------------------------------------------------------------------------------
+@name: Form
+@description: Form
+--------------------------------------------------------------------------------- */ // --- variables
+// --- utilities
+var Form = function () {
+  // - handleValidation
+  var handleValidation = function handleValidation(eventsEl, selectorEl) {
+    $.each(eventsEl, function (ie, ve) {
+      $.each(selectorEl, function (i, v) {
+        $("#" + v.id).on(ve, function (e) {
+          var _this = $(e.currentTarget),
+            _val = _this.val(),
+            _target = _this.attr("data-target"),
+            _alertEl = $("#" + _target);
+          var _errorMessage;
+
+          // Condition if validation does not error
+          _alertEl.removeClass("error");
+          _this.parent().removeClass("error");
+
+          // confirmPassword Validation
+          if (v.validation !== undefined && v.validation.confirmPassword) {
+            if (_val !== $("#password").val()) {
+              _errorMessage = _alertEl.attr("data-invalid-confirm");
+            }
+          }
+
+          // Minimum Validation
+          if (v.validation !== undefined && v.validation.minimum) {
+            if (_val.length < v.validation.minimumChar) {
+              _errorMessage = _alertEl.attr("data-invalid");
+            }
+          }
+
+          // Maximum Validation
+          if (v.validation !== undefined && v.validation.maximum) {
+            if (_val.length < v.validation.maximumChar) {
+              _errorMessage = _alertEl.attr("data-invalid");
+            }
+          }
+
+          // Minimum Validation
+          if (v.validation !== undefined && v.validation.name) {
+            if (!_variables.PERSON_NAME.test(_val)) {
+              _errorMessage = _alertEl.attr("data-invalid");
+            }
+          }
+
+          // Email validation
+          if (v.validation !== undefined && v.validation.email) {
+            if (!_variables.EMAIL.test(_val)) {
+              _errorMessage = _alertEl.attr("data-invalid");
+            }
+          }
+
+          // Numeric validation
+          if (v.validation !== undefined && v.validation.phone) {
+            if (!_variables.PHONE_NUMBER.test(_val)) {
+              _errorMessage = _alertEl.attr("data-invalid");
+            }
+          }
+
+          // Required validation
+          if (_variables.WHITESPACE.test(_val) || _val === null) {
+            _errorMessage = _alertEl.attr("data-req");
+          }
+
+          // Error Message
+          if (_errorMessage !== undefined) {
+            _alertEl.text(_errorMessage);
+            _alertEl.addClass("error");
+            _this.parent().addClass("error");
+          }
+        });
+      });
+    });
+
+    // Return Handle keypress
+    handleKeypress();
+    // Return Handle confirm password
+    handleConfirmPassword();
+  };
+
+  // handleKeypress
+  var handleKeypress = function handleKeypress() {
+    $(".number-only").on("keypress", function (e) {
+      var _this = $(e.currentTarget),
+        _val = _this.val(),
+        _target = _this.attr("data-target"),
+        _alertEl = $("#" + _target);
+      var _errorMessage;
+      if (!_variables.NUMBERIC.test(e.key)) {
+        _errorMessage = _alertEl.attr("data-invalid");
+        _alertEl.text(_errorMessage);
+        _alertEl.addClass("error");
+        _this.parent().addClass("error");
+        // remove error after few second
+        setTimeout(function () {
+          _alertEl.removeClass("error");
+          _this.parent().removeClass("error");
+        }, 2000);
+        e.preventDefault();
+      }
+    });
+  };
+  var handleConfirmPassword = function handleConfirmPassword() {
+    $(".js-confirm-password").on("input", function (e) {
+      var _this = $(e.currentTarget);
+      var _parent = _this.parent();
+      var _val = _this.val();
+      var _password = _this.parents("body").find("#password").val();
+      var _text = _parent.find(".form-alert").attr("data-invalid");
+      if (_val == _password) {
+        _parent.removeClass("error");
+        _parent.find(".form-alert").removeClass("error").text("");
+      } else {
+        _parent.addClass("error");
+        _parent.find(".form-alert").addClass("error").text(_text);
+      }
+    });
+  };
+
+  // handleEmptyData
+  var handleEmptyData = function handleEmptyData(selectorEl) {
+    $.each(selectorEl, function (i, v) {
+      var _target = $("#" + v.id).attr("data-target"),
+        _alertEl = $("#" + _target);
+
+      // Condition if validation does not error
+      _alertEl.removeClass("error");
+      $("#" + v.id).parent().removeClass("error");
+      if (v.validation !== undefined && v.validation.selectOption) {
+        if ($("#" + v.id).hasClass("js-select2")) {
+          var _select = $("#".concat(v.id, " option[value=0]")).text();
+          $("#".concat(v.id, " option[value=0]")).attr("selected", "selected");
+          $("#" + v.id).parent().find(".select2").find(".select2-selection__rendered").text(_select);
+        }
+        var _value = $("#" + v.id + " option:first-child").val();
+        $("#" + v.id).val(_value);
+      } else if (v.validation !== undefined && v.validation.attrId) {
+        $("#" + v.id).attr("data-id", "");
+      } else if (v.emptydata) {} else {
+        $("#" + v.id).val("");
+      }
+      if ($("#" + v.id + "[type='file']")) {
+        $('label[for="photo"]').parent().find(".user-avatar").remove();
+        $(".dropify-preview").hide();
+        $(".form-horizontal .img-preview").hide();
+      }
+    });
+  };
+
+  // handleRunEmpty
+  var handleRunEmpty = function handleRunEmpty(selectorEl, isAlert) {
+    if (isAlert) {
+      swal({
+        title: "Apakah Anda yakin?",
+        text: "Tindakan ini tidak dapat diurungkan!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+        confirmButtonClass: "btn btn-success",
+        cancelButtonClass: "btn btn-danger m-l-10",
+        buttonsStyling: false
+      }).then(function () {
+        // Run Empty data
+        handleEmptyData(selectorEl);
+        // hide modal
+        $(".modal").modal("hide");
+      }, function (dismiss) {
+        if (dismiss === "cancel") {
+          swal("Batal", "Data Anda aman :)", "error");
+        }
+      });
+    } else {
+      // Run Empty data
+      handleEmptyData(selectorEl);
+    }
+  };
+
+  // handleDataColletion
+  var handleDataColletion = function handleDataColletion(selectorEl) {
+    var formData = new FormData();
+    $.each(selectorEl, function (i, v) {
+      var inputValue = "";
+      if (v.type !== undefined && v.type == "file") {
+        inputValue = $("#" + v.id).prop("files")[0];
+      } else if (v.type !== undefined && v.type == "checkbox") {
+        if ($("#" + v.id).is(":checked")) {
+          inputValue = "1";
+        } else {
+          inputValue = "0";
+        }
+      } else if (v.dataValueId !== undefined) {
+        inputValue = $("#" + v.id).attr("data-id");
+      } else {
+        inputValue = $("#" + v.id).val();
+      }
+      if (!_variables.WHITESPACE.test(inputValue)) {
+        if (inputValue !== null) {
+          var keyValue = v.alias === undefined ? v.id : v.alias;
+          formData.append(keyValue, inputValue);
+        }
+      }
+    });
+    return formData;
+  };
+
+  // handleGetFormData
+  var handleGetFormData = function handleGetFormData(data, modalShow) {
+    // handleRunEmpty(data.elementSelector);
+    // get data from API
+    var response = _index.HttpRequest.custom(data);
+    if (response.code === 200) {
+      // show form modal
+      if (modalShow !== undefined) {
+        // for examination modal
+        if (modalShow === "examination") {
+          var _data = response.data;
+          if (_data.examinationNurse === "1" && _data.doctorId === undefined) {
+            modalShow = "#modalExaminationNurse";
+            $(modalShow).modal("show");
+          } else {
+            modalShow = "#modalExamination";
+            $(modalShow).modal("show");
+          }
+          // end for examination modal
+        } else {
+          $(modalShow).modal("show");
+        }
+      } else {
+        $(".modal").modal("show");
+      }
+      // set input data
+      $.each(data.elementSelector, function (i, v) {
+        var _element = v.alias !== undefined ? $("#" + v.alias) : $("#" + v.id);
+        var _elementId = v.alias !== undefined ? v.alias : v.id;
+        $.each(response.data, function (iD, vD) {
+          if (modalShow !== undefined) {
+            _element = $(modalShow).find("#" + v.id);
+          }
+          if (_elementId == iD) {
+            if (v.type !== undefined && v.type == "file") {
+              if (vD !== null) {
+                _element.parents(".form-group").find(".img-preview").show();
+                _element.parents(".form-group").find(".img-preview__el").attr({
+                  src: vD
+                });
+              }
+            } else if (v.type !== undefined && v.type == "checkbox") {
+              if (vD == 1) {
+                _element.attr("checked", "checked");
+              } else {
+                _element.removeAttr("checked");
+              }
+            } else if (v.type !== undefined && v.type == "custom-select-input") {
+              _element.val(vD);
+              _element.trigger("change");
+            } else if (v.validation !== undefined && v.validation.selectOption) {
+              if (_element.hasClass("js-select2")) {
+                var _dataSelect = vD.split("value: ");
+                var _text = _dataSelect[0];
+                var _val = _dataSelect[1];
+                _element.parent().find(".select2").find(".select2-selection__rendered").text(_text);
+                $("#".concat(v.id, " option[value=\"").concat(_val, "\"]")).attr("selected", "selected");
+                _element.val(_val);
+              } else {
+                _element.val(vD);
+              }
+            } else if (v.validation !== undefined && v.validation.attrId) {
+              var _arr = vD.split(" - ");
+              var _val2 = "";
+              for (var _i = 0; _i < _arr.length; _i++) {
+                _val2 += _arr[_i].split(",")[0] + ", ";
+              }
+              _element.attr("data-id", _val2.slice(0, -1));
+              _element.val(vD);
+            } else if (v.dataValueId !== undefined) {
+              var _dataSelect2 = vD.split("-");
+              _element.attr("data-id", _dataSelect2[0]);
+              _element.val(_dataSelect2[1]);
+              $("#".concat(iD)).parent(".form-dropdown").find(".js-reset-dropdown").show();
+            } else {
+              if (_typeof(vD) !== "object") {
+                _element.val(vD);
+              }
+            }
+          }
+        });
+      });
+    } else {
+      $(".modal").modal("hide");
+      _index.SweetAlert.config(response.message, "warning");
+    }
+    return response;
+  };
+
+  // handleDeleteData
+  var handleDeleteData = function handleDeleteData(data, element) {
+    swal({
+      title: "Apakah Anda yakin?",
+      text: "Tindakan ini tidak dapat diurungkan!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Hapus",
+      cancelButtonText: "Batal",
+      confirmButtonClass: "btn btn-success",
+      cancelButtonClass: "btn btn-danger m-l-10",
+      buttonsStyling: false
+    }).then(function () {
+      // Run API Delete Data
+      _index.HttpRequest["default"](data, element);
+    }, function (dismiss) {
+      if (dismiss === "cancel") {
+        swal("Batal", "Data Anda aman :)", "error");
+      }
+    });
+  };
+  return {
+    validation: handleValidation,
+    emptyData: handleRunEmpty,
+    dataColletion: handleDataColletion,
+    deleteData: handleDeleteData,
+    getFormData: handleGetFormData
+  };
+}();
+var _default = exports["default"] = Form;
+
+},{"../variables":35,"./index":31}],26:[function(require,module,exports){
+"use strict";
+
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _index = require("./index");
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; } /* ------------------------------------------------------------------------------
+@name: HttpRequest
+@description: HttpRequest Activate
+--------------------------------------------------------------------------------- */ // --- utilities
+var HttpRequest = function () {
+  // handleAjaxRequest
+  var handleAjaxRequest = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
+      var response, _error$responseJSON;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return $.ajax({
+              url: data.url,
+              method: data.method,
+              dataType: "JSON",
+              cache: false,
+              contentType: false,
+              processData: false,
+              data: data.data
+            });
+          case 3:
+            response = _context.sent;
+            return _context.abrupt("return", response);
+          case 7:
+            _context.prev = 7;
+            _context.t0 = _context["catch"](0);
+            _index.SweetAlert.config(((_error$responseJSON = _context.t0.responseJSON) === null || _error$responseJSON === void 0 ? void 0 : _error$responseJSON.message) || "Error during the request", "error");
+            return _context.abrupt("return", null);
+          case 11:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee, null, [[0, 7]]);
+    }));
+    return function handleAjaxRequest(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  return {
+    ajax: handleAjaxRequest
+  };
+}();
+var _default = exports["default"] = HttpRequest;
+
+},{"./index":31}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2062,7 +2234,7 @@ var Scrolllable = function () {
 }();
 var _default = exports["default"] = Scrolllable;
 
-},{}],26:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2123,7 +2295,7 @@ var Session = function () {
 }();
 var _default = exports["default"] = Session;
 
-},{}],27:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2173,7 +2345,7 @@ var SweetAlert = function () {
 }();
 var _default = exports["default"] = SweetAlert;
 
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2286,7 +2458,7 @@ var Validation = function () {
 }();
 var _default = exports["default"] = Validation;
 
-},{"../variables":33}],29:[function(require,module,exports){
+},{"../variables":35}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2322,6 +2494,18 @@ Object.defineProperty(exports, "FilterData", {
     return _FilterData["default"];
   }
 });
+Object.defineProperty(exports, "Form", {
+  enumerable: true,
+  get: function get() {
+    return _Form["default"];
+  }
+});
+Object.defineProperty(exports, "HttpRequest", {
+  enumerable: true,
+  get: function get() {
+    return _HttpRequest["default"];
+  }
+});
 Object.defineProperty(exports, "Scrolllable", {
   enumerable: true,
   get: function get() {
@@ -2355,9 +2539,11 @@ var _SweetAlert = _interopRequireDefault(require("./SweetAlert"));
 var _Validation = _interopRequireDefault(require("./Validation"));
 var _Alert = _interopRequireDefault(require("./Alert"));
 var _Scrolllable = _interopRequireDefault(require("./Scrolllable"));
+var _Form = _interopRequireDefault(require("./Form"));
+var _HttpRequest = _interopRequireDefault(require("./HttpRequest"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./Alert":20,"./Currency":21,"./DeleteData":22,"./EditTable":23,"./FilterData":24,"./Scrolllable":25,"./Session":26,"./SweetAlert":27,"./Validation":28}],30:[function(require,module,exports){
+},{"./Alert":20,"./Currency":21,"./DeleteData":22,"./EditTable":23,"./FilterData":24,"./Form":25,"./HttpRequest":26,"./Scrolllable":27,"./Session":28,"./SweetAlert":29,"./Validation":30}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2369,15 +2555,13 @@ exports.API_URL = void 0;
 @description: API_URL
 --------------------------------------------------------------------------------- */
 
-var URL_BASE = "http://localhost/rzf-pos-api/v1/";
-// const MIDTRANS_SNAP = "https://app.sandbox.midtrans.com/snap/v1/";
-// const MIDTRANS_API = "https://api.sandbox.midtrans.com/v2/";
-
+var URL_BASE = "http://localhost/codeigniter-api-template/api/";
 var API_URL = exports.API_URL = {
-  login: "".concat(URL_BASE, "login")
+  login: "".concat(URL_BASE, "auth/login"),
+  USERS: "".concat(URL_BASE, "users")
 };
 
-},{}],31:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2396,7 +2580,7 @@ var PHONE_NUMBER = exports.PHONE_NUMBER = /^(0|\+62)+([0-9]){4,16}/i;
 var FULL_NAME = exports.FULL_NAME = /^(?:[\u00c0-\u01ffa-zA-Z-\s\.']){3,}(?:[\u00c0-\u01ffa-zA-Z-\s\.']{3,})+$/i;
 var PERSON_NAME = exports.PERSON_NAME = /^[a-zA-Z][a-zA-Z\-' ]*[a-zA-Z ]$/i;
 
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2411,11 +2595,11 @@ exports.WEB_URL = void 0;
 var URL_BASE_WEB = $("base").attr("href");
 var WEB_URL = exports.WEB_URL = {
   base: "".concat(URL_BASE_WEB),
-  files: "".concat(VENDOR_WEB, "files/"),
-  dashboard: "".concat(URL_BASE_WEB, "dashboard")
+  dashboard: "".concat(URL_BASE_WEB, "dashboard"),
+  login: "".concat(URL_BASE_WEB, "login")
 };
 
-},{}],33:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2455,6 +2639,6 @@ Object.keys(_WEB_URL).forEach(function (key) {
   });
 });
 
-},{"./API_URL":30,"./Regex":31,"./WEB_URL":32}]},{},[1])
+},{"./API_URL":32,"./Regex":33,"./WEB_URL":34}]},{},[1])
 
 //# sourceMappingURL=maps/app.js.map

@@ -1,20 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Dashboard extends MX_Controller {
+class Users extends MX_Controller {
 	public function __construct() {
 		parent::__construct();
-		check_auth();
 	}
 
 	// -- index
 	public function index() {
 		// - template
-		template_page('Dashboard', 'dashboard', 'dashboard/view');
-	}
+		template_page('Users', 'users', 'users/view'); }
 
 	// -- view
 	public function view()
 	{
-		$this->load->view('index');
+		$data = [
+      'user_list' => $this->global_model->get_data('tb_users')
+    ];
+
+		$this->load->view('index', $data);
 	}
 }

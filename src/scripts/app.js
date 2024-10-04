@@ -1,6 +1,5 @@
 // --- core
 import {
-	DataTableInit,
 	SweetAlert,
 	Dropify,
 	TemporaryAlert,
@@ -12,6 +11,7 @@ import {
 	Password,
 	Dropdown,
 	CheckBox,
+	DataTable,
 } from "./core";
 
 // --- components
@@ -35,7 +35,6 @@ const App = (() => {
 	const ready = () => {
 		(($) => {
 			// -- core initialization
-			DataTableInit.init();
 			SweetAlert.init();
 			Dropify.init();
 			TemporaryAlert.init();
@@ -47,6 +46,7 @@ const App = (() => {
 			Password.init();
 			Dropdown.init();
 			CheckBox.init();
+			DataTable.init();
 
 			// -- components initialization
 			Header.init();

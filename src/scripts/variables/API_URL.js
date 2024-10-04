@@ -3,10 +3,9 @@
 @description: API_URL
 --------------------------------------------------------------------------------- */
 
-const URL_BASE = "http://localhost/rzf-pos-api/v1/";
-// const MIDTRANS_SNAP = "https://app.sandbox.midtrans.com/snap/v1/";
-// const MIDTRANS_API = "https://api.sandbox.midtrans.com/v2/";
+const URL_BASE = "http://localhost/codeigniter-api-template/api/";
 
 export const API_URL = {
-	login: `${URL_BASE}login`,
+	login: `${URL_BASE}auth/login`,
+	USERS: `${URL_BASE}users`,
 };

@@ -66,7 +66,7 @@ class Users extends RestController {
 						: '<span data-toggle="tooltip" data-placement="left" title="Tidak Aktif" class="badge badge-danger"><i class="mdi mdi-power"></i></span>';
 
 					$o_data[] = [
-						$start + $i++,
+						$val->user_id,
 						FILES . 'users/' . $photo,
 						$val->first_name,
 						$val->username,

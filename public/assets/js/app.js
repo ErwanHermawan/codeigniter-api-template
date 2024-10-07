@@ -394,15 +394,21 @@ var Users = function () {
       token: userData.token
     };
     var columnSetting = [{
+      targets: 0,
+      orderable: false,
+      render: function render(data) {
+        return "<div class=\"custom-checkbox\">\n\t\t\t\t\t\t\t\t\t\t<label class=\"custom-checkbox__wrapper\">\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" value=\"".concat(data, "\" />\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"custom-checkbox__checkmark\"></div>\n\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t</div>");
+      }
+    }, {
       targets: 1,
-      render: function render(dataSetting) {
-        return "<span class=\"user-avatar\">\n\t\t\t\t\t\t\t\t\t\t<img class=\"user-avatar__img\" src=\"".concat(dataSetting, "\" />\n\t\t\t\t\t\t\t\t\t</span>");
+      render: function render(data) {
+        return "<span class=\"user-avatar\">\n\t\t\t\t\t\t\t\t\t\t<img class=\"user-avatar__img\" src=\"".concat(data, "\" />\n\t\t\t\t\t\t\t\t\t</span>");
       }
     }, {
       targets: 6,
       className: "text-center",
-      render: function render(dataSetting) {
-        return "<button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Edit\" class=\"btn btn-icon waves-effect btn-primary btn-trans js-edit-data\" data-id=\"".concat(dataSetting, "\"><i class=\"mdi mdi-pencil-outline\"></i></button>\n\t\t\t\t\t<button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Delete\" class=\"btn btn-icon waves-effect btn-danger btn-trans js-delete-data\" data-id=\"").concat(dataSetting, "\"><i class=\"mdi mdi-trash-can-outline\"></i></button>");
+      render: function render(data) {
+        return "<button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Edit\" class=\"btn btn-icon waves-effect btn-primary btn-trans js-edit-data\" data-id=\"".concat(data, "\"><i class=\"mdi mdi-pencil-outline\"></i></button>\n\t\t\t\t\t<button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Delete\" class=\"btn btn-icon waves-effect btn-danger btn-trans js-delete-data\" data-id=\"").concat(data, "\"><i class=\"mdi mdi-trash-can-outline\"></i></button>");
       }
     }];
     var filterSetting = [{
@@ -420,6 +426,16 @@ var Users = function () {
       event: "change"
     };
     _core.DataTable.server(dataSetting, columnSetting, filterSetting, sortSetting);
+  };
+  var selectCheckbox = function selectCheckbox() {
+    $(".js-select-all-checkbox input").on("click", function (e) {
+      var _this = $(e.currentTarget);
+      if (_this.is(":checked")) {
+        console.log(1);
+      } else {
+        console.log(2);
+      }
+    });
   };
   var init = function init() {
     handleRunDataTable();
@@ -666,7 +682,7 @@ var DataTable = function () {
     });
 
     // --- sort setting
-    if (sortSetting !== 0) {
+    if (sortSetting) {
       $("#" + sortSetting.id).on(sortSetting.event, function (e) {
         var value = $(e.currentTarget).val();
         table.page.len(value).draw();
@@ -674,9 +690,60 @@ var DataTable = function () {
     }
 
     // --- setting visibility column
-    if (columnVisibleSetting !== 0) {
+    if (columnVisibleSetting) {
       table.columns(columnVisibleSetting.target).visible(columnVisibleSetting.visble);
     }
+    var selectedRows = [];
+    var deleteButton = "<button type=\"button\" class=\"btn btn-danger waves-effect w-md waves-light\" id=\"deleteBatch\"><i class=\"mdi mdi-trash-can-outline\"></i> Delete Batch</button>";
+
+    // Handle 'Select All' checkbox
+    $("#selectAll").on("click", function () {
+      var rows = table.rows({
+        search: "applied"
+      }).nodes();
+      $('input[type="checkbox"]', rows).prop("checked", this.checked);
+
+      // Add or remove row IDs from selectedRows
+      if (this.checked) {
+        $('input[type="checkbox"]', rows).each(function () {
+          var id = $(this).val();
+          if (!selectedRows.includes(id)) {
+            selectedRows.push(id);
+          }
+        });
+        $("body").find(".form-inline").prepend(deleteButton);
+      } else {
+        $('input[type="checkbox"]', rows).each(function () {
+          var id = $(this).val();
+          selectedRows = selectedRows.filter(function (item) {
+            return item !== id;
+          });
+        });
+        $("body").find(".form-inline").find("#deleteBatch").remove();
+      }
+    });
+
+    // Handle individual row checkboxes
+    $("." + dataSetting.selector + " tbody").on("change", 'input[type="checkbox"]', function () {
+      var id = $(this).val();
+      if (this.checked) {
+        if (!selectedRows.includes(id)) {
+          selectedRows.push(id);
+        }
+        $("body").find(".form-inline").prepend(deleteButton);
+      } else {
+        selectedRows = selectedRows.filter(function (item) {
+          return item !== id;
+        });
+        $("#selectAll").prop("checked", false);
+        $("body").find(".form-inline").find("#deleteBatch").remove();
+      }
+    });
+
+    // Example of getting selected rows when form is submitted
+    $("body").find("#deleteBatch").on("click", function () {
+      console.log("Selected Row IDs:", selectedRows);
+    });
   };
 
   // -- init

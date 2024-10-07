@@ -3,9 +3,17 @@
  * -----------------------------------------------------------------------------
 /*/
 
+.navbar-default {
+	border-bottom: solid 1px #eee;
+}
+
+.content {
+	margin-top: 86px !important;
+}
+
 .topbar .topbar-left {
 	text-align: left !important;
-	border-bottom: solid 1px #ebebeb;
+	// border-bottom: solid 1px #ebebeb;
 }
 
 .side-menu {
@@ -222,6 +230,14 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 div#DataTables_Table_0_wrapper.dataTables_wrapper.container-fluid.dt-bootstrap4.no-footer {
 	padding: 0 !important;
+}
+div#DataTables_Table_0_wrapper .row {
+	align-items: center !important;
+}
+.dataTables_length label {
+	margin-bottom: 0 !important;
+	font-size: 14px !important;
+	color: #6c757d !important;
 }
 
 .datatable-custom .dataTables_filter {

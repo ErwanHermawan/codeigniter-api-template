@@ -1,0 +1,89 @@
+/*/
+ * Custom Datepicker CSS
+ * -----------------------------------------------------------------------------
+/*/
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
+	background-color: $primary;
+	border-color: $primary;
+}
+.daterangepicker td.in-range.available:not(.active) {
+	background: rgba($primary, 0.1) !important;
+}
+.daterangepicker .input-mini,
+.daterangepicker .input-mini.active {
+	height: 40px;
+	margin-bottom: 8px;
+	border: 1px solid #eff2f7;
+	background-color: rgba($primary, 0.1);
+	color: #435966;
+	font-size: 16px;
+}
+.daterangepicker .ranges li {
+	border-radius: 2px;
+	color: #435966;
+	font-weight: 600;
+	font-size: 14px;
+	background-color: transparent;
+	font-weight: normal;
+	border: none;
+	border-bottom: solid 1px #eff2f7;
+	margin: 0;
+	padding: 6px 12px;
+	&:last-child {
+		margin-bottom: 12px;
+	}
+}
+.daterangepicker .ranges li.active,
+.daterangepicker .ranges li:hover {
+	background-color: transparent;
+	color: $primary;
+	border: none;
+	border-bottom: solid 1px #eff2f7;
+}
+.daterangepicker .ranges li.active {
+	font-weight: 500;
+}
+.daterangepicker select.hourselect,
+.daterangepicker select.minuteselect,
+.daterangepicker select.secondselect,
+.daterangepicker select.ampmselect {
+	border: 1px solid #eff2f7;
+	padding: 2px;
+	width: 60px;
+}
+.dropdown-menu {
+	border: none;
+	box-shadow: 0px 8px 24px rgba(67, 89, 102, 0.1);
+}
+.daterangepicker .calendar-table {
+	border: 1px solid #eff2f7;
+}
+.calendar-table .table-condensed {
+	color: #435966;
+	font-size: 16px;
+}
+.daterangepicker td,
+.daterangepicker th {
+	text-align: center;
+	width: 40px;
+	height: 36px;
+	border-radius: 4px;
+	/* white-space: nowrap; */
+	cursor: pointer;
+}
+.daterangepicker td.off {
+	color: #becad1;
+}
+.daterangepicker td.available:hover,
+.daterangepicker th.available:hover {
+	background-color: rgba($primary, 0.1);
+}
+.show-calendar {
+	.ranges {
+		border-right: solid 1px #eff2f7 !important;
+		ul {
+			padding-right: 8px;
+		}
+	}
+}

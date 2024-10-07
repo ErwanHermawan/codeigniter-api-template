@@ -11542,11 +11542,13 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
   z-index: 3000;
 }
 
-.daterangepicker .ranges, .daterangepicker .calendar {
+.daterangepicker .ranges,
+.daterangepicker .calendar {
   float: left;
 }
 
-.daterangepicker.single .ranges, .daterangepicker.single .calendar {
+.daterangepicker.single .ranges,
+.daterangepicker.single .calendar {
   float: none;
 }
 
@@ -11569,7 +11571,8 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
 }
 
 /* Calendars */
-.daterangepicker .calendar th, .daterangepicker .calendar td {
+.daterangepicker .calendar th,
+.daterangepicker .calendar td {
   white-space: nowrap;
   text-align: center;
   min-width: 32px;
@@ -11611,7 +11614,8 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
   margin: 0;
 }
 
-.daterangepicker td, .daterangepicker th {
+.daterangepicker td,
+.daterangepicker th {
   text-align: center;
   width: 20px;
   height: 20px;
@@ -11620,16 +11624,21 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
   cursor: pointer;
 }
 
-.daterangepicker td.off, .daterangepicker td.off.in-range, .daterangepicker td.off.start-date, .daterangepicker td.off.end-date {
+.daterangepicker td.off,
+.daterangepicker td.off.in-range,
+.daterangepicker td.off.start-date,
+.daterangepicker td.off.end-date {
   color: #999;
   background: #fff;
 }
 
-.daterangepicker td.disabled, .daterangepicker option.disabled {
+.daterangepicker td.disabled,
+.daterangepicker option.disabled {
   color: #999;
 }
 
-.daterangepicker td.available:hover, .daterangepicker th.available:hover {
+.daterangepicker td.available:hover,
+.daterangepicker th.available:hover {
   background: #eee;
 }
 
@@ -11650,18 +11659,21 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
   border-radius: 4px;
 }
 
-.daterangepicker td.active, .daterangepicker td.active:hover {
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
   background-color: #357ebd;
   border-color: #3071a9;
   color: #fff;
 }
 
-.daterangepicker td.week, .daterangepicker th.week {
+.daterangepicker td.week,
+.daterangepicker th.week {
   font-size: 80%;
   color: #ccc;
 }
 
-.daterangepicker select.monthselect, .daterangepicker select.yearselect {
+.daterangepicker select.monthselect,
+.daterangepicker select.yearselect {
   font-size: 12px;
   padding: 1px;
   height: auto;
@@ -11678,7 +11690,10 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
   width: 40%;
 }
 
-.daterangepicker select.hourselect, .daterangepicker select.minuteselect, .daterangepicker select.secondselect, .daterangepicker select.ampmselect {
+.daterangepicker select.hourselect,
+.daterangepicker select.minuteselect,
+.daterangepicker select.secondselect,
+.daterangepicker select.ampmselect {
   width: 50px;
   margin-bottom: 0;
 }
@@ -11756,7 +11771,8 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
   cursor: pointer;
 }
 
-.daterangepicker .ranges li.active, .daterangepicker .ranges li:hover {
+.daterangepicker .ranges li.active,
+.daterangepicker .ranges li:hover {
   background: #08c;
   border: 1px solid #08c;
   color: #fff;
@@ -27095,7 +27111,7 @@ a:focus {
 }
 
 .header-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 16px;
   margin-bottom: 8px;
@@ -27657,7 +27673,7 @@ textarea.form-control {
   background-color: #ffffff;
   border: 1px solid #e3e3e3;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 15px;
   max-width: 100%;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -28316,7 +28332,7 @@ pre {
 .btn {
   border-radius: 4px;
   padding: 6px 14px;
-  font-size: 14px;
+  font-size: 15px;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
@@ -34898,9 +34914,16 @@ button.toast-close-button {
  * Custom CSS
  * -----------------------------------------------------------------------------
 /*/
+.navbar-default {
+  border-bottom: solid 1px #eee;
+}
+
+.content {
+  margin-top: 86px !important;
+}
+
 .topbar .topbar-left {
   text-align: left !important;
-  border-bottom: solid 1px #ebebeb;
 }
 
 .side-menu {
@@ -35125,6 +35148,20 @@ div#DataTables_Table_0_wrapper.dataTables_wrapper.container-fluid.dt-bootstrap4.
   padding: 0 !important;
 }
 
+div#DataTables_Table_0_wrapper .row {
+  -webkit-box-align: center !important;
+  -webkit-align-items: center !important;
+     -moz-box-align: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
+}
+
+.dataTables_length label {
+  margin-bottom: 0 !important;
+  font-size: 14px !important;
+  color: #6c757d !important;
+}
+
 .datatable-custom .dataTables_filter {
   display: none;
 }
@@ -35167,5 +35204,168 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
   .forced .side-menu {
     display: block;
   }
+}
+.custom-checkbox {
+  position: relative;
+}
+.custom-checkbox__wrapper {
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 4px 0;
+}
+.custom-checkbox__wrapper input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.custom-checkbox__wrapper input:checked ~ .custom-checkbox__checkmark {
+  background-color: #6ab058;
+}
+.custom-checkbox__wrapper input:checked ~ .custom-checkbox__checkmark:after {
+  opacity: 1;
+}
+.custom-checkbox__wrapper:hover input ~ .custom-checkbox__checkmark {
+  background-color: #ebeff2;
+}
+.custom-checkbox__wrapper:hover input:checked ~ .custom-checkbox__checkmark {
+  background-color: #6ab058;
+}
+.custom-checkbox__wrapper .custom-checkbox__checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #ebeff2;
+  -webkit-transition: background-color 0.25s ease;
+  -moz-transition: background-color 0.25s ease;
+  transition: background-color 0.25s ease;
+  border-radius: 4px;
+}
+.custom-checkbox__wrapper .custom-checkbox__checkmark:after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+     -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+  opacity: 0;
+  -webkit-transition: opacity 0.25s ease;
+  -moz-transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease;
+}
+
+/*/
+ * Custom Datepicker CSS
+ * -----------------------------------------------------------------------------
+/*/
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
+  background-color: #6ab058;
+  border-color: #6ab058;
+}
+
+.daterangepicker td.in-range.available:not(.active) {
+  background: rgba(106, 176, 88, 0.1) !important;
+}
+
+.daterangepicker .input-mini,
+.daterangepicker .input-mini.active {
+  height: 40px;
+  margin-bottom: 8px;
+  border: 1px solid #eff2f7;
+  background-color: rgba(106, 176, 88, 0.1);
+  color: #435966;
+  font-size: 16px;
+}
+
+.daterangepicker .ranges li {
+  border-radius: 2px;
+  color: #435966;
+  font-weight: 600;
+  font-size: 14px;
+  background-color: transparent;
+  font-weight: normal;
+  border: none;
+  border-bottom: solid 1px #eff2f7;
+  margin: 0;
+  padding: 6px 12px;
+}
+.daterangepicker .ranges li:last-child {
+  margin-bottom: 12px;
+}
+
+.daterangepicker .ranges li.active,
+.daterangepicker .ranges li:hover {
+  background-color: transparent;
+  color: #6ab058;
+  border: none;
+  border-bottom: solid 1px #eff2f7;
+}
+
+.daterangepicker .ranges li.active {
+  font-weight: 500;
+}
+
+.daterangepicker select.hourselect,
+.daterangepicker select.minuteselect,
+.daterangepicker select.secondselect,
+.daterangepicker select.ampmselect {
+  border: 1px solid #eff2f7;
+  padding: 2px;
+  width: 60px;
+}
+
+.dropdown-menu {
+  border: none;
+  -webkit-box-shadow: 0px 8px 24px rgba(67, 89, 102, 0.1);
+          box-shadow: 0px 8px 24px rgba(67, 89, 102, 0.1);
+}
+
+.daterangepicker .calendar-table {
+  border: 1px solid #eff2f7;
+}
+
+.calendar-table .table-condensed {
+  color: #435966;
+  font-size: 16px;
+}
+
+.daterangepicker td,
+.daterangepicker th {
+  text-align: center;
+  width: 40px;
+  height: 36px;
+  border-radius: 4px;
+  /* white-space: nowrap; */
+  cursor: pointer;
+}
+
+.daterangepicker td.off {
+  color: #becad1;
+}
+
+.daterangepicker td.available:hover,
+.daterangepicker th.available:hover {
+  background-color: rgba(106, 176, 88, 0.1);
+}
+
+.show-calendar .ranges {
+  border-right: solid 1px #eff2f7 !important;
+}
+.show-calendar .ranges ul {
+  padding-right: 8px;
 }
 /*# sourceMappingURL=maps/app.css.map */

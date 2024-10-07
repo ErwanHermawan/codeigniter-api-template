@@ -1,9 +1,12 @@
 <div class="row">
   <div class="col-12">
-    <div class="card-box table-responsive datatable-custom">
+    <div class="card-box datatable-custom">
 			<div class="d-flex justify-content-between align-items-center mb-4">
 				<h4 class="header-title mb-0">Data User</h4>
 				<div class="form-inline">
+					<!-- <div class="form-group ml-2">
+						<button type="button" class="btn btn-danger waves-effect w-md waves-light" id="deleteBatch"><i class="mdi mdi-trash-can-outline"></i> Delete Batch</button>
+					</div> -->
 					<div class="form-group">
 						<input id="dateRange" class="form-control ml-2 js-date-range-picker" data-range="0" placeholder="Search data"/>
 					</div>
@@ -23,12 +26,19 @@
 				</div>
 			</div>
       <div class="row">
-        <div class="col-sm-12 labe">
+        <div class="col-sm-12">
           <table class="table js-data-users">
             <thead>
               <tr role="row">
-                <th class="text-center" width="20">No</th>
-                <th class="text-center" width="80">Photo</th>
+                <th class="text-center" width="20">
+									<div class="custom-checkbox js-select-all-checkbox">
+										<label class="custom-checkbox__wrapper">
+											<input type="checkbox" id="selectAll"/>
+											<div class="custom-checkbox__checkmark"></div>
+										</label>
+									</div>	
+								</th>
+                <th width="80">Photo</th>
                 <th>Full Name</th>
                 <th>Username</th>
                 <th>Role</th>

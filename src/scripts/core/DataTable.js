@@ -64,7 +64,7 @@ const DataTable = (() => {
 		});
 
 		// --- sort setting
-		if (sortSetting !== 0) {
+		if (sortSetting) {
 			$("#" + sortSetting.id).on(sortSetting.event, (e) => {
 				let value = $(e.currentTarget).val();
 				table.page.len(value).draw();
@@ -72,11 +72,63 @@ const DataTable = (() => {
 		}
 
 		// --- setting visibility column
-		if (columnVisibleSetting !== 0) {
+		if (columnVisibleSetting) {
 			table
 				.columns(columnVisibleSetting.target)
 				.visible(columnVisibleSetting.visble);
 		}
+
+		var selectedRows = [];
+		const deleteButton = `<button type="button" class="btn btn-danger waves-effect w-md waves-light" id="deleteBatch"><i class="mdi mdi-trash-can-outline"></i> Delete Batch</button>`;
+
+		// Handle 'Select All' checkbox
+		$("#selectAll").on("click", function () {
+			var rows = table.rows({ search: "applied" }).nodes();
+			$('input[type="checkbox"]', rows).prop("checked", this.checked);
+
+			// Add or remove row IDs from selectedRows
+			if (this.checked) {
+				$('input[type="checkbox"]', rows).each(function () {
+					var id = $(this).val();
+					if (!selectedRows.includes(id)) {
+						selectedRows.push(id);
+					}
+				});
+				$("body").find(".form-inline").prepend(deleteButton);
+			} else {
+				$('input[type="checkbox"]', rows).each(function () {
+					var id = $(this).val();
+					selectedRows = selectedRows.filter((item) => item !== id);
+				});
+				$("body").find(".form-inline").find("#deleteBatch").remove();
+			}
+		});
+
+		// Handle individual row checkboxes
+		$("." + dataSetting.selector + " tbody").on(
+			"change",
+			'input[type="checkbox"]',
+			function () {
+				var id = $(this).val();
+				if (this.checked) {
+					if (!selectedRows.includes(id)) {
+						selectedRows.push(id);
+					}
+					$("body").find(".form-inline").prepend(deleteButton);
+				} else {
+					selectedRows = selectedRows.filter((item) => item !== id);
+					$("#selectAll").prop("checked", false);
+					$("body").find(".form-inline").find("#deleteBatch").remove();
+				}
+			}
+		);
+
+		// Example of getting selected rows when form is submitted
+		$("body")
+			.find("#deleteBatch")
+			.on("click", function () {
+				console.log("Selected Row IDs:", selectedRows);
+			});
 	};
 
 	// -- init

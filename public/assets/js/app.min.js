@@ -189,14 +189,13 @@ var Login = function () {
             return _utilities.HttpRequest.ajax(data);
           case 8:
             response = _context.sent;
-            console.log(response);
             if (response.status) {
               _utilities.Session.set("userData", JSON.stringify(response.data));
               location.href = _variables.WEB_URL.dashboard;
             } else {
               _utilities.SweetAlert.config(response.message, "error");
             }
-          case 11:
+          case 10:
           case "end":
             return _context.stop();
         }
@@ -394,22 +393,11 @@ var Users = function () {
       token: userData.token
     };
     var columnSetting = [{
+      targets: [5, 6],
+      className: "text-center"
+    }, {
       targets: 0,
-      orderable: false,
-      render: function render(data) {
-        return "<div class=\"custom-checkbox\">\n\t\t\t\t\t\t\t\t\t\t<label class=\"custom-checkbox__wrapper\">\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" value=\"".concat(data, "\" />\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"custom-checkbox__checkmark\"></div>\n\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t</div>");
-      }
-    }, {
-      targets: 1,
-      render: function render(data) {
-        return "<span class=\"user-avatar\">\n\t\t\t\t\t\t\t\t\t\t<img class=\"user-avatar__img\" src=\"".concat(data, "\" />\n\t\t\t\t\t\t\t\t\t</span>");
-      }
-    }, {
-      targets: 6,
-      className: "text-center",
-      render: function render(data) {
-        return "<button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Edit\" class=\"btn btn-icon waves-effect btn-primary btn-trans js-edit-data\" data-id=\"".concat(data, "\"><i class=\"mdi mdi-pencil-outline\"></i></button>\n\t\t\t\t\t<button type=\"button\" data-toggle=\"tooltip\" data-placement=\"left\" title=\"Delete\" class=\"btn btn-icon waves-effect btn-danger btn-trans js-delete-data\" data-id=\"").concat(data, "\"><i class=\"mdi mdi-trash-can-outline\"></i></button>");
-      }
+      orderable: false
     }];
     var filterSetting = [{
       id: "dateRange",

@@ -65,7 +65,6 @@ const Login = (() => {
 		};
 
 		const response = await HttpRequest.ajax(data);
-		console.log(response);
 
 		if (response.status) {
 			Session.set("userData", JSON.stringify(response.data));

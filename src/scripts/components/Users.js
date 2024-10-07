@@ -70,32 +70,12 @@ const Users = (() => {
 
 		const columnSetting = [
 			{
+				targets: [5, 6],
+				className: "text-center",
+			},
+			{
 				targets: 0,
 				orderable: false,
-				render: (data) => {
-					return `<div class="custom-checkbox">
-										<label class="custom-checkbox__wrapper">
-											<input type="checkbox" value="${data}" />
-											<div class="custom-checkbox__checkmark"></div>
-										</label>
-									</div>`;
-				},
-			},
-			{
-				targets: 1,
-				render: (data) => {
-					return `<span class="user-avatar">
-										<img class="user-avatar__img" src="${data}" />
-									</span>`;
-				},
-			},
-			{
-				targets: 6,
-				className: "text-center",
-				render: (data) => {
-					return `<button type="button" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-icon waves-effect btn-primary btn-trans js-edit-data" data-id="${data}"><i class="mdi mdi-pencil-outline"></i></button>
-					<button type="button" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-icon waves-effect btn-danger btn-trans js-delete-data" data-id="${data}"><i class="mdi mdi-trash-can-outline"></i></button>`;
-				},
 			},
 		];
 

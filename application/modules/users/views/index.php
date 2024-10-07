@@ -4,9 +4,6 @@
 			<div class="d-flex justify-content-between align-items-center mb-4">
 				<h4 class="header-title mb-0">Data User</h4>
 				<div class="form-inline">
-					<!-- <div class="form-group ml-2">
-						<button type="button" class="btn btn-danger waves-effect w-md waves-light" id="deleteBatch"><i class="mdi mdi-trash-can-outline"></i> Delete Batch</button>
-					</div> -->
 					<div class="form-group">
 						<input id="dateRange" class="form-control ml-2 js-date-range-picker" data-range="0" placeholder="Search data"/>
 					</div>

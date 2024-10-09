@@ -8,113 +8,102 @@ class Global_model extends CI_Model {
 	}
 	
 	/**
-	 * Get data from a table with optional keyword filtering.
+	 * Fetch data from the database with custom conditions and options.
 	 *
-	 * @param string $table The table name.
-	 * @param array $multi_keyword An associative array of fields and keywords for filtering.
-	 * @param int $limit Limit the number of results.
-	 * @param string $sort Sorting order (asc or desc).
-	 * @return array Result set as an associative array.
+	 * @param array $data {
+	 *   Array of parameters to customize the query.
+	 *
+	 *   @type string|null $select      Fields to select. If null, selects all fields.
+	 *   @type array|null  $where       Associative array of fields and values for the WHERE clause.
+	 *   @type array|null  $or_where    Associative array of fields and values for the OR WHERE clause.
+	 *   @type array|null  $search      Associative array for the LIKE search, with field => value pairs.
+	 *   @type array|null  $sorting     {
+	 *     Array to define sorting options.
+	 *     @type string $field The field to sort by.
+	 *     @type string $order The order of sorting (ASC or DESC).
+	 *   }
+	 *   @type int|null    $limit       Limit the number of results.
+	 *   @type int|null    $offset      The offset for the limit (for pagination).
+	 *   @type string|null $output_data The output format, either 'result_array', 'row', or 'num_rows'.
+	 *   @type string      $table       The name of the table to query.
+	 * }
+	 *
+	 * @return array|object|int|null
+	 *   Returns the result of the query based on the requested output type:
+	 *   - 'result_array': Returns an array of results (default).
+	 *   - 'row': Returns a single row as an object.
+	 *   - 'num_rows': Returns the number of rows.
 	 */
-	public function get_data(string $table, array $multi_keyword = [], int $limit = 0, string $sort = 'asc'): array {
-		$this->db->from($table);
-		
-		if (!empty($multi_keyword)) {
-			// Start grouping if there are multiple keywords
-			if (count($multi_keyword) > 1) {
-				$this->db->group_start();
-				// Handle the first keyword as a "LIKE" condition
-				$first_field = key($multi_keyword);
-				$this->db->like($first_field, $multi_keyword[$first_field]);
-				
-				// Handle remaining keywords as "OR LIKE" conditions
-				foreach (array_slice($multi_keyword, 1) as $field => $val) {
-					$this->db->or_like($field, $val);
-				}
-				$this->db->group_end();
-			} else {
-				// Single keyword handling
-				foreach ($multi_keyword as $field => $val) {
-					$this->db->like($field, $val);
+	public function get_data($data = [])
+	{
+		// Select custom data
+		if (!empty($data['select'])) {
+			$this->db->select($data['select']);
+		}
+
+		// Where clause
+		if (!empty($data['where'])) {
+			foreach ($data['where'] as $field => $val) {
+				if ($val != 'all') {
+					$this->db->where($field, $val);
 				}
 			}
 		}
-		
-		// Apply limit if specified
-		if ($limit > 0) {
-			$this->db->limit($limit);
-		}
-		
-		// Apply sorting based on created_date if the field exists
-		if ($this->db->field_exists('created_date', $table)) {
-			$this->db->order_by('created_date', $sort);
-		}
-		
-		// Execute the query and return the results
-		return $this->db->get()->result_array();
-	}
-	
-	/**
-	 * Get data with specific where conditions and sorting.
-	 *
-	 * @param string $table The table name.
-	 * @param array $multi_where Associative array for multi-where conditions.
-	 * @param array $or_where Associative array for OR where conditions.
-	 * @param object|null $sorting Sorting object with field and order.
-	 * @param int $limit Limit the number of results.
-	 * @param array $multi_keyword An associative array of fields and keywords for filtering.
-	 * @return array Result set as an associative array.
-	 */
-	public function get_data_where(string $table, array $multi_where = [], array $or_where = [], $sorting = null, int $limit = 0, array $multi_keyword = []): array {
-		// Apply multi-where conditions
-		if (!empty($multi_where)) {
-			foreach ($multi_where as $field => $val) {
-				$this->db->where($field, $val);
-			}
-		}
-		
-		// Apply or-where conditions
-		if (!empty($or_where)) {
-			foreach ($or_where as $field => $val) {
+
+		// Or Where clause
+		if (!empty($data['or_where'])) {
+			foreach ($data['or_where'] as $field => $val) {
 				$this->db->or_where($field, $val);
 			}
 		}
-		
-		// Apply sorting if provided
-		if ($sorting) {
-			$this->db->order_by($sorting->field, $sorting->order);
-		}
-		
-		// Apply limit if specified
-		if ($limit > 0) {
-			$this->db->limit($limit);
-		}
-		
-		// Apply multi-keyword conditions
-		if (!empty($multi_keyword)) {
-			if (count($multi_keyword) > 1) {
-				$this->db->group_start();
-				// First keyword as a "LIKE" condition
-				$first_field = key($multi_keyword);
-				$this->db->like($first_field, $multi_keyword[$first_field]);
-				
-				// Remaining keywords as "OR LIKE" conditions
-				foreach (array_slice($multi_keyword, 1) as $field => $val) {
-					$this->db->or_like($field, $val);
-				}
-				$this->db->group_end();
-			} else {
-				// Single keyword handling
-				foreach ($multi_keyword as $field => $val) {
-					$this->db->like($field, $val);
+
+		// Like clause (search)
+		if (!empty($data['search'])) {
+			$this->db->group_start();
+			$first = true;
+
+			foreach ($data['search'] as $field => $val) {
+				$val_array = json_decode($val);
+
+				if ($val_array && is_array($val_array)) {
+					foreach ($val_array as $new_val) {
+						$first ? $this->db->where($field, $new_val) : $this->db->or_where($field, $new_val);
+						$first = false;
+					}
+				} else {
+					$first ? $this->db->like($field, $val) : $this->db->or_like($field, $val);
+					$first = false;
 				}
 			}
+
+			$this->db->group_end();
 		}
-		
-		// Execute the query and return the results
-		return $this->db->get($table)->result_array();
+
+		// Sorting
+		if (!empty($data['sorting'])) {
+			$this->db->order_by($data['sorting']['field'], $data['sorting']['order']);
+		}
+
+		// Limit and offset
+		if (!empty($data['limit'])) {
+			$offset = !empty($data['offset']) ? $data['offset'] : 0;
+			$this->db->limit($data['limit'], $offset);
+		}
+
+		// Get query result
+		$q = $this->db->get($data['table']);
+
+		// Output data handling
+		switch ($data['output_data'] ?? 'result_array') {
+			case 'row':
+				return $q->num_rows() > 0 ? $q->row() : null;
+			case 'num_rows':
+				return $q->num_rows();
+			default:
+				return $q->result_array();
+		}
 	}
-	
+
 	/**
 	 * Get a single row of data from a table.
 	 *
@@ -250,138 +239,6 @@ class Global_model extends CI_Model {
 		// Execute the query and return the result
 		$query = $this->db->get();
 		return $query->row(); // Return a single row instead of the entire query object
-	}
-	
-	/**
-	 * Get the number of rows matching specified criteria.
-	 *
-	 * @param string $table The table name.
-	 * @param array|null $multi_where Multi-where conditions.
-	 * @param array|null $multi_keyword Multi-keyword search.
-	 * @param array|null $date_range Date range filtering.
-	 * @param array|null $or_where OR conditions.
-	 * @return int The number of matching rows.
-	 */
-	public function get_row(string $table, ?array $multi_where = null, ?array $multi_keyword = null, ?array $date_range = null, ?array $or_where = null): int 
-	{
-		// Handle multi-keyword search
-		if ($multi_keyword !== null) {
-			if (count($multi_keyword) > 1) {
-				$this->db->group_start();
-				foreach (array_slice($multi_keyword, 0, 1) as $field => $val) {
-					$this->db->like($field, $val);
-				}
-				foreach (array_slice($multi_keyword, 1) as $field => $val) {
-					$this->db->or_like($field, $val);
-				}
-				$this->db->group_end();
-			} else {
-				foreach ($multi_keyword as $field => $val) {
-					$this->db->like($field, $val);
-				}
-			}
-		}
-
-		// Handle date range filtering
-		if ($date_range !== null) {
-			$this->db->where($date_range['column'] . ' >=', $date_range['start_date']);
-			$this->db->where($date_range['column'] . ' <=', $date_range['end_date']);
-		}
-
-		// Handle multi-where conditions
-		if ($multi_where !== null) {
-			foreach ($multi_where as $field => $val) {
-				if ($val !== 'All') {
-					$this->db->where($field, $val);
-				}
-			}
-		}
-
-		// Handle OR conditions
-		if ($or_where !== null) {
-			foreach ($or_where as $field => $val) {
-				$this->db->or_where($field, $val);
-			}
-		}
-
-		// Execute the query
-		$query = $this->db->get($table);
-		return $query->num_rows(); // Return the number of rows that match the criteria
-	}
-
-	/**
-	 * Get paginated data with various filtering options.
-	 *
-	 * @param string $table The table name.
-	 * @param array|null $multi_where Multi-where conditions.
-	 * @param array|null $multi_keyword Multi-keyword search.
-	 * @param array|null $paging Pagination parameters.
-	 * @param array|null $date_range Date range filtering.
-	 * @param object|null $sorting Sorting object with field and order.
-	 * @param array|null $or_where OR conditions.
-	 * @return object Query result object.
-	 */
-	public function get_data_page(string $table, ?array $multi_where = null, ?array $multi_keyword = null, ?array $paging = null, ?array $date_range = null, ?object $sorting = null, ?array $or_where = null): object
-	{
-		// Handle multi-keyword search
-		if ($multi_keyword !== null) {
-			if (count($multi_keyword) > 1) {
-				$this->db->group_start();
-				foreach (array_slice($multi_keyword, 0, 1) as $field => $val) {
-					$this->db->like($field, $val);
-				}
-				foreach (array_slice($multi_keyword, 1) as $field => $val) {
-					$this->db->or_like($field, $val);
-				}
-				$this->db->group_end();
-			} else {
-				foreach ($multi_keyword as $field => $val) {
-					$this->db->like($field, $val);
-				}
-			}
-		}
-
-		// Handle date range filtering
-		if ($date_range !== null) {
-			$this->db->where($date_range['column'] . ' >=', $date_range['start_date']);
-			$this->db->where($date_range['column'] . ' <=', $date_range['end_date']);
-		}
-
-		// Handle multi-where conditions
-		if ($multi_where !== null) {
-			foreach ($multi_where as $field => $val) {
-				if ($val !== 'All') {
-					$this->db->where($field, $val);
-				}
-			}
-		}
-
-		// Handle OR conditions
-		if ($or_where !== null) {
-			foreach ($or_where as $field => $val) {
-				$this->db->or_where($field, $val);
-			}
-		}
-
-		// Handle pagination
-		if ($paging !== null) {
-			$this->db->limit($paging['limit'], $paging['start']);
-		}
-
-		// Handle sorting
-		if ($sorting !== null) {
-			$this->db->order_by($sorting->field, $sorting->order);
-		}
-
-		// Ensure created_date is sorted by DESC if it exists
-		if ($this->db->field_exists('created_date', $table)) {
-			$this->db->order_by('created_date', 'DESC');
-		}
-
-		// Execute the query
-		$query = $this->db->get($table);
-		
-		return $query; // Return the query result object
 	}
 
 }

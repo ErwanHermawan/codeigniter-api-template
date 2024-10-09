@@ -14,99 +14,155 @@ class Users extends RestController {
 	public function index_get()
 	{
 		$token = $this->input->get_request_header('Authorization');
-		$id = $this->get( 'id' );
+		$id = $this->get('id');
 		
 		if (!$token) {
-			$this->response(['status' => false, 'message' => 'Authorization token is missing'], RestController::HTTP_UNAUTHORIZED);
-			return;
+			return $this->response(['status' => false, 'message' => 'Authorization token is missing'], RestController::HTTP_UNAUTHORIZED);
 		}
 		
-		// Use the helper to decode the JWT
+		// Decode JWT token
 		$decoded = decode_jwt($token);
-		if ($decoded) {
-			if ( $id === null )
-			{
-				// datatable 
-				if (null !== $this->get('draw') && null !== $this->get('start') && null !== $this->get('length') && null !== $this->get('search')) {
-					$draw = intval($this->get('draw'));
-					$start = preg_replace("/[^a-zA-Z0-9.]/", '', $this->get('start')); 
-					$limit = preg_replace("/[^a-zA-Z0-9.]/", '', $this->get('length')); 
-					$search = htmlspecialchars($this->get('search')['value']);
-	
-					// Paging settings
-					$paging = ['start' => $start, 'limit' => $limit];
-	
-					// Multi-keyword search
-					$multi_keyword = !empty($search) ? ['name' => $search, 'email' => $search] : null;
-	
-					// Get total row count
-					$total_row = $this->global_model->get_data_page('tb_users', null, $multi_keyword)->num_rows();
-	
-					// Get paginated data
-					$data = $this->global_model->get_data_page('tb_users', null, $multi_keyword, $paging)->result();
-	
-					$o_data = [];
-					$i = 1;
-					$timestamp = date('ms'); // Cache the timestamp once for the loop
-	
-					foreach($data as $val) {
-						// Handle the user photo
-						$photo = $val->photo ? $val->photo . '?dt=' . $timestamp : 'default.jpg?dt=' . $timestamp;
-						$path = FILES . 'users/' . $photo;
-	
-						// Element rendering
-						$checkbox = render_checkbox($val->user_id);
-						$image = render_image($path);
-						$status = render_active_status($val->status);
-						$action_button = render_action_button($val->user_id, ['edit', 'delete']);
+		if (!$decoded) {
+			return $this->response(['status' => false, 'message' => 'Unauthorized access'], RestController::HTTP_UNAUTHORIZED);
+		}
 
-						// Append the data row to the array
-						$o_data[] = [
-							$checkbox,
-							$image,
-							$val->first_name ?? '',
-							$val->username ?? '',
-							$val->role ?? '',
-							$status,
-							$action_button
-						];
-					}
-	
-					$result = [
-						"draw" => $draw,
-						"recordsTotal" => $data,
-						"recordsFiltered" => $total_row,
-						"data" => $o_data
-					];
-	
-					// Return result as JSON
-					echo json_encode($result);
-					exit();
+		// If 'id' is provided, fetch the specific user's data
+		if ($id !== null) {
+			$this->handle_single_user($id);
+			return; // Exit after processing single user
+		}
 
-				} else {
-					$data = $this->global_model->get_data('tb_users');
-					if ( $data !== null ) {
-						// param print api: message, status, code, data
-						api_print('Get data successfully', true, 200, $data);
-					} else {
-						// param print api: message, status, code, data
-						api_print('No such user found', false, 404);
-					}
-				}
-			}
-			else
-			{
-				$data = $this->global_model->get_single_data('tb_users', 'user_id', $id);
-				if ( $data !== null ) {
-					// param print api: message, status, code, data
-					api_print('Get data successfully', true, 200, $data);
-				} else {
-					// param print api: message, status, code, data
-					api_print('No such user found', false, 404);
-				}
-			}
+		// Sanitize and validate DataTable inputs
+		$draw = $this->get('draw');
+		$start = sanitize($this->get('start'));
+		$limit = sanitize($this->get('length'));
+		$search = htmlspecialchars($this->get('search')['value'] ?? '');
+
+		// If request is for DataTable, handle accordingly
+		if ($draw !== null && $start !== null && $limit !== null && $search !== null) {
+			$this->handle_datatable_request($draw, $start, $limit, $search);
 		} else {
-			$this->response(['status' => false, 'message' => 'Unauthorized access'], RestController::HTTP_UNAUTHORIZED);
+			// Otherwise, Handle default request (paginated data)
+			$this->handle_default_request($limit, $start, $search);
+		}
+	}
+	
+	// Handle datatable request
+	private function handle_datatable_request($draw, $start, $limit, $search)
+	{
+		// Search and filtering logic
+		$config = [
+			'table' => 'tb_users',
+			'search' => ['first_name' => $search],
+			'sorting' => ['field' => 'user_id', 'order' => 'ASC'],
+			'output_data' => 'num_rows'
+		];
+		$total_row = $this->global_model->get_data($config);;
+		$data = $this->get_user_data($limit, $start, $search);
+		
+		$o_data = [];
+		$timestamp = date('ms'); // Cache the timestamp once for the loop
+		
+		foreach ($data as $val) {
+			$photo = $val['photo'] ? $val['photo'] . '?dt=' . $timestamp : 'default.jpg?dt=' . $timestamp;
+			$path = FILES . 'users/' . $photo;
+			
+			$o_data[] = [
+				render_checkbox($val['user_id']),
+				render_image($path),
+				$val['first_name'] ?? '',
+				$val['username'] ?? '',
+				$val['role'] ?? '',
+				render_active_status($val['status']),
+				render_action_button($val['user_id'], ['edit', 'delete'])
+			];
+		}
+		
+		$result = [
+			"draw" => $draw,
+			"recordsTotal" => $total_row,
+			"recordsFiltered" => $total_row,
+			"data" => $o_data
+		];
+		
+		echo json_encode($result);
+		exit();
+	}
+	
+	// Handle default request (paginated data)
+	private function handle_default_request($limit, $start, $search)
+	{
+		$data = $this->get_user_data($limit, $start, $search);
+		if ($data !== null) {
+			api_print('Get data successfully', true, 200, $data);
+		} else {
+			api_print('No such user found', false, 404);
+		}
+	}
+	
+	// Handle single user retrieval
+	private function handle_single_user($id)
+	{
+		$data = $this->global_model->get_single_data('tb_users', 'user_id', $id);
+		if ($data !== null) {
+			api_print('Get data successfully', true, 200, $data);
+		} else {
+			api_print('No such user found', false, 404);
+		}
+	}
+	
+	// Get paginated user data
+	private function get_user_data($limit, $start, $search)
+	{
+		$config = [
+			'table' => 'tb_users',
+			'search' => ['first_name' => $search],
+			'sorting' => ['field' => 'user_id', 'order' => 'ASC'],
+			'limit' => $limit,
+			'ofset' => $start
+		];
+		
+		return $this->global_model->get_data($config);
+	}
+	
+	// Add User
+	public function index_post() {
+		$token = $this->input->get_request_header('Authorization');
+		
+		// Check if Authorization token is provided
+		if (!$token) {
+			return $this->response(['status' => false, 'message' => 'Authorization token is missing'], RestController::HTTP_UNAUTHORIZED);
+		}
+		
+		// Decode JWT token and check for validity
+		$decoded = decode_jwt($token);
+		if (!$decoded) {
+			return $this->response(['status' => false, 'message' => 'Unauthorized access'], RestController::HTTP_UNAUTHORIZED);
+		}
+
+		// Validate required fields
+		$required_fields = ['name', 'username', 'password', 'role'];
+		foreach ($required_fields as $field) {
+			if ($this->post($field) === null) {
+				return api_print('Missing required field: ' . ucfirst($field), false, 400);
+			}
+		}
+
+		// Collect input data
+		$data_collection = ['name', 'username', 'phone', 'role', 'status'];
+		$data = data_collection_add($data_collection);
+
+		// Add password to the collected data
+		$data['password'] = password_hash($this->post('password'), PASSWORD_DEFAULT);
+
+		// Insert data into the database
+		$result = $this->global_model->add('tb_users', $data);
+
+		// Response handling
+		if ($result) {
+			return api_print('User added successfully.', true, 200, $data);
+		} else {
+			return api_print('Failed to add user.', false, 500);
 		}
 	}
 }

@@ -7,15 +7,18 @@
 import { API_URL, WHITESPACE } from "../variables";
 
 // --- utilities
-import { Session, SweetAlert } from "utilities";
+import { Session, Form, SweetAlert } from "utilities";
 
 // --- core
 import { DataTable } from "core";
 
 const userData = JSON.parse(Session.get("userData"));
 
-// Form UserSelector
-const UserSelector = [
+// Form ElementSelector
+const ElementSelector = [
+	{
+		id: "user_id",
+	},
 	{
 		id: "name",
 		validation: {
@@ -30,16 +33,9 @@ const UserSelector = [
 		},
 	},
 	{
-		id: "confirm_password",
-		validation: {
-			confirmPassword: true,
-		},
-	},
-	{
-		id: "email",
+		id: "username",
 		validation: {
 			required: true,
-			email: true,
 		},
 	},
 	{
@@ -54,6 +50,10 @@ const UserSelector = [
 		validation: {
 			selectRequired: true,
 		},
+	},
+	{
+		id: "photo",
+		type: "file",
 	},
 ];
 const ElementEvents = ["input", "blur"];
@@ -102,19 +102,31 @@ const Users = (() => {
 		DataTable.server(dataSetting, columnSetting, filterSetting, sortSetting);
 	};
 
-	const selectCheckbox = () => {
-		$(".js-select-all-checkbox input").on("click", (e) => {
-			const _this = $(e.currentTarget);
-			if (_this.is(":checked")) {
+	// Handle Run Validation
+	const handleRunValidation = () => {
+		Form.validation(ElementEvents, ElementSelector);
+	};
+
+	// Handle Click Validation
+	const handleClickValidation = () => {
+		$('button[type="submit"]').on("click", (e) => {
+			$.each(ElementSelector, (i, v) => {
+				$("#" + v.id).blur();
+			});
+
+			if ($(".error").length === 0) {
+				// handlePostData();
 				console.log(1);
-			} else {
-				console.log(2);
 			}
+			e.preventDefault();
 		});
 	};
 
+	// init
 	const init = () => {
 		handleRunDataTable();
+		handleRunValidation();
+		handleClickValidation();
 	};
 
 	return {

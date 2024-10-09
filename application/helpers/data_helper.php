@@ -10,16 +10,17 @@ if (!function_exists('data_collection')) {
 	* @return array The collected data
 	*/
 	function data_collection(array $data_collection) {
+		$ci =& get_instance();
 		$data = [];
-		
+
 		foreach ($data_collection as $key) {
-			if (isset($_POST[$key])) {
-				$data[$key] = $_POST[$key]; // Add only if the POST key exists
+			if ($ci->post($key) !== null) {
+				$data[$key] = $ci->post($key); // Add only if the POST key exists
 			} else {
 				$data[$key] = null; // You may decide to set a default value like null
 			}
 		}
-		
+
 		return $data;
 	}
 }

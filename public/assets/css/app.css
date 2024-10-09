@@ -35177,6 +35177,39 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
   line-height: 16px;
 }
 
+.modal-header .close {
+  color: #ff5b5b !important;
+  opacity: 1;
+}
+
+.modal-title {
+  margin-top: 4px !important;
+}
+
+.dropify-wrapper {
+  height: 160px !important;
+}
+
+.error label {
+  font-size: 14px;
+  color: #212529;
+}
+
+.error .form-control {
+  border-color: #ff5b5b;
+}
+
+.form-alert {
+  display: none;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.error .form-alert {
+  display: block;
+  width: 100%;
+}
+
 @media only screen and (max-width: 991.98px) {
   #wrapper.enlarged .topbar .topbar-left,
   .topbar .topbar-left {

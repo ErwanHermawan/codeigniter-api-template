@@ -52,9 +52,10 @@ if (!function_exists('render_checkbox')) {
 	}
 }
 
-if (!function_exists('is_datatables_request')) {
-  function is_datatables_request() {
-
-		return $check_element;
+if (!function_exists('sanitize')) {
+  // Helper function to sanitize input values
+	function sanitize($input)
+	{
+		return preg_replace("/[^a-zA-Z0-9.]/", '', $input);
 	}
 }

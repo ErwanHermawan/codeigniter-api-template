@@ -13,10 +13,6 @@ class Users extends MX_Controller {
 	// -- view
 	public function view()
 	{
-		$data = [
-      'user_list' => $this->global_model->get_data('tb_users')
-    ];
-
-		$this->load->view('index', $data);
+		$this->load->view('index');
 	}
 }

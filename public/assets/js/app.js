@@ -347,8 +347,10 @@ var _core = require("../core");
 
 var userData = JSON.parse(_utilities.Session.get("userData"));
 
-// Form UserSelector
-var UserSelector = [{
+// Form ElementSelector
+var ElementSelector = [{
+  id: "user_id"
+}, {
   id: "name",
   validation: {
     required: true
@@ -360,15 +362,9 @@ var UserSelector = [{
     minimumChar: 5
   }
 }, {
-  id: "confirm_password",
+  id: "username",
   validation: {
-    confirmPassword: true
-  }
-}, {
-  id: "email",
-  validation: {
-    required: true,
-    email: true
+    required: true
   }
 }, {
   id: "phone",
@@ -381,6 +377,9 @@ var UserSelector = [{
   validation: {
     selectRequired: true
   }
+}, {
+  id: "photo",
+  type: "file"
 }];
 var ElementEvents = ["input", "blur"];
 var Users = function () {
@@ -415,18 +414,31 @@ var Users = function () {
     };
     _core.DataTable.server(dataSetting, columnSetting, filterSetting, sortSetting);
   };
-  var selectCheckbox = function selectCheckbox() {
-    $(".js-select-all-checkbox input").on("click", function (e) {
-      var _this = $(e.currentTarget);
-      if (_this.is(":checked")) {
+
+  // Handle Run Validation
+  var handleRunValidation = function handleRunValidation() {
+    _utilities.Form.validation(ElementEvents, ElementSelector);
+  };
+
+  // Handle Click Validation
+  var handleClickValidation = function handleClickValidation() {
+    $('button[type="submit"]').on("click", function (e) {
+      $.each(ElementSelector, function (i, v) {
+        $("#" + v.id).blur();
+      });
+      if ($(".error").length === 0) {
+        // handlePostData();
         console.log(1);
-      } else {
-        console.log(2);
       }
+      e.preventDefault();
     });
   };
+
+  // init
   var init = function init() {
     handleRunDataTable();
+    handleRunValidation();
+    handleClickValidation();
   };
   return {
     init: init

@@ -35,7 +35,7 @@
       <!-- DataTable -->
       <div class="row">
         <div class="col-sm-12">
-          <table class="table js-data-users">
+          <table id="dataTable" class="table js-data-users">
             <thead>
               <tr role="row">
                 <th class="text-center" width="20">

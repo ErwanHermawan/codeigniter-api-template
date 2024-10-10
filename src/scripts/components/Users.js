@@ -7,7 +7,7 @@
 import { API_URL, WHITESPACE } from "../variables";
 
 // --- utilities
-import { Session, Form, SweetAlert } from "utilities";
+import { Session, Form, HttpRequest, SweetAlert } from "utilities";
 
 // --- core
 import { DataTable } from "core";
@@ -36,13 +36,6 @@ const ElementSelector = [
 		id: "username",
 		validation: {
 			required: true,
-		},
-	},
-	{
-		id: "phone",
-		validation: {
-			required: false,
-			phone: true,
 		},
 	},
 	{
@@ -115,18 +108,72 @@ const Users = (() => {
 			});
 
 			if ($(".error").length === 0) {
-				// handlePostData();
-				console.log(1);
+				handlePostData();
 			}
 			e.preventDefault();
 		});
 	};
 
+	const handlePostData = () => {
+		const formData = Form.dataColletion(ElementSelector);
+		console.log(formData);
+		const userId = $("#user_id").val();
+
+		const endpoint = API_URL.USERS;
+		const method = userId.length ? "PUT" : "POST";
+
+		const requestData = {
+			url: endpoint,
+			method: method,
+			data: formData,
+			elementSelector: ElementSelector,
+		};
+
+		Form.postData(requestData);
+	};
+
+	const handleEditData = () => {
+		$("body").on("click", ".js-edit-data", (e) => {
+			const _this = $(e.currentTarget);
+			const userId = _this.attr("data-id");
+
+			const data = {
+				url: API_URL.USERS,
+				data: { user_id: userId },
+				elementSelector: ElementSelector,
+			};
+
+			Form.getData(data);
+		});
+	};
+
+	// handleDeleteData
+	const handleDeleteData = () => {
+		$("body").on("click", ".js-delete-data", (e) => {
+			const _this = $(e.currentTarget);
+			const userId = _this.attr("data-id");
+
+			const sendData = JSON.stringify({ user_id: userId });
+
+			const data = {
+				url: API_URL.USERS,
+				method: "DELETE",
+				data: sendData,
+			};
+
+			Form.deleteData(data);
+		});
+	};
+
 	// init
 	const init = () => {
-		handleRunDataTable();
-		handleRunValidation();
-		handleClickValidation();
+		if ($(".js-data-users").length) {
+			handleRunDataTable();
+			handleRunValidation();
+			handleClickValidation();
+			handleEditData();
+			handleDeleteData();
+		}
 	};
 
 	return {

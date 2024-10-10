@@ -39,7 +39,7 @@ class Auth extends RestController {
 			$data = [
 				'logged_in' => true,
 				'user_id' => $user->user_id,
-				'full_name' => trim($user->first_name . ' ' . $user->mid_name . ' ' . $user->last_name),
+				'name' => $user->name,
 				'photo' => $user->photo,
 				'status' => $user->status,
 				'role' => $user->role,

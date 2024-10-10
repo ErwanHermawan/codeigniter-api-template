@@ -14,7 +14,7 @@ import {
 } from "variables";
 
 // --- utilities
-import { HttpRequest, SweetAlert } from "utilities";
+import { HttpRequest, Session, SweetAlert } from "utilities";
 
 const Form = (() => {
 	// - handleValidation
@@ -118,6 +118,7 @@ const Form = (() => {
 		});
 	};
 
+	// handleConfirmPassword
 	const handleConfirmPassword = () => {
 		$(".js-confirm-password").on("input", (e) => {
 			const _this = $(e.currentTarget);
@@ -134,6 +135,38 @@ const Form = (() => {
 				_parent.find(".form-alert").addClass("error").text(_text);
 			}
 		});
+	};
+
+	// handleRunEmpty
+	const handleRunEmpty = (selectorEl, isAlert) => {
+		if (isAlert) {
+			swal({
+				title: "Apakah Anda yakin?",
+				text: "Tindakan ini tidak dapat diurungkan!",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonText: "Ya",
+				cancelButtonText: "Batal",
+				confirmButtonClass: "btn btn-success",
+				cancelButtonClass: "btn btn-danger m-l-10",
+				buttonsStyling: false,
+			}).then(
+				() => {
+					// Run Empty data
+					handleEmptyData(selectorEl);
+					// hide modal
+					$(".modal").modal("hide");
+				},
+				(dismiss) => {
+					if (dismiss === "cancel") {
+						swal("Batal", "Data Anda aman :)", "error");
+					}
+				}
+			);
+		} else {
+			// Run Empty data
+			handleEmptyData(selectorEl);
+		}
 	};
 
 	// handleEmptyData
@@ -173,38 +206,6 @@ const Form = (() => {
 		});
 	};
 
-	// handleRunEmpty
-	const handleRunEmpty = (selectorEl, isAlert) => {
-		if (isAlert) {
-			swal({
-				title: "Apakah Anda yakin?",
-				text: "Tindakan ini tidak dapat diurungkan!",
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonText: "Ya",
-				cancelButtonText: "Batal",
-				confirmButtonClass: "btn btn-success",
-				cancelButtonClass: "btn btn-danger m-l-10",
-				buttonsStyling: false,
-			}).then(
-				() => {
-					// Run Empty data
-					handleEmptyData(selectorEl);
-					// hide modal
-					$(".modal").modal("hide");
-				},
-				(dismiss) => {
-					if (dismiss === "cancel") {
-						swal("Batal", "Data Anda aman :)", "error");
-					}
-				}
-			);
-		} else {
-			// Run Empty data
-			handleEmptyData(selectorEl);
-		}
-	};
-
 	// handleDataColletion
 	const handleDataColletion = (selectorEl) => {
 		let formData = new FormData();
@@ -236,107 +237,100 @@ const Form = (() => {
 	};
 
 	// handleGetFormData
-	const handleGetFormData = (data, modalShow) => {
-		// handleRunEmpty(data.elementSelector);
-		// get data from API
-		const response = HttpRequest.custom(data);
-		if (response.code === 200) {
-			// show form modal
-			if (modalShow !== undefined) {
-				// for examination modal
-				if (modalShow === "examination") {
-					const data = response.data;
-					if (data.examinationNurse === "1" && data.doctorId === undefined) {
-						modalShow = "#modalExaminationNurse";
-						$(modalShow).modal("show");
-					} else {
-						modalShow = "#modalExamination";
-						$(modalShow).modal("show");
-					}
-					// end for examination modal
-				} else {
-					$(modalShow).modal("show");
-				}
+	const handleGetFormData = async (data, modalShow = null) => {
+		// Ensure userData and token are available
+		const userData = JSON.parse(Session.get("userData")); // Assuming this is how userData is retrieved
+		const token = userData?.token;
+
+		if (!token) {
+			SweetAlert.config("Authorization token is missing", "error");
+			return;
+		}
+		// Get data from API
+		const response = await HttpRequest.get(data, token);
+		console.log(response);
+
+		if (response.status) {
+			// Show the modal
+			if (modalShow) {
+				$(modalShow).modal("show");
 			} else {
 				$(".modal").modal("show");
 			}
-			// set input data
-			$.each(data.elementSelector, (i, v) => {
-				let _element = v.alias !== undefined ? $("#" + v.alias) : $("#" + v.id);
-				let _elementId = v.alias !== undefined ? v.alias : v.id;
 
-				$.each(response.data, (iD, vD) => {
-					if (modalShow !== undefined) {
-						_element = $(modalShow).find("#" + v.id);
-					}
-					if (_elementId == iD) {
-						if (v.type !== undefined && v.type == "file") {
-							if (vD !== null) {
-								_element.parents(".form-group").find(".img-preview").show();
-								_element.parents(".form-group").find(".img-preview__el").attr({
-									src: vD,
-								});
-							}
-						} else if (v.type !== undefined && v.type == "checkbox") {
-							if (vD == 1) {
-								_element.attr("checked", "checked");
-							} else {
-								_element.removeAttr("checked");
-							}
-						} else if (
-							v.type !== undefined &&
-							v.type == "custom-select-input"
-						) {
-							_element.val(vD);
-							_element.trigger("change");
-						} else if (
-							v.validation !== undefined &&
-							v.validation.selectOption
-						) {
-							if (_element.hasClass("js-select2")) {
-								const _dataSelect = vD.split("value: ");
-								const _text = _dataSelect[0];
-								const _val = _dataSelect[1];
-								_element
-									.parent()
-									.find(".select2")
-									.find(".select2-selection__rendered")
-									.text(_text);
+			// Iterate through element selectors
+			$.each(data.elementSelector, (index, field) => {
+				let element = field.alias ? $("#" + field.alias) : $("#" + field.id);
+				let elementId = field.alias || field.id;
 
-								$(`#${v.id} option[value="${_val}"]`).attr(
-									"selected",
-									"selected"
-								);
-								_element.val(_val);
-							} else {
-								_element.val(vD);
-							}
-						} else if (v.validation !== undefined && v.validation.attrId) {
-							const _arr = vD.split(" - ");
-							let _val = "";
-							for (let i = 0; i < _arr.length; i++) {
-								_val += _arr[i].split(",")[0] + ", ";
-							}
-							_element.attr("data-id", _val.slice(0, -1));
-							_element.val(vD);
-						} else if (v.dataValueId !== undefined) {
-							const _dataSelect = vD.split("-");
-							_element.attr("data-id", _dataSelect[0]);
-							_element.val(_dataSelect[1]);
+				// Match API response data to form fields
+				$.each(response.data, (responseKey, responseValue) => {
+					if (elementId == responseKey) {
+						if (modalShow) {
+							element = $(modalShow).find("#" + field.id); // Target element within modal
+						}
 
-							$(`#${iD}`)
-								.parent(".form-dropdown")
-								.find(".js-reset-dropdown")
-								.show();
-						} else {
-							if (typeof vD !== "object") {
-								_element.val(vD);
-							}
+						// Handle different input types
+						switch (field.type) {
+							case "file":
+								if (responseValue) {
+									element.parents(".form-group").find(".img-preview").show();
+									element
+										.parents(".form-group")
+										.find(".img-preview__el")
+										.attr("src", responseValue);
+								}
+								break;
+
+							case "checkbox":
+								element.prop("checked", responseValue == 1);
+								break;
+
+							case "custom-select-input":
+								element.val(responseValue).trigger("change");
+								break;
+
+							default:
+								// Handle selectOption for select2 dropdowns
+								if (
+									field.validation?.selectOption &&
+									element.hasClass("js-select2")
+								) {
+									const [text, value] = responseValue.split("value: ");
+									element
+										.parent()
+										.find(".select2-selection__rendered")
+										.text(text);
+									element.val(value).trigger("change");
+								}
+								// Handle custom attributes (attrId)
+								else if (field.validation?.attrId) {
+									const attrValue = responseValue
+										.split(" - ")
+										.map((val) => val.split(",")[0])
+										.join(", ");
+									element.attr("data-id", attrValue).val(responseValue);
+								}
+								// Handle dataValueId fields
+								else if (field.dataValueId !== undefined) {
+									const [id, value] = responseValue.split("-");
+									element.attr("data-id", id).val(value);
+									$(`#${responseKey}`)
+										.parent(".form-dropdown")
+										.find(".js-reset-dropdown")
+										.show();
+								}
+								// Default case for regular form inputs
+								else if (typeof responseValue !== "object") {
+									element.val(responseValue);
+								}
+								break;
 						}
 					}
 				});
 			});
 		} else {
+			// If the response is unsuccessful, hide modal and show a warning
 			$(".modal").modal("hide");
 			SweetAlert.config(response.message, "warning");
 		}
@@ -344,8 +338,52 @@ const Form = (() => {
 		return response;
 	};
 
+	// handlePostRequest
+	const handlePostRequest = async (data) => {
+		// Ensure userData and token are available
+		const userData = JSON.parse(Session.get("userData")); // Assuming this is how userData is retrieved
+		const token = userData?.token;
+
+		if (!token) {
+			SweetAlert.config("Authorization token is missing", "error");
+			return;
+		}
+
+		const beforeSend = () => {
+			const loader = `
+      <span class="custom-loader">
+        <span></span><span></span><span></span><span></span>
+      </span> Mengirim ....`;
+			$(".js-button-loader").attr("disabled", true).html(loader);
+		};
+
+		// Call the AJAX request with token and beforeSend callback
+		const response = await HttpRequest.post(data, token, beforeSend);
+
+		if (response && response.status) {
+			const status = response.status ? "success" : "error";
+
+			$(".js-button-loader")
+				.attr("disabled", false)
+				.html(`<i class="mdi mdi-content-save-outline"></i> Simpan`);
+
+			$(".modal").modal("hide");
+			SweetAlert.config(response.message, status);
+			$("#dataTable").DataTable().ajax.reload();
+
+			if (data.elementSelector) {
+				Form.emptyData(data.elementSelector); // Clear form data if selector is provided
+			}
+		} else {
+			SweetAlert.config(response?.message || "An error occurred", "error"); // Use response message or a fallback
+			$(".js-button-loader")
+				.attr("disabled", false)
+				.html(`<i class="mdi mdi-content-save-outline"></i> Simpan`);
+		}
+	};
+
 	// handleDeleteData
-	const handleDeleteData = (data, element) => {
+	const handleDeleteData = (data) => {
 		swal({
 			title: "Apakah Anda yakin?",
 			text: "Tindakan ini tidak dapat diurungkan!",
@@ -358,8 +396,20 @@ const Form = (() => {
 			buttonsStyling: false,
 		}).then(
 			() => {
+				// Ensure userData and token are available
+				const userData = JSON.parse(Session.get("userData")); // Assuming this is how userData is retrieved
+				const token = userData?.token;
+
+				if (!token) {
+					SweetAlert.config("Authorization token is missing", "error");
+					return;
+				}
+
 				// Run API Delete Data
-				HttpRequest.default(data, element);
+				const response = HttpRequest.post(data, token);
+				$(".modal").modal("hide");
+				SweetAlert.config("success", response.status);
+				$("#dataTable").DataTable().ajax.reload();
 			},
 			(dismiss) => {
 				if (dismiss === "cancel") {
@@ -373,8 +423,9 @@ const Form = (() => {
 		validation: handleValidation,
 		emptyData: handleRunEmpty,
 		dataColletion: handleDataColletion,
+		getData: handleGetFormData,
+		postData: handlePostRequest,
 		deleteData: handleDeleteData,
-		getFormData: handleGetFormData,
 	};
 })();
 

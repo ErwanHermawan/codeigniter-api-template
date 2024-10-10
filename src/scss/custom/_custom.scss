@@ -285,6 +285,14 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
 	width: 100%;
 }
 
+.img-preview {
+	display: none;
+	&__el {
+		margin-bottom: 10px;
+		max-height: 80px;
+	}
+}
+
 @include medium {
 	#wrapper.enlarged .topbar .topbar-left,
 	.topbar .topbar-left {

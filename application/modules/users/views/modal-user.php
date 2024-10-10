@@ -43,15 +43,6 @@
             </div>
           </div>
 
-          <!-- Phone Input -->
-          <div class="form-group row">
-            <label for="phone" class="col-sm-2 col-form-label">Phone</label>
-            <div class="col-sm-8">
-              <input id="phone" type="text" name="phone" placeholder="Enter phone" class="form-control" data-target="alertPhone" />
-              <p class="form-alert" id="alertPhone" data-req="Phone is required." data-invalid="Invalid phone number."></p>
-            </div>
-          </div>
-
           <!-- Role Selection -->
           <div class="form-group row">
             <label for="role" class="col-sm-2 col-form-label">Role</label>

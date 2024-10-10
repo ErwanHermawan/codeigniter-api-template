@@ -64,7 +64,8 @@ const Login = (() => {
 			data: formData,
 		};
 
-		const response = await HttpRequest.ajax(data);
+		const response = await HttpRequest.post(data);
+		console.log(response);
 
 		if (response.status) {
 			Session.set("userData", JSON.stringify(response.data));

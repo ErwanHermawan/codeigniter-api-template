@@ -14,7 +14,7 @@ class Users extends RestController {
 	public function index_get()
 	{
 		$token = $this->input->get_request_header('Authorization');
-		$id = $this->get('id');
+		$id = $this->get('user_id');
 		
 		if (!$token) {
 			return $this->response(['status' => false, 'message' => 'Authorization token is missing'], RestController::HTTP_UNAUTHORIZED);
@@ -25,19 +25,19 @@ class Users extends RestController {
 		if (!$decoded) {
 			return $this->response(['status' => false, 'message' => 'Unauthorized access'], RestController::HTTP_UNAUTHORIZED);
 		}
-
+		
 		// If 'id' is provided, fetch the specific user's data
 		if ($id !== null) {
 			$this->handle_single_user($id);
 			return; // Exit after processing single user
 		}
-
+		
 		// Sanitize and validate DataTable inputs
 		$draw = $this->get('draw');
 		$start = sanitize($this->get('start'));
 		$limit = sanitize($this->get('length'));
 		$search = htmlspecialchars($this->get('search')['value'] ?? '');
-
+		
 		// If request is for DataTable, handle accordingly
 		if ($draw !== null && $start !== null && $limit !== null && $search !== null) {
 			$this->handle_datatable_request($draw, $start, $limit, $search);
@@ -53,7 +53,7 @@ class Users extends RestController {
 		// Search and filtering logic
 		$config = [
 			'table' => 'tb_users',
-			'search' => ['first_name' => $search],
+			'search' => ['name' => $search],
 			'sorting' => ['field' => 'user_id', 'order' => 'ASC'],
 			'output_data' => 'num_rows'
 		];
@@ -70,7 +70,7 @@ class Users extends RestController {
 			$o_data[] = [
 				render_checkbox($val['user_id']),
 				render_image($path),
-				$val['first_name'] ?? '',
+				$val['name'] ?? '',
 				$val['username'] ?? '',
 				$val['role'] ?? '',
 				render_active_status($val['status']),
@@ -104,8 +104,19 @@ class Users extends RestController {
 	private function handle_single_user($id)
 	{
 		$data = $this->global_model->get_single_data('tb_users', 'user_id', $id);
+		$o_data = [];
+		$user_photo = FILES . 'users/' . ($data->photo != null ? $data->photo. '?dt=' .date('ms') : 'default.jpg');
+		
+		$row['user_id'] = $data->user_id;
+		$row['photo'] = $user_photo;
+		$row['name'] = $data->name;
+		$row['username'] = $data->username;
+		$row['role'] = $data->role;
+		$row['status'] = $data->status;
+		$o_data = $row;
+		
 		if ($data !== null) {
-			api_print('Get data successfully', true, 200, $data);
+			api_print('Get data successfully', true, 200, $o_data);
 		} else {
 			api_print('No such user found', false, 404);
 		}
@@ -116,8 +127,8 @@ class Users extends RestController {
 	{
 		$config = [
 			'table' => 'tb_users',
-			'search' => ['first_name' => $search],
-			'sorting' => ['field' => 'user_id', 'order' => 'ASC'],
+			'search' => ['name' => $search],
+			'sorting' => ['field' => 'user_id', 'order' => 'DESC'],
 			'limit' => $limit,
 			'ofset' => $start
 		];
@@ -139,30 +150,86 @@ class Users extends RestController {
 		if (!$decoded) {
 			return $this->response(['status' => false, 'message' => 'Unauthorized access'], RestController::HTTP_UNAUTHORIZED);
 		}
-
+		
 		// Validate required fields
 		$required_fields = ['name', 'username', 'password', 'role'];
-		foreach ($required_fields as $field) {
-			if ($this->post($field) === null) {
-				return api_print('Missing required field: ' . ucfirst($field), false, 400);
-			}
+		if (($validation_result = validation_fields($required_fields)) !== true) {
+			return $validation_result; // Error response from validation
 		}
-
+		
 		// Collect input data
-		$data_collection = ['name', 'username', 'phone', 'role', 'status'];
+		$data_collection = ['name', 'username', 'role', 'status'];
 		$data = data_collection_add($data_collection);
-
+		
 		// Add password to the collected data
 		$data['password'] = password_hash($this->post('password'), PASSWORD_DEFAULT);
-
+		
 		// Insert data into the database
 		$result = $this->global_model->add('tb_users', $data);
-
+		
 		// Response handling
 		if ($result) {
 			return api_print('User added successfully.', true, 200, $data);
 		} else {
 			return api_print('Failed to add user.', false, 500);
+		}
+	}
+	
+	public function index_delete() {
+		// Get Authorization token from headers
+		$token = $this->input->get_request_header('Authorization');
+		
+		// Parse raw input to extract user_id
+		$input = json_decode(trim(file_get_contents('php://input')), true);
+		$user_id = $input['user_id'] ?? null; // Use null coalescing operator for cleaner extraction
+		
+		// Validate Authorization token
+		if (!$token) {
+			return $this->response([
+				'status' => false, 
+				'message' => 'Authorization token is missing'
+			], RestController::HTTP_UNAUTHORIZED);
+		}
+		
+		// Decode JWT and check if valid
+		$decoded = decode_jwt($token);
+		if (!$decoded) {
+			return $this->response([
+				'status' => false, 
+				'message' => 'Unauthorized access'
+			], RestController::HTTP_UNAUTHORIZED);
+		}
+		
+		// Validate user_id presence
+		if (!$user_id) {
+			return $this->response([
+				'status' => false, 
+				'message' => 'User ID is required'
+			], RestController::HTTP_BAD_REQUEST);
+		}
+		
+		// Fetch user data from database
+		$user = $this->global_model->get_single_data('tb_users', 'user_id', $user_id);
+		if (!$user) {
+			return $this->response([
+				'status' => false, 
+				'message' => 'User not found'
+			], RestController::HTTP_NOT_FOUND);
+		}
+		
+		// Delete user photo if it exists
+		if (!empty($user->photo)) {
+			delete_img('users', $user->photo);
+		}
+		
+		// Delete user from database
+		$result = $this->global_model->delete('tb_users', 'user_id', $user_id);
+		
+		// Return appropriate response
+		if ($result) {
+			return api_print('User deleted successfully.', true, 200);
+		} else {
+			return api_print('Failed to delete user.', false, 500);
 		}
 	}
 }

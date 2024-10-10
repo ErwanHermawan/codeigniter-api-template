@@ -221,3 +221,22 @@ if (!function_exists('api_print')) {
 		$ci->response($config, $code);
 	}
 }
+
+if (!function_exists('validation_fields')) {
+  /**
+   * Validate required fields from POST request
+   *
+   * @param array $required_fields
+   * @return mixed
+   */
+  function validation_fields($required_fields) {
+    $ci =& get_instance(); // Get the CodeIgniter instance
+    foreach ($required_fields as $field) {
+      if ($ci->post($field) === null) {
+        return api_print('Missing required field: ' . ucfirst($field), false, 400);
+      }
+    }
+    return true; // Return true if all fields are valid
+  }
+}
+

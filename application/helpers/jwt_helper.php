@@ -24,6 +24,7 @@ if (!function_exists('generate_jwt')) {
     
     // Define the payload
     $token_data = [
+			"status" => true,
       "iat" => time(), // Issued at
       "exp" => time() + $expiration_seconds, // Expiration time
       "data" => $data // Custom data payload

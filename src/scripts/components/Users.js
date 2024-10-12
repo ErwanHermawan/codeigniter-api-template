@@ -27,10 +27,6 @@ const ElementSelector = [
 	},
 	{
 		id: "password",
-		validation: {
-			minimum: true,
-			minimumChar: 5,
-		},
 	},
 	{
 		id: "username",
@@ -115,8 +111,8 @@ const Users = (() => {
 	};
 
 	const handlePostData = () => {
-		const formData = Form.dataColletion(ElementSelector);
-		console.log(formData);
+		const dataCollection = Form.dataCollection(ElementSelector, "multipart");
+
 		const userId = $("#user_id").val();
 
 		const endpoint = API_URL.USERS;
@@ -125,11 +121,11 @@ const Users = (() => {
 		const requestData = {
 			url: endpoint,
 			method: method,
-			data: formData,
+			data: dataCollection,
 			elementSelector: ElementSelector,
 		};
 
-		Form.postData(requestData);
+		Form.sendData(requestData, "multipart");
 	};
 
 	const handleEditData = () => {

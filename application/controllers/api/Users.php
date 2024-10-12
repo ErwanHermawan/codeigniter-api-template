@@ -153,7 +153,7 @@ class Users extends RestController {
 		
 		// Validate required fields
 		$required_fields = ['name', 'username', 'password', 'role'];
-		if (($validation_result = validation_fields($required_fields)) !== true) {
+		if (($validation_result = validation_fields($required_fields, 'POST')) !== true) {
 			return $validation_result; // Error response from validation
 		}
 		
@@ -167,6 +167,35 @@ class Users extends RestController {
 		// Insert data into the database
 		$result = $this->global_model->add('tb_users', $data);
 		
+		if(!empty($_FILES['photo']['name'])) 
+		{
+			$upload_img = upload_img('photo', 'users');
+			$tmp_file = $upload_img->file_name;
+			$this->load->library('upload', $upload_img->config);
+			$this->load->library('image_lib');
+			$user_id = $result->id;
+			$new_file = $user_id . '.' . $upload_img->file_ext;
+			
+			if($this->upload->do_upload('photo'))
+			{
+				// update image send with (directory name, temporary file, new file, resize width)
+				$update_img = update_img('users', $tmp_file, $new_file, 512);
+				$this->image_lib->initialize($update_img);
+				$this->image_lib->resize();
+				$this->image_lib->clear();
+				
+				$old_file = 'files/users/' . $tmp_file;
+				if (file_exists($old_file)) {
+					unlink($old_file);
+				}
+				
+				$data = [
+					'photo' => $new_file
+				];
+				$result = $this->global_model->update('tb_users', $data, 'user_id', $user_id);
+			}
+		}
+		
 		// Response handling
 		if ($result) {
 			return api_print('User added successfully.', true, 200, $data);
@@ -178,58 +207,55 @@ class Users extends RestController {
 	public function index_delete() {
 		// Get Authorization token from headers
 		$token = $this->input->get_request_header('Authorization');
+		$auth_result = jwt_authorization($token);
+		var_dump($auth_result);
+		
+		// Check if authorization was successful
+		if (isset($auth_result->status) && !$auth_result->status) {
+			return $this->response($auth_result, RestController::HTTP_UNAUTHORIZED);
+		}
 		
 		// Parse raw input to extract user_id
-		$input = json_decode(trim(file_get_contents('php://input')), true);
-		$user_id = $input['user_id'] ?? null; // Use null coalescing operator for cleaner extraction
+	// 	$input = json_decode(trim(file_get_contents('php://input')), true);
+	// 	$user_id = $input['user_id'] ?? null; // Use null coalescing operator for cleaner extraction
 		
-		// Validate Authorization token
-		if (!$token) {
-			return $this->response([
-				'status' => false, 
-				'message' => 'Authorization token is missing'
-			], RestController::HTTP_UNAUTHORIZED);
-		}
+	// 	// Validate user_id presence
+	// 	if (!$user_id) {
+	// 		return $this->response([
+	// 			'status' => false, 
+	// 			'message' => 'User ID is required'
+	// 		], RestController::HTTP_BAD_REQUEST);
+	// 	}
 		
-		// Decode JWT and check if valid
-		$decoded = decode_jwt($token);
-		if (!$decoded) {
-			return $this->response([
-				'status' => false, 
-				'message' => 'Unauthorized access'
-			], RestController::HTTP_UNAUTHORIZED);
-		}
+	// 	// Fetch user data from database
+	// 	$user = $this->global_model->get_single_data('tb_users', 'user_id', $user_id);
+	// 	if (!$user) {
+	// 		return $this->response([
+	// 			'status' => false, 
+	// 			'message' => 'User not found'
+	// 		], RestController::HTTP_NOT_FOUND);
+	// 	}
 		
-		// Validate user_id presence
-		if (!$user_id) {
-			return $this->response([
-				'status' => false, 
-				'message' => 'User ID is required'
-			], RestController::HTTP_BAD_REQUEST);
-		}
+	// 	// Delete user photo if it exists
+	// 	if (!empty($user->photo)) {
+	// 		delete_img('users', $user->photo);
+	// 	}
 		
-		// Fetch user data from database
-		$user = $this->global_model->get_single_data('tb_users', 'user_id', $user_id);
-		if (!$user) {
-			return $this->response([
-				'status' => false, 
-				'message' => 'User not found'
-			], RestController::HTTP_NOT_FOUND);
-		}
+	// 	// Delete user from database
+	// 	$result = $this->global_model->delete('tb_users', 'user_id', $user_id);
 		
-		// Delete user photo if it exists
-		if (!empty($user->photo)) {
-			delete_img('users', $user->photo);
-		}
-		
-		// Delete user from database
-		$result = $this->global_model->delete('tb_users', 'user_id', $user_id);
-		
-		// Return appropriate response
-		if ($result) {
-			return api_print('User deleted successfully.', true, 200);
-		} else {
-			return api_print('Failed to delete user.', false, 500);
-		}
+	// 	// Return appropriate response
+	// 	if ($result) {
+	// 		return $this->response([
+	// 			'status' => true,
+	// 			'message' => 'User deleted successfully.'
+	// 		], RestController::HTTP_OK);
+	// 	} else {
+	// 		return $this->response([
+	// 			'status' => false,
+	// 			'message' => 'Failed to delete user.'
+	// 		], RestController::HTTP_INTERNAL_SERVER_ERROR);
+	// 	}
 	}
+	
 }

@@ -1,4 +1,6 @@
 <?php
+use chriskacerguis\RestServer\RestController;
+
 if (!function_exists('check_auth')) {
 	/**
 	* Check if access should be blocked based on user session status.
@@ -15,3 +17,29 @@ if (!function_exists('check_auth')) {
 		}
 	}
 }
+
+if (!function_exists('jwt_authorization')) {
+  function jwt_authorization($token) {
+    // Validate Authorization token
+    if (!$token) {
+      return [
+        'status' => false, 
+        'message' => 'Authorization token is missing'
+      ];
+    }
+    
+    // Decode JWT and check if valid
+    $decoded = decode_jwt($token);
+		
+    if (!$decoded) {
+      return [
+        'status' => false, 
+        'message' => 'Unauthorized access'
+      ];
+    }
+
+    // Return decoded token on success
+    return $decoded;
+  }
+}
+

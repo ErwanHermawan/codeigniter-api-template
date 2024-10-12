@@ -171,32 +171,31 @@ var Login = function () {
   };
   var handleLoginUser = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var username, password, formData, data, response;
+      var username, password, data, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             username = $(".js-auth-login").find("#username").val();
             password = $(".js-auth-login").find("#password").val();
-            formData = new FormData();
-            formData.append("username", username);
-            formData.append("password", password);
             data = {
               url: _variables.API_URL.login,
               method: "POST",
-              data: formData
+              data: {
+                username: username,
+                password: password
+              }
             };
-            _context.next = 8;
-            return _utilities.HttpRequest.post(data);
-          case 8:
+            _context.next = 5;
+            return _utilities.HttpRequest.data(data);
+          case 5:
             response = _context.sent;
-            console.log(response);
             if (response.status) {
               _utilities.Session.set("userData", JSON.stringify(response.data));
               location.href = _variables.WEB_URL.dashboard;
             } else {
               _utilities.SweetAlert.config(response.message, "error");
             }
-          case 11:
+          case 7:
           case "end":
             return _context.stop();
         }
@@ -357,11 +356,7 @@ var ElementSelector = [{
     required: true
   }
 }, {
-  id: "password",
-  validation: {
-    minimum: true,
-    minimumChar: 5
-  }
+  id: "password"
 }, {
   id: "username",
   validation: {
@@ -428,18 +423,17 @@ var Users = function () {
     });
   };
   var handlePostData = function handlePostData() {
-    var formData = _utilities.Form.dataColletion(ElementSelector);
-    console.log(formData);
+    var dataCollection = _utilities.Form.dataCollection(ElementSelector, "multipart");
     var userId = $("#user_id").val();
     var endpoint = _variables.API_URL.USERS;
     var method = userId.length ? "PUT" : "POST";
     var requestData = {
       url: endpoint,
       method: method,
-      data: formData,
+      data: dataCollection,
       elementSelector: ElementSelector
     };
-    _utilities.Form.postData(requestData);
+    _utilities.Form.sendData(requestData, "multipart");
   };
   var handleEditData = function handleEditData() {
     $("body").on("click", ".js-edit-data", function (e) {
@@ -2103,32 +2097,43 @@ var Form = function () {
     });
   };
 
-  // handleDataColletion
-  var handleDataColletion = function handleDataColletion(selectorEl) {
-    var formData = new FormData();
-    $.each(selectorEl, function (i, v) {
-      var inputValue = "";
-      if (v.type !== undefined && v.type == "file") {
-        inputValue = $("#" + v.id).prop("files")[0];
-      } else if (v.type !== undefined && v.type == "checkbox") {
-        if ($("#" + v.id).is(":checked")) {
-          inputValue = "1";
-        } else {
-          inputValue = "0";
-        }
+  // handleDataCollection
+  var handleDataCollection = function handleDataCollection(elementSelector) {
+    var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "data";
+    var dataCollection;
+
+    // Initialize dataCollection based on the type
+    if (type === "data") {
+      dataCollection = {}; // Object for normal data collection
+    } else if (type === "multipart") {
+      dataCollection = new FormData(); // FormData for file uploads
+    }
+    $.each(elementSelector, function (i, v) {
+      var inputValue = null;
+
+      // Determine input type and value
+      if (v.type === "file") {
+        inputValue = $("#" + v.id).prop("files")[0]; // Handle file input
+      } else if (v.type === "checkbox") {
+        inputValue = $("#" + v.id).is(":checked") ? "1" : "0"; // Handle checkbox
       } else if (v.dataValueId !== undefined) {
-        inputValue = $("#" + v.id).attr("data-id");
+        inputValue = $("#" + v.id).attr("data-id"); // Handle custom data attribute
       } else {
-        inputValue = $("#" + v.id).val();
+        inputValue = $("#" + v.id).val(); // Default to value attribute
       }
-      if (!_variables.WHITESPACE.test(inputValue)) {
-        if (inputValue !== null) {
-          var keyValue = v.alias === undefined ? v.id : v.alias;
-          formData.append(keyValue, inputValue);
+
+      // Validate and append input value
+      if (inputValue !== null && !_variables.WHITESPACE.test(inputValue)) {
+        var keyValue = v.alias || v.id; // Use alias if defined, otherwise id
+
+        if (type === "data") {
+          dataCollection[keyValue] = inputValue; // Collect data in an object
+        } else {
+          dataCollection.append(keyValue, inputValue); // Collect data in FormData
         }
       }
     });
-    return formData;
+    return dataCollection;
   };
 
   // handleGetFormData
@@ -2154,10 +2159,9 @@ var Form = function () {
             return _context.abrupt("return");
           case 6:
             _context.next = 8;
-            return _index.HttpRequest.get(data, token);
+            return _index.HttpRequest.data(data, token);
           case 8:
             response = _context.sent;
-            console.log(response);
             if (response.status) {
               // Show the modal
               if (modalShow) {
@@ -2234,7 +2238,7 @@ var Form = function () {
               _index.SweetAlert.config(response.message, "warning");
             }
             return _context.abrupt("return", response);
-          case 12:
+          case 11:
           case "end":
             return _context.stop();
         }
@@ -2245,34 +2249,60 @@ var Form = function () {
     };
   }();
 
-  // handlePostRequest
-  var handlePostRequest = /*#__PURE__*/function () {
+  // handleSendData
+  var handleSendData = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(data) {
-      var userData, token, beforeSend, response, status;
+      var type,
+        _response,
+        _response2,
+        _response3,
+        userData,
+        token,
+        beforeSend,
+        response,
+        status,
+        message,
+        _args2 = arguments;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
-            // Ensure userData and token are available
-            userData = JSON.parse(_index.Session.get("userData")); // Assuming this is how userData is retrieved
+            type = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : "data";
+            _context2.prev = 1;
+            // Retrieve userData and token
+            userData = JSON.parse(_index.Session.get("userData"));
             token = userData === null || userData === void 0 ? void 0 : userData.token;
             if (token) {
-              _context2.next = 5;
+              _context2.next = 7;
               break;
             }
             _index.SweetAlert.config("Authorization token is missing", "error");
             return _context2.abrupt("return");
-          case 5:
+          case 7:
             beforeSend = function beforeSend() {
-              var loader = "\n      <span class=\"custom-loader\">\n        <span></span><span></span><span></span><span></span>\n      </span> Mengirim ....";
+              var loader = "\n        <span class=\"custom-loader\">\n          <span></span><span></span><span></span><span></span>\n        </span> Mengirim ....";
               $(".js-button-loader").attr("disabled", true).html(loader);
-            }; // Call the AJAX request with token and beforeSend callback
-            _context2.next = 8;
-            return _index.HttpRequest.post(data, token, beforeSend);
-          case 8:
+            }; // Make the appropriate HTTP request based on the type
+            if (!(type === "data")) {
+              _context2.next = 14;
+              break;
+            }
+            _context2.next = 11;
+            return _index.HttpRequest.data(data, token, beforeSend);
+          case 11:
             response = _context2.sent;
-            if (response && response.status) {
-              status = response.status ? "success" : "error";
-              $(".js-button-loader").attr("disabled", false).html("<i class=\"mdi mdi-content-save-outline\"></i> Simpan");
+            _context2.next = 17;
+            break;
+          case 14:
+            _context2.next = 16;
+            return _index.HttpRequest.multipartData(data, token, beforeSend);
+          case 16:
+            response = _context2.sent;
+          case 17:
+            // Handle response status and UI feedback
+            status = (_response = response) !== null && _response !== void 0 && _response.status ? "success" : "error";
+            message = ((_response2 = response) === null || _response2 === void 0 ? void 0 : _response2.message) || "An error occurred"; // Reset the loader and re-enable the button
+            $(".js-button-loader").attr("disabled", false).html("<i class=\"mdi mdi-content-save-outline\"></i> Simpan");
+            if ((_response3 = response) !== null && _response3 !== void 0 && _response3.status) {
               $(".modal").modal("hide");
               _index.SweetAlert.config(response.message, status);
               $("#dataTable").DataTable().ajax.reload();
@@ -2280,16 +2310,24 @@ var Form = function () {
                 Form.emptyData(data.elementSelector); // Clear form data if selector is provided
               }
             } else {
-              _index.SweetAlert.config((response === null || response === void 0 ? void 0 : response.message) || "An error occurred", "error"); // Use response message or a fallback
-              $(".js-button-loader").attr("disabled", false).html("<i class=\"mdi mdi-content-save-outline\"></i> Simpan");
+              _index.SweetAlert.config(message, "error");
             }
-          case 10:
+            _context2.next = 28;
+            break;
+          case 23:
+            _context2.prev = 23;
+            _context2.t0 = _context2["catch"](1);
+            // Handle any unexpected errors
+            _index.SweetAlert.config("An unexpected error occurred", "error");
+            $(".js-button-loader").attr("disabled", false).html("<i class=\"mdi mdi-content-save-outline\"></i> Simpan");
+            console.error("Error sending data:", _context2.t0);
+          case 28:
           case "end":
             return _context2.stop();
         }
-      }, _callee2);
+      }, _callee2, null, [[1, 23]]);
     }));
-    return function handlePostRequest(_x2) {
+    return function handleSendData(_x2) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -2316,7 +2354,7 @@ var Form = function () {
       }
 
       // Run API Delete Data
-      var response = _index.HttpRequest.post(data, token);
+      var response = _index.HttpRequest.data(data, token);
       $(".modal").modal("hide");
       _index.SweetAlert.config("success", response.status);
       $("#dataTable").DataTable().ajax.reload();
@@ -2329,9 +2367,9 @@ var Form = function () {
   return {
     validation: handleValidation,
     emptyData: handleRunEmpty,
-    dataColletion: handleDataColletion,
+    dataCollection: handleDataCollection,
     getData: handleGetFormData,
-    postData: handlePostRequest,
+    sendData: handleSendData,
     deleteData: handleDeleteData
   };
 }();
@@ -2353,8 +2391,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 @description: HttpRequest Activate
 --------------------------------------------------------------------------------- */ // --- utilities
 var HttpRequest = function () {
-  // handlePostRequest
-  var handlePostRequest = /*#__PURE__*/function () {
+  // handleRequestMultipartData
+  var handleRequestMultipartData = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, token) {
       var _beforeSend,
         headers,
@@ -2401,13 +2439,13 @@ var HttpRequest = function () {
         }
       }, _callee, null, [[1, 10]]);
     }));
-    return function handlePostRequest(_x, _x2) {
+    return function handleRequestMultipartData(_x, _x2) {
       return _ref.apply(this, arguments);
     };
   }();
 
-  // handlePostRequest
-  var handleGetRequest = /*#__PURE__*/function () {
+  // handleRequestMultipartData
+  var handleRequestData = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(data, token) {
       var _beforeSend2,
         headers,
@@ -2426,8 +2464,8 @@ var HttpRequest = function () {
             _context2.next = 6;
             return $.ajax({
               url: data.url,
-              method: "GET",
-              dataType: "application/json",
+              method: data.method,
+              dataType: "JSON",
               data: data.data,
               headers: {
                 Authorization: "Bearer ".concat(token) // Pass token in the headers
@@ -2452,13 +2490,13 @@ var HttpRequest = function () {
         }
       }, _callee2, null, [[1, 10]]);
     }));
-    return function handleGetRequest(_x3, _x4) {
+    return function handleRequestData(_x3, _x4) {
       return _ref2.apply(this, arguments);
     };
   }();
   return {
-    post: handlePostRequest,
-    get: handleGetRequest
+    multipartData: handleRequestMultipartData,
+    data: handleRequestData
   };
 }();
 var _default = exports["default"] = HttpRequest;

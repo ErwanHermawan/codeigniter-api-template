@@ -54,18 +54,14 @@ const Login = (() => {
 	const handleLoginUser = async () => {
 		const username = $(".js-auth-login").find("#username").val();
 		const password = $(".js-auth-login").find("#password").val();
-		let formData = new FormData();
-		formData.append("username", username);
-		formData.append("password", password);
 
 		const data = {
 			url: API_URL.login,
 			method: "POST",
-			data: formData,
+			data: { username: username, password: password },
 		};
 
-		const response = await HttpRequest.post(data);
-		console.log(response);
+		const response = await HttpRequest.data(data);
 
 		if (response.status) {
 			Session.set("userData", JSON.stringify(response.data));

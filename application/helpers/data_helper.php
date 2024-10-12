@@ -224,19 +224,31 @@ if (!function_exists('api_print')) {
 
 if (!function_exists('validation_fields')) {
   /**
-   * Validate required fields from POST request
+   * Validate required fields from the specified method (POST/PUT)
    *
    * @param array $required_fields
+   * @param string $method
    * @return mixed
    */
-  function validation_fields($required_fields) {
+  function validation_fields($required_fields, $method) {
     $ci =& get_instance(); // Get the CodeIgniter instance
+    
     foreach ($required_fields as $field) {
-      if ($ci->post($field) === null) {
-        return api_print('Missing required field: ' . ucfirst($field), false, 400);
+      // Handle POST and PUT methods
+      if (strtoupper($method) === "POST") {
+        $input = $ci->post($field); // Get from POST
+      } else if (strtoupper($method) === "PUT") {
+        $input = $ci->put($field); // Get from PUT (REST Server handles PUT like this)
+      } else {
+				return api_print('Invalid request method: ' . ucfirst($field), false, 400); // Return 400 error for missing fields
+      }
+
+      // If the field is missing, return error response
+      if ($input === null) {
+				return api_print('Missing required field: ' . ucfirst($field), false, 400); // Return 400 error for missing fields
       }
     }
+    
     return true; // Return true if all fields are valid
   }
 }
-

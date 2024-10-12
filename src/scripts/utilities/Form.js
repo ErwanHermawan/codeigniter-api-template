@@ -206,34 +206,44 @@ const Form = (() => {
 		});
 	};
 
-	// handleDataColletion
-	const handleDataColletion = (selectorEl) => {
-		let formData = new FormData();
-		$.each(selectorEl, (i, v) => {
-			let inputValue = "";
-			if (v.type !== undefined && v.type == "file") {
-				inputValue = $("#" + v.id).prop("files")[0];
-			} else if (v.type !== undefined && v.type == "checkbox") {
-				if ($("#" + v.id).is(":checked")) {
-					inputValue = "1";
-				} else {
-					inputValue = "0";
-				}
+	// handleDataCollection
+	const handleDataCollection = (elementSelector, type = "data") => {
+		let dataCollection;
+
+		// Initialize dataCollection based on the type
+		if (type === "data") {
+			dataCollection = {}; // Object for normal data collection
+		} else if (type === "multipart") {
+			dataCollection = new FormData(); // FormData for file uploads
+		}
+
+		$.each(elementSelector, (i, v) => {
+			let inputValue = null;
+
+			// Determine input type and value
+			if (v.type === "file") {
+				inputValue = $("#" + v.id).prop("files")[0]; // Handle file input
+			} else if (v.type === "checkbox") {
+				inputValue = $("#" + v.id).is(":checked") ? "1" : "0"; // Handle checkbox
 			} else if (v.dataValueId !== undefined) {
-				inputValue = $("#" + v.id).attr("data-id");
+				inputValue = $("#" + v.id).attr("data-id"); // Handle custom data attribute
 			} else {
-				inputValue = $("#" + v.id).val();
+				inputValue = $("#" + v.id).val(); // Default to value attribute
 			}
 
-			if (!WHITESPACE.test(inputValue)) {
-				if (inputValue !== null) {
-					let keyValue = v.alias === undefined ? v.id : v.alias;
-					formData.append(keyValue, inputValue);
+			// Validate and append input value
+			if (inputValue !== null && !WHITESPACE.test(inputValue)) {
+				let keyValue = v.alias || v.id; // Use alias if defined, otherwise id
+
+				if (type === "data") {
+					dataCollection[keyValue] = inputValue; // Collect data in an object
+				} else {
+					dataCollection.append(keyValue, inputValue); // Collect data in FormData
 				}
 			}
 		});
 
-		return formData;
+		return dataCollection;
 	};
 
 	// handleGetFormData
@@ -247,8 +257,7 @@ const Form = (() => {
 			return;
 		}
 		// Get data from API
-		const response = await HttpRequest.get(data, token);
-		console.log(response);
+		const response = await HttpRequest.data(data, token);
 
 		if (response.status) {
 			// Show the modal
@@ -338,47 +347,61 @@ const Form = (() => {
 		return response;
 	};
 
-	// handlePostRequest
-	const handlePostRequest = async (data) => {
-		// Ensure userData and token are available
-		const userData = JSON.parse(Session.get("userData")); // Assuming this is how userData is retrieved
-		const token = userData?.token;
+	// handleSendData
+	const handleSendData = async (data, type = "data") => {
+		try {
+			// Retrieve userData and token
+			const userData = JSON.parse(Session.get("userData"));
+			const token = userData?.token;
 
-		if (!token) {
-			SweetAlert.config("Authorization token is missing", "error");
-			return;
-		}
-
-		const beforeSend = () => {
-			const loader = `
-      <span class="custom-loader">
-        <span></span><span></span><span></span><span></span>
-      </span> Mengirim ....`;
-			$(".js-button-loader").attr("disabled", true).html(loader);
-		};
-
-		// Call the AJAX request with token and beforeSend callback
-		const response = await HttpRequest.post(data, token, beforeSend);
-
-		if (response && response.status) {
-			const status = response.status ? "success" : "error";
-
-			$(".js-button-loader")
-				.attr("disabled", false)
-				.html(`<i class="mdi mdi-content-save-outline"></i> Simpan`);
-
-			$(".modal").modal("hide");
-			SweetAlert.config(response.message, status);
-			$("#dataTable").DataTable().ajax.reload();
-
-			if (data.elementSelector) {
-				Form.emptyData(data.elementSelector); // Clear form data if selector is provided
+			if (!token) {
+				SweetAlert.config("Authorization token is missing", "error");
+				return;
 			}
-		} else {
-			SweetAlert.config(response?.message || "An error occurred", "error"); // Use response message or a fallback
+
+			const beforeSend = () => {
+				const loader = `
+        <span class="custom-loader">
+          <span></span><span></span><span></span><span></span>
+        </span> Mengirim ....`;
+				$(".js-button-loader").attr("disabled", true).html(loader);
+			};
+
+			// Make the appropriate HTTP request based on the type
+			let response;
+			if (type === "data") {
+				response = await HttpRequest.data(data, token, beforeSend);
+			} else {
+				response = await HttpRequest.multipartData(data, token, beforeSend);
+			}
+
+			// Handle response status and UI feedback
+			const status = response?.status ? "success" : "error";
+			const message = response?.message || "An error occurred";
+
+			// Reset the loader and re-enable the button
 			$(".js-button-loader")
 				.attr("disabled", false)
 				.html(`<i class="mdi mdi-content-save-outline"></i> Simpan`);
+
+			if (response?.status) {
+				$(".modal").modal("hide");
+				SweetAlert.config(response.message, status);
+				$("#dataTable").DataTable().ajax.reload();
+
+				if (data.elementSelector) {
+					Form.emptyData(data.elementSelector); // Clear form data if selector is provided
+				}
+			} else {
+				SweetAlert.config(message, "error");
+			}
+		} catch (error) {
+			// Handle any unexpected errors
+			SweetAlert.config("An unexpected error occurred", "error");
+			$(".js-button-loader")
+				.attr("disabled", false)
+				.html(`<i class="mdi mdi-content-save-outline"></i> Simpan`);
+			console.error("Error sending data:", error);
 		}
 	};
 
@@ -406,7 +429,7 @@ const Form = (() => {
 				}
 
 				// Run API Delete Data
-				const response = HttpRequest.post(data, token);
+				const response = HttpRequest.data(data, token);
 				$(".modal").modal("hide");
 				SweetAlert.config("success", response.status);
 				$("#dataTable").DataTable().ajax.reload();
@@ -422,9 +445,9 @@ const Form = (() => {
 	return {
 		validation: handleValidation,
 		emptyData: handleRunEmpty,
-		dataColletion: handleDataColletion,
+		dataCollection: handleDataCollection,
 		getData: handleGetFormData,
-		postData: handlePostRequest,
+		sendData: handleSendData,
 		deleteData: handleDeleteData,
 	};
 })();

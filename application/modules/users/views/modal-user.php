@@ -60,8 +60,7 @@
           <div class="form-group row">
             <label for="password" class="col-sm-2 col-form-label">Password</label>
             <div class="col-sm-8">
-              <input id="password" type="password" name="password" placeholder="Enter password" class="form-control" data-target="alertPassword" />
-              <p class="form-alert" id="alertPassword" data-req="Password is required." data-invalid="Password must be at least 5 characters."></p>
+              <input id="password" type="password" name="password" placeholder="Enter password" class="form-control" />
             </div>
           </div>
 

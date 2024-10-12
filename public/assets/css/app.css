@@ -35148,7 +35148,7 @@ div#DataTables_Table_0_wrapper.dataTables_wrapper.container-fluid.dt-bootstrap4.
   padding: 0 !important;
 }
 
-div#DataTables_Table_0_wrapper .row {
+div#dataTable_wrapper .row {
   -webkit-box-align: center !important;
   -webkit-align-items: center !important;
      -moz-box-align: center !important;

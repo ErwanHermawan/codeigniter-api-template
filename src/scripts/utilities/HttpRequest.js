@@ -7,8 +7,12 @@
 import { Session, SweetAlert } from "utilities";
 
 const HttpRequest = (() => {
-	// handlePostRequest
-	const handlePostRequest = async (data, token, beforeSend = false) => {
+	// handleRequestMultipartData
+	const handleRequestMultipartData = async (
+		data,
+		token,
+		beforeSend = false
+	) => {
 		try {
 			const headers = {};
 
@@ -42,8 +46,8 @@ const HttpRequest = (() => {
 		}
 	};
 
-	// handlePostRequest
-	const handleGetRequest = async (data, token, beforeSend = false) => {
+	// handleRequestMultipartData
+	const handleRequestData = async (data, token, beforeSend = false) => {
 		try {
 			const headers = {};
 
@@ -54,8 +58,8 @@ const HttpRequest = (() => {
 
 			const response = await $.ajax({
 				url: data.url,
-				method: "GET",
-				dataType: "application/json",
+				method: data.method,
+				dataType: "JSON",
 				data: data.data,
 				headers: {
 					Authorization: `Bearer ${token}`, // Pass token in the headers
@@ -78,8 +82,8 @@ const HttpRequest = (() => {
 	};
 
 	return {
-		post: handlePostRequest,
-		get: handleGetRequest,
+		multipartData: handleRequestMultipartData,
+		data: handleRequestData,
 	};
 })();
 

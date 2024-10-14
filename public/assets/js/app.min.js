@@ -368,6 +368,9 @@ var ElementSelector = [{
     selectRequired: true
   }
 }, {
+  id: "status",
+  type: "checkbox"
+}, {
   id: "photo",
   type: "file"
 }];
@@ -417,24 +420,26 @@ var Users = function () {
         $("#" + v.id).blur();
       });
       if ($(".error").length === 0) {
-        handlePostData();
+        handleSaveData();
       }
       e.preventDefault();
     });
   };
-  var handlePostData = function handlePostData() {
+
+  // handleSaveData
+  var handleSaveData = function handleSaveData() {
     var dataCollection = _utilities.Form.dataCollection(ElementSelector, "multipart");
-    var userId = $("#user_id").val();
     var endpoint = _variables.API_URL.USERS;
-    var method = userId.length ? "PUT" : "POST";
     var requestData = {
       url: endpoint,
-      method: method,
+      method: "POST",
       data: dataCollection,
       elementSelector: ElementSelector
     };
     _utilities.Form.sendData(requestData, "multipart");
   };
+
+  // handleEditData
   var handleEditData = function handleEditData() {
     $("body").on("click", ".js-edit-data", function (e) {
       var _this = $(e.currentTarget);
@@ -455,13 +460,12 @@ var Users = function () {
     $("body").on("click", ".js-delete-data", function (e) {
       var _this = $(e.currentTarget);
       var userId = _this.attr("data-id");
-      var sendData = JSON.stringify({
-        user_id: userId
-      });
       var data = {
         url: _variables.API_URL.USERS,
         method: "DELETE",
-        data: sendData
+        data: {
+          user_id: userId
+        }
       };
       _utilities.Form.deleteData(data);
     });
@@ -655,14 +659,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+var _utilities = require("../utilities");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-/* ------------------------------------------------------------------------------
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); } /* ------------------------------------------------------------------------------
 @name: DataTable
---------------------------------------------------------------------------------- */
-
+--------------------------------------------------------------------------------- */ // --- utilities
 var DataTable = function () {
   var handleDataTable = function handleDataTable() {
     // data table defautl
@@ -730,34 +739,31 @@ var DataTable = function () {
     if (columnVisibleSetting) {
       table.columns(columnVisibleSetting.target).visible(columnVisibleSetting.visble);
     }
+
+    // --- Handle row selection and batch deletion
     var selectedRows = [];
-    var deleteButton = "<button type=\"button\" class=\"btn btn-danger waves-effect w-md waves-light\" id=\"deleteBatch\"><i class=\"mdi mdi-trash-can-outline\"></i> Delete Batch</button>";
+    var deleteButtonHtml = "<button type=\"button\" class=\"btn btn-danger waves-effect w-md waves-light\" id=\"deleteBatch\"><i class=\"mdi mdi-trash-can-outline\"></i> Delete Batch</button>";
+    var updateDeleteButton = function updateDeleteButton() {
+      if (selectedRows.length > 0) {
+        if (!$("body").find("#deleteBatch").length) {
+          $("body").find(".form-inline").prepend(deleteButtonHtml);
+        }
+      } else {
+        $("body").find(".form-inline").find("#deleteBatch").remove();
+      }
+    };
 
     // Handle 'Select All' checkbox
     $("#selectAll").on("click", function () {
       var rows = table.rows({
         search: "applied"
       }).nodes();
-      $('input[type="checkbox"]', rows).prop("checked", this.checked);
-
-      // Add or remove row IDs from selectedRows
-      if (this.checked) {
-        $('input[type="checkbox"]', rows).each(function () {
-          var id = $(this).val();
-          if (!selectedRows.includes(id)) {
-            selectedRows.push(id);
-          }
-        });
-        $("body").find(".form-inline").prepend(deleteButton);
-      } else {
-        $('input[type="checkbox"]', rows).each(function () {
-          var id = $(this).val();
-          selectedRows = selectedRows.filter(function (item) {
-            return item !== id;
-          });
-        });
-        $("body").find(".form-inline").find("#deleteBatch").remove();
-      }
+      var isChecked = this.checked;
+      $('input[type="checkbox"]', rows).prop("checked", isChecked);
+      selectedRows = isChecked ? _toConsumableArray(new Set(selectedRows.concat($(rows).map(function (i, el) {
+        return $(el).val();
+      }).get()))) : [];
+      updateDeleteButton();
     });
 
     // Handle individual row checkboxes
@@ -767,19 +773,27 @@ var DataTable = function () {
         if (!selectedRows.includes(id)) {
           selectedRows.push(id);
         }
-        $("body").find(".form-inline").prepend(deleteButton);
       } else {
         selectedRows = selectedRows.filter(function (item) {
           return item !== id;
         });
         $("#selectAll").prop("checked", false);
-        $("body").find(".form-inline").find("#deleteBatch").remove();
       }
+      updateDeleteButton();
     });
 
-    // Example of getting selected rows when form is submitted
-    $("body").find("#deleteBatch").on("click", function () {
-      console.log("Selected Row IDs:", selectedRows);
+    // Handle batch delete button click
+    $("body").on("click", "#deleteBatch", function () {
+      console.log(selectedRows);
+      var deleteData = {
+        url: dataSetting.url,
+        method: "DELETE",
+        data: {
+          user_id: selectedRows
+        }
+      };
+      _utilities.Form.deleteData(deleteData);
+      $("body").find(".form-inline").find("#deleteBatch").remove();
     });
   };
 
@@ -794,7 +808,7 @@ var DataTable = function () {
 }();
 var _default = exports["default"] = DataTable;
 
-},{}],11:[function(require,module,exports){
+},{"../utilities":31}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

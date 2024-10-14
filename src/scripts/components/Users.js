@@ -41,6 +41,10 @@ const ElementSelector = [
 		},
 	},
 	{
+		id: "status",
+		type: "checkbox",
+	},
+	{
 		id: "photo",
 		type: "file",
 	},
@@ -104,23 +108,20 @@ const Users = (() => {
 			});
 
 			if ($(".error").length === 0) {
-				handlePostData();
+				handleSaveData();
 			}
 			e.preventDefault();
 		});
 	};
 
-	const handlePostData = () => {
+	// handleSaveData
+	const handleSaveData = () => {
 		const dataCollection = Form.dataCollection(ElementSelector, "multipart");
-
-		const userId = $("#user_id").val();
-
 		const endpoint = API_URL.USERS;
-		const method = userId.length ? "PUT" : "POST";
 
 		const requestData = {
 			url: endpoint,
-			method: method,
+			method: "POST",
 			data: dataCollection,
 			elementSelector: ElementSelector,
 		};
@@ -128,6 +129,7 @@ const Users = (() => {
 		Form.sendData(requestData, "multipart");
 	};
 
+	// handleEditData
 	const handleEditData = () => {
 		$("body").on("click", ".js-edit-data", (e) => {
 			const _this = $(e.currentTarget);
@@ -149,12 +151,10 @@ const Users = (() => {
 			const _this = $(e.currentTarget);
 			const userId = _this.attr("data-id");
 
-			const sendData = JSON.stringify({ user_id: userId });
-
 			const data = {
 				url: API_URL.USERS,
 				method: "DELETE",
-				data: sendData,
+				data: { user_id: userId },
 			};
 
 			Form.deleteData(data);

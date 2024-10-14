@@ -4,20 +4,6 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="header-title mb-0">Data Users</h4>
         <div class="form-inline">
-          <!-- Date Range Input -->
-          <div class="form-group">
-            <input id="dateRange" class="form-control ml-2 js-date-range-picker" data-range="0" placeholder="Search data" />
-          </div>
-
-          <!-- Status Dropdown -->
-          <div class="form-group">
-            <select class="form-control ml-2" id="status">
-              <option value="Pendaftaran">Pilih Status</option>
-              <option value="All">Semua</option>
-              <option value="Pendaftaran">Menunggu Pemeriksaan</option>
-            </select>
-          </div>
-
           <!-- Search Input -->
           <div class="form-group">
             <input id="search" class="form-control ml-2" placeholder="Search data" />

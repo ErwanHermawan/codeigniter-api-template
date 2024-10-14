@@ -111,17 +111,11 @@ class Global_model extends CI_Model {
 	 * @param string|null $column The column to match.
 	 * @param mixed|null $value The value to match.
 	 * @param object|null $sort Sorting object with field and order.
-	 * @return object|null The matching row or null.
 	 */
-	public function get_single_data(string $table, ?string $column = null, ?string $value = null, $sort = null): ?object {
+	public function get_single_data(string $table, ?string $column = null, ?string $value = null): ?object {
 		// Apply where condition if column and value are provided
 		if ($column !== null && $value !== null) {
 			$this->db->where($column, $value);
-		}
-		
-		// Apply sorting if provided
-		if ($sort) {
-			$this->db->order_by($sort->field, $sort->order);
 		}
 		
 		// Execute the query
@@ -197,8 +191,11 @@ class Global_model extends CI_Model {
 	 * @return bool Deletion status.
 	 */
 	public function delete(string $table, ?string $column = null, $value = null): bool {
-		// Set the condition for deletion if column and value are provided
-		if ($column !== null && $value !== null) {
+		// Check if the value is an array for batch deletion
+		if (is_array($value)) {
+			$this->db->where_in($column, $value);
+		} elseif ($column !== null && $value !== null) {
+			// Single value deletion
 			$this->db->where($column, $value);
 		}
 
@@ -207,13 +204,14 @@ class Global_model extends CI_Model {
 
 		// Check if any rows were affected
 		if ($this->db->affected_rows() > 0) {
-			// Reset the AUTO_INCREMENT value
+			// Reset the AUTO_INCREMENT value only if rows were deleted
 			$this->db->query('ALTER TABLE ' . $table . ' AUTO_INCREMENT = 1');
 			return true;
 		}
 
-		return false; // Return false if no rows were affected
+		return false; // No rows were deleted
 	}
+
 	
 	/**
 	 * Get the maximum code from a specific column with optional where condition.

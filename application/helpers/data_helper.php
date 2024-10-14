@@ -3,47 +3,42 @@
 use chriskacerguis\RestServer\RestController;
 
 if (!function_exists('data_collection')) {
-	/**
-	* Collect data from $_POST based on the provided keys.
-	*
-	* @param array $data_collection Array of keys to collect from $_POST
-	* @return array The collected data
-	*/
-	function data_collection(array $data_collection) {
-		$ci =& get_instance();
-		$data = [];
+  /**
+   * Collect data from a REST request based on the provided keys.
+   *
+   * @param array $data_collection Array of keys to collect from the request
+   * @param string $method The request method (e.g., 'POST', 'PUT')
+   * @return array The collected data
+   */
+  function data_collection(array $data_collection, string $method = 'POST') {
+    $ci =& get_instance(); // Load the CI instance (for logging, etc.)
+    $data = [];
 
-		foreach ($data_collection as $key) {
-			if ($ci->post($key) !== null) {
-				$data[$key] = $ci->post($key); // Add only if the POST key exists
-			} else {
-				$data[$key] = null; // You may decide to set a default value like null
-			}
-		}
+    foreach ($data_collection as $key) {
+      $input = null;
 
-		return $data;
-	}
+      // Use RestController's methods to retrieve inputs based on method type
+      switch (strtoupper($method)) {
+        case 'POST':
+          $input = $ci->post($key); // Use post() for POST requests
+          break;
+        case 'PUT':
+          $input = $ci->put($key); // Use put() for PUT requests
+          break;
+        default:
+          // Log an error for unsupported methods
+          log_message('error', 'Unsupported request method: ' . $method);
+          break;
+      }
+
+      // Collect the input, use null if key doesn't exist
+      $data[$key] = $input ?? null;
+    }
+
+    return $data;
+  }
 }
 
-if (!function_exists('data_collection_put')) {
-	/**
-	* Collect data from PUT request based on the provided keys.
-	*
-	* @param array $data_collection_put Array of keys to collect from PUT request
-	* @return array The collected data
-	*/
-	function data_collection_put(array $data_collection_put) {
-		$ci =& get_instance();
-		$data = [];
-		
-		foreach ($data_collection_put as $key) {
-			// Use ternary operator for cleaner and more efficient key-value assignment
-			$data[$key] = !empty($ci->put($key)) ? $ci->put($key) : '';
-		}
-		
-		return $data;
-	}
-}
 
 if (!function_exists('data_collection_add')) {
 	/**
@@ -57,7 +52,7 @@ if (!function_exists('data_collection_add')) {
 		$ci =& get_instance();
 		
 		// Collect the data from the POST request
-		$data = data_collection($data_collection);
+		$data = data_collection($data_collection, 'POST');
 		
 		// Add metadata if the user_created flag is true
 		if ($user_created) {
@@ -77,16 +72,15 @@ if (!function_exists('data_collection_update')) {
 	/**
 	* Collect data for updating an entry, including update metadata.
 	*
-	* @param array $data_collection Array of keys to collect from PUT or POST request
-	* @param bool $api Indicates whether the data is coming from an API
+	* @param array $data_collection Array of keys to collect from PUT request
 	* @param bool $update Indicates whether to include update metadata
 	* @return array The collected data with update metadata if applicable
 	*/
-	function data_collection_update(array $data_collection, bool $api = false, bool $update = true) {
+	function data_collection_update(array $data_collection, bool $update = true) {
 		$ci =& get_instance();
 		
 		// Collect data based on whether it's from an API or not
-		$data = $api ? data_collection_put($data_collection) : data_collection($data_collection);
+		$data = data_collection($data_collection, "PUT");
 		
 		// Add update metadata if the update flag is true
 		if ($update) {

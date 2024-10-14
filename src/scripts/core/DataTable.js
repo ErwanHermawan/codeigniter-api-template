@@ -2,6 +2,9 @@
 @name: DataTable
 --------------------------------------------------------------------------------- */
 
+// --- utilities
+import { Form } from "utilities";
+
 const DataTable = (() => {
 	const handleDataTable = () => {
 		// data table defautl
@@ -47,7 +50,7 @@ const DataTable = (() => {
 			},
 		};
 
-		let table = $("." + dataSetting.selector).DataTable(tableSetting);
+		const table = $("." + dataSetting.selector).DataTable(tableSetting);
 
 		// --- filter setting
 		$.each(filterSetting, (i, v) => {
@@ -78,30 +81,39 @@ const DataTable = (() => {
 				.visible(columnVisibleSetting.visble);
 		}
 
-		var selectedRows = [];
-		const deleteButton = `<button type="button" class="btn btn-danger waves-effect w-md waves-light" id="deleteBatch"><i class="mdi mdi-trash-can-outline"></i> Delete Batch</button>`;
+		// --- Handle row selection and batch deletion
+		let selectedRows = [];
+		const deleteButtonHtml = `<button type="button" class="btn btn-danger waves-effect w-md waves-light" id="deleteBatch"><i class="mdi mdi-trash-can-outline"></i> Delete Batch</button>`;
+
+		const updateDeleteButton = () => {
+			if (selectedRows.length > 0) {
+				if (!$("body").find("#deleteBatch").length) {
+					$("body").find(".form-inline").prepend(deleteButtonHtml);
+				}
+			} else {
+				$("body").find(".form-inline").find("#deleteBatch").remove();
+			}
+		};
 
 		// Handle 'Select All' checkbox
 		$("#selectAll").on("click", function () {
-			var rows = table.rows({ search: "applied" }).nodes();
-			$('input[type="checkbox"]', rows).prop("checked", this.checked);
+			const rows = table.rows({ search: "applied" }).nodes();
+			const isChecked = this.checked;
+			$('input[type="checkbox"]', rows).prop("checked", isChecked);
 
-			// Add or remove row IDs from selectedRows
-			if (this.checked) {
-				$('input[type="checkbox"]', rows).each(function () {
-					var id = $(this).val();
-					if (!selectedRows.includes(id)) {
-						selectedRows.push(id);
-					}
-				});
-				$("body").find(".form-inline").prepend(deleteButton);
-			} else {
-				$('input[type="checkbox"]', rows).each(function () {
-					var id = $(this).val();
-					selectedRows = selectedRows.filter((item) => item !== id);
-				});
-				$("body").find(".form-inline").find("#deleteBatch").remove();
-			}
+			selectedRows = isChecked
+				? [
+						...new Set(
+							selectedRows.concat(
+								$(rows)
+									.map((i, el) => $(el).val())
+									.get()
+							)
+						),
+				  ]
+				: [];
+
+			updateDeleteButton();
 		});
 
 		// Handle individual row checkboxes
@@ -109,26 +121,32 @@ const DataTable = (() => {
 			"change",
 			'input[type="checkbox"]',
 			function () {
-				var id = $(this).val();
+				const id = $(this).val();
 				if (this.checked) {
 					if (!selectedRows.includes(id)) {
 						selectedRows.push(id);
 					}
-					$("body").find(".form-inline").prepend(deleteButton);
 				} else {
 					selectedRows = selectedRows.filter((item) => item !== id);
 					$("#selectAll").prop("checked", false);
-					$("body").find(".form-inline").find("#deleteBatch").remove();
 				}
+				updateDeleteButton();
 			}
 		);
 
-		// Example of getting selected rows when form is submitted
-		$("body")
-			.find("#deleteBatch")
-			.on("click", function () {
-				console.log("Selected Row IDs:", selectedRows);
-			});
+		// Handle batch delete button click
+		$("body").on("click", "#deleteBatch", function () {
+			console.log(selectedRows);
+
+			const deleteData = {
+				url: dataSetting.url,
+				method: "DELETE",
+				data: { user_id: selectedRows },
+			};
+
+			Form.deleteData(deleteData);
+			$("body").find(".form-inline").find("#deleteBatch").remove();
+		});
 	};
 
 	// -- init

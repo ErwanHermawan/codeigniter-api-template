@@ -18,8 +18,8 @@ if (!function_exists('check_auth')) {
 	}
 }
 
-if (!function_exists('jwt_authorization')) {
-  function jwt_authorization($token) {
+if (!function_exists('validate_token')) {
+  function validate_token($token) {
     // Validate Authorization token
     if (!$token) {
       return [
@@ -31,13 +31,6 @@ if (!function_exists('jwt_authorization')) {
     // Decode JWT and check if valid
     $decoded = decode_jwt($token);
 		
-    if (!$decoded) {
-      return [
-        'status' => false, 
-        'message' => 'Unauthorized access'
-      ];
-    }
-
     // Return decoded token on success
     return $decoded;
   }

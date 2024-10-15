@@ -16,7 +16,7 @@
 				height: "250px",
 
 				// width in pixels of the scrollbar and rail
-				size: "4px",
+				size: "7px",
 
 				// scrollbar color, accepts any hex/color value
 				color: "#000",
@@ -70,10 +70,10 @@
 				touchScrollStep: 200,
 
 				// sets border radius
-				borderRadius: "4px",
+				borderRadius: "7px",
 
 				// sets border radius of the rail
-				railBorderRadius: "4px",
+				railBorderRadius: "7px",
 			};
 
 			var o = $.extend(defaults, options);

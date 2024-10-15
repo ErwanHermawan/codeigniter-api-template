@@ -156,10 +156,10 @@ if (!function_exists('data_history')) {
 				$content .= '<li class="list-group-item">
                         <div class="user-list-item">
                             <div class="user-history">
-                              <img class="user-history__img" src="' . FILES . 'users/' . ($update_data->photo ? $update_data->photo . '?dt=' .date('ms') : 'default.jpg' ) .'" alt="'.$update_data->first_name . ' ' . $update_data->last_name.'" />
+                              <img class="user-history__img" src="' . FILES . 'users/' . ($update_data->photo ? $update_data->photo . '?dt=' .date('ms') : 'default.jpg' ) .'" alt="'.$update_data->name . '" />
                           </div>
                           <div class="user-desc">
-                              <span class="name">'.$update_data->first_name . ' ' . $update_data->last_name.'</span>
+                              <span class="name">'.$update_data->name . '</span>
                                 <span class="desc"><strong>Updated</strong> ' . date_format(date_create($data->updated_date), "F d, Y H:i") . '</span>
                             </div>
                         </div>
@@ -170,10 +170,10 @@ if (!function_exists('data_history')) {
 			$content .= '<li class="list-group-item">
                       <div class="user-list-item">
                           <div class="user-history">
-                              <img class="user-history__img" src="' . FILES . 'users/' . ($create_data->photo ? $create_data->photo . '?dt=' .date('ms') : 'default.jpg' ) . '" alt="'.$create_data->first_name . ' ' . $create_data->last_name.'" />
+                              <img class="user-history__img" src="' . FILES . 'users/' . ($create_data ? $create_data->photo . '?dt=' .date('ms') : 'default.jpg' ) . '" alt="'.$create_data->name . '" />
                           </div>
                           <div class="user-desc">
-                              <span class="name">'.$create_data->first_name . ' ' . $create_data->last_name.'</span>
+                              <span class="name">'. $create_data ?$create_data->name: null . '</span>
                               <span class="desc"><strong>Created</strong> ' . date_format(date_create($data->created_date), "F d, Y H:i") . '</span>
                           </div>
                       </div>

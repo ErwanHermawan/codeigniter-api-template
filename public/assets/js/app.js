@@ -707,6 +707,11 @@ var DataTable = function () {
           xhr.setRequestHeader("Authorization", "Bearer " + dataSetting.token);
         }
       },
+      error: function error(xhr, status, _error) {
+        // Show a popup when the API request fails
+        // showErrorPopup(xhr.status, error);
+        _utilities.SweetAlert.config(_error, "error");
+      },
       columnDefs: columnSetting
     }, "processing", true), "language", {
       processing: '<div class="loader"></div>'

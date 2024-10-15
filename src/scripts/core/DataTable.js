@@ -3,7 +3,7 @@
 --------------------------------------------------------------------------------- */
 
 // --- utilities
-import { Form } from "utilities";
+import { Form, SweetAlert } from "utilities";
 
 const DataTable = (() => {
 	const handleDataTable = () => {
@@ -42,6 +42,11 @@ const DataTable = (() => {
 					// Add Bearer token to the request headers
 					xhr.setRequestHeader("Authorization", "Bearer " + dataSetting.token);
 				},
+			},
+			error: function (xhr, status, error) {
+				// Show a popup when the API request fails
+				// showErrorPopup(xhr.status, error);
+				SweetAlert.config(error, "error");
 			},
 			columnDefs: columnSetting,
 			processing: true,

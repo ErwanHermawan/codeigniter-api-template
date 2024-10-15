@@ -17,7 +17,6 @@
 }
 
 .side-menu {
-	position: absolute !important;
 	padding-bottom: 64px !important;
 }
 
@@ -291,6 +290,65 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
 		margin-bottom: 10px;
 		max-height: 80px;
 	}
+}
+
+.account-profile {
+	position: relative;
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	overflow: hidden;
+	margin: 0 auto;
+	margin-bottom: 16px;
+	border: solid 1px #ebebeb;
+}
+
+.account-profile__img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.account-profile__input,
+.account-profile__icon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 4;
+	opacity: 0;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.account-profile__icon {
+	background-color: rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	visibility: hidden;
+	z-index: 3;
+	/* position: relative; */
+}
+
+.account-profile__icon .mdi {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 32px;
+	z-index: 5;
+	color: #fff;
+}
+
+.account-profile__input:hover + .account-profile__icon {
+	opacity: 1;
+	visibility: visible;
+}
+
+.img-thumb-preview {
+	max-height: 160px;
 }
 
 @include medium {

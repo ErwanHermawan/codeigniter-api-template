@@ -7,6 +7,7 @@ class Header extends MX_Controller {
   public function top($header_data = [], $header_view)
   {
     $data = [
+			'logo' => $header_data['logo'],
       'robots' => $header_data['robots'],
       'refresh' => $header_data['refresh'],
       'title' => $header_data['title'],

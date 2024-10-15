@@ -251,6 +251,26 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
 	line-height: 16px;
 }
 
+.dataTables_processing.card {
+	box-shadow: none !important;
+}
+
+/* HTML: <div class="loader"></div> */
+.table-loader {
+	width: 50px;
+	padding: 8px;
+	margin: 0 auto;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: $primary;
+	--_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+	-webkit-mask: var(--_m);
+	mask: var(--_m);
+	-webkit-mask-composite: source-out;
+	mask-composite: subtract;
+	animation: l3 1s infinite linear;
+}
+
 .modal-header .close {
 	color: #ff5b5b !important;
 	opacity: 1;
@@ -349,6 +369,12 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
 
 .img-thumb-preview {
 	max-height: 160px;
+}
+
+@keyframes l3 {
+	to {
+		transform: rotate(1turn);
+	}
 }
 
 @include medium {

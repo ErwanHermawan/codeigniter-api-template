@@ -9,7 +9,6 @@ import FilterData from "./FilterData";
 import EditTable from "./EditTable";
 import DeleteData from "./DeleteData";
 import SweetAlert from "./SweetAlert";
-// import FormatNumber from "./FormatNumber";
 import Validation from "./Validation";
 import Alert from "./Alert";
 import Scrolllable from "./Scrolllable";
@@ -23,7 +22,6 @@ export {
 	EditTable,
 	DeleteData,
 	SweetAlert,
-	// FormatNumber,
 	Validation,
 	Scrolllable,
 	Alert,

@@ -15,8 +15,8 @@
     <div class="topbar">
       <!-- LOGO -->
       <div class="topbar-left">
-        <a href="<?= base_url(''); ?>" class="dashboard-logo">
-          <img src="<?= ASSETS_IMG; ?>logo/logo.svg" alt="Company Logo" />
+        <a href="<?= base_url('dashboard'); ?>" class="dashboard-logo">
+          <img src="<?= $logo ?>" alt="Company Logo" />
         </a>
       </div>
 
@@ -61,7 +61,7 @@
           <!-- Master -->
           <ul>
             <li>
-              <a href="<?= base_url(''); ?>" class="waves-effect <?= ($navigation_menu == 'dashboard' ? 'active' : ''); ?>">
+              <a href="<?= base_url('dashboard'); ?>" class="waves-effect <?= ($navigation_menu == 'dashboard' ? 'active' : ''); ?>">
                 <i class="mdi mdi-view-dashboard"></i><span>Dashboard</span>
               </a>
             </li>

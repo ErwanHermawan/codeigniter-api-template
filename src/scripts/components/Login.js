@@ -56,7 +56,7 @@ const Login = (() => {
 		const password = $(".js-auth-login").find("#password").val();
 
 		const data = {
-			url: API_URL.login,
+			url: API_URL.LOGIN,
 			method: "POST",
 			data: { username: username, password: password },
 		};

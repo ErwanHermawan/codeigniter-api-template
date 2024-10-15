@@ -284,10 +284,7 @@ class Users extends RestController {
 
 		// Validate presence of user_id
 		if (empty($user_ids)) {
-			return $this->response([
-				'status' => false, 
-				'message' => 'User ID is required'
-			], RestController::HTTP_BAD_REQUEST);
+			api_print('User ID is required', false, 400);
 		}
 
 		// Ensure $user_ids is always an array for uniform handling

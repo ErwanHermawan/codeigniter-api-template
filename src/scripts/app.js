@@ -12,6 +12,7 @@ import {
 	Dropdown,
 	CheckBox,
 	DataTable,
+	Modal,
 } from "./core";
 
 // --- components
@@ -47,6 +48,7 @@ const App = (() => {
 			Dropdown.init();
 			CheckBox.init();
 			DataTable.init();
+			Modal.init();
 
 			// -- components initialization
 			Header.init();

@@ -137,8 +137,8 @@ const Form = (() => {
 		});
 	};
 
-	// handleRunEmpty
-	const handleRunEmpty = (selectorEl, isAlert) => {
+	// handleRunEmptyFormData
+	const handleRunEmptyFormData = (selectorEl, isAlert) => {
 		if (isAlert) {
 			swal({
 				title: "Apakah Anda yakin?",
@@ -444,7 +444,7 @@ const Form = (() => {
 
 	return {
 		validation: handleValidation,
-		emptyData: handleRunEmpty,
+		emptyData: handleRunEmptyFormData,
 		dataCollection: handleDataCollection,
 		getData: handleGetFormData,
 		sendData: handleSendData,

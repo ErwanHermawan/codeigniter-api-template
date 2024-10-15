@@ -9,7 +9,7 @@
 
       <!-- Modal Body -->
       <div class="modal-body">
-        <form class="form-horizontal">
+        <form autocomplete="off" class="form-horizontal">
           <!-- Hidden Account ID -->
           <input type="hidden" name="user_id" id="user_id" />
 

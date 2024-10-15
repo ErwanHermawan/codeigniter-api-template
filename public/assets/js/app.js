@@ -37,6 +37,7 @@ var App = function () {
       _core.Dropdown.init();
       _core.CheckBox.init();
       _core.DataTable.init();
+      _core.Modal.init();
 
       // -- components initialization
       _components.Header.init();
@@ -68,7 +69,7 @@ var App = function () {
 // ---  run main js
 App.init();
 
-},{"./components":6,"./core":19}],2:[function(require,module,exports){
+},{"./components":6,"./core":20}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -118,7 +119,7 @@ var Header = function () {
 }();
 var _default = exports["default"] = Header;
 
-},{"../utilities":31,"../variables":35}],3:[function(require,module,exports){
+},{"../utilities":32,"../variables":36}],3:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -178,7 +179,7 @@ var Login = function () {
             username = $(".js-auth-login").find("#username").val();
             password = $(".js-auth-login").find("#password").val();
             data = {
-              url: _variables.API_URL.login,
+              url: _variables.API_URL.LOGIN,
               method: "POST",
               data: {
                 username: username,
@@ -219,103 +220,114 @@ var Login = function () {
 }();
 var _default = exports["default"] = Login;
 
-},{"../utilities":31,"../variables":35}],4:[function(require,module,exports){
+},{"../utilities":32,"../variables":36}],4:[function(require,module,exports){
 "use strict";
 
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 var _variables = require("../variables");
 var _utilities = require("../utilities");
-/* ------------------------------------------------------------------------------
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; } /* ------------------------------------------------------------------------------
 @name: Meta
 @description: Meta
---------------------------------------------------------------------------------- */
-
-// --- variables
-
+--------------------------------------------------------------------------------- */ // --- variables
 // --- utilities
-
+// Form ElementSelector
+var ElementSelector = [{
+  id: "meta_id"
+}, {
+  id: "og_image",
+  type: "file"
+}, {
+  id: "twitter_image",
+  type: "file"
+}, {
+  id: "logo",
+  type: "file"
+}, {
+  id: "robots"
+}, {
+  id: "refresh"
+}, {
+  id: "title"
+}, {
+  id: "description"
+}, {
+  id: "keywords"
+}, {
+  id: "author"
+}, {
+  id: "copyright"
+}, {
+  id: "theme_color"
+}, {
+  id: "domain_name"
+}, {
+  id: "twitter_account"
+}, {
+  id: "facebook_account"
+}, {
+  id: "instagram_account"
+}, {
+  id: "email_account"
+}];
 var Meta = function () {
-  // handleClickMeta
-  var handleClickMeta = function handleClickMeta() {
+  // Handle Click Validation
+  var handleClickValidation = function handleClickValidation() {
     $('.js-form-meta button[type="submit"]').on("click", function (e) {
-      handleFormData();
       e.preventDefault();
-    });
-  };
-
-  // handleFormData
-  var handleFormData = function handleFormData() {
-    var _meta_id = $('input[name="meta_id"]').val();
-    var _og_image = $('input[name="og_image"]').prop("files")[0];
-    var _twitter_image = $('input[name="twitter_image"]').prop("files")[0];
-    var _robots = $('input[name="robots"]').val();
-    var _refresh = $('input[name="refresh"]').val();
-    var _title = $('input[name="title"]').val();
-    var _description = $('input[name="description"]').val();
-    var _keywords = $('input[name="keywords"]').val();
-    var _author = $('input[name="author"]').val();
-    var _copyright = $('input[name="copyright"]').val();
-    var _theme_color = $('input[name="theme_color"]').val();
-    var _domain_name = $('input[name="domain_name"]').val();
-    var _twitter_account = $('input[name="twitter_account"]').val();
-    var _facebook_account = $('input[name="facebook_account"]').val();
-    var _instagram_account = $('input[name="instagram_account"]').val();
-    var _email_account = $('input[name="email_account"]').val();
-    if (!_variables.WHITESPACE.test(_robots) && !_variables.WHITESPACE.test(_refresh) && !_variables.WHITESPACE.test(_title) && !_variables.WHITESPACE.test(_description) && !_variables.WHITESPACE.test(_keywords) && !_variables.WHITESPACE.test(_author) && !_variables.WHITESPACE.test(_copyright) && !_variables.WHITESPACE.test(_theme_color) && !_variables.WHITESPACE.test(_domain_name) && !_variables.WHITESPACE.test(_twitter_account) && !_variables.WHITESPACE.test(_facebook_account) && !_variables.WHITESPACE.test(_instagram_account) && !_variables.WHITESPACE.test(_email_account)) {
-      var form_data = new FormData();
-      form_data.append("meta_id", _meta_id);
-      form_data.append("og_image", _og_image);
-      form_data.append("twitter_image", _twitter_image);
-      form_data.append("robots", _robots);
-      form_data.append("refresh", _refresh);
-      form_data.append("title", _title);
-      form_data.append("description", _description);
-      form_data.append("keywords", _keywords);
-      form_data.append("author", _author);
-      form_data.append("copyright", _copyright);
-      form_data.append("theme_color", _theme_color);
-      form_data.append("domain_name", _domain_name);
-      form_data.append("twitter_account", _twitter_account);
-      form_data.append("facebook_account", _facebook_account);
-      form_data.append("instagram_account", _instagram_account);
-      form_data.append("email_account", _email_account);
-      handlePostData(form_data);
-    }
-  };
-
-  // handlePostData
-  var handlePostData = function handlePostData(form_data) {
-    $.ajax({
-      url: _variables.API_URL.meta,
-      method: "POST",
-      dataType: "JSON",
-      cache: false,
-      contentType: false,
-      processData: false,
-      data: form_data,
-      beforeSend: function beforeSend() {
-        var _loader = "<span class=\"custom-loader\"><span></span><span></span><span></span><span></span></span> Mengirim ....";
-        $(".js-form-meta button[type='submit']").html(_loader);
-      },
-      success: function success(response) {
-        var _status = response.status;
-        var _message = response.message;
-        if (_status) {
-          $(".js-form-meta button[type='submit']").html("<i class=\"mdi mdi-content-save-outline\"></i> Simpan");
-          _utilities.SweetAlert.config(_message);
-          setTimeout(function () {
-            location.href = _variables.WEB_URL.meta;
-          }, 800);
-        }
+      $.each(ElementSelector, function (i, v) {
+        $("#" + v.id).blur();
+      });
+      if ($(".error").length === 0) {
+        handleSaveData();
       }
     });
   };
+
+  // handleSaveData
+  var handleSaveData = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var dataCollection, endpoint, requestData, response;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            dataCollection = _utilities.Form.dataCollection(ElementSelector, "multipart");
+            endpoint = _variables.API_URL.META;
+            requestData = {
+              url: endpoint,
+              method: "POST",
+              data: dataCollection,
+              elementSelector: ElementSelector
+            };
+            _context.next = 5;
+            return _utilities.HttpRequest.multipartData(requestData);
+          case 5:
+            response = _context.sent;
+            if (response.status) {
+              _utilities.SweetAlert.config(response.message, "success");
+              location.href = _variables.WEB_URL.meta;
+            } else {
+              _utilities.SweetAlert.config(response.message, "error");
+            }
+          case 7:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }));
+    return function handleSaveData() {
+      return _ref.apply(this, arguments);
+    };
+  }();
   var init = function init() {
     if ($(".js-form-meta").length) {
-      handleClickMeta();
+      handleClickValidation();
     }
   };
   return {
@@ -324,7 +336,7 @@ var Meta = function () {
 }();
 var _default = exports["default"] = Meta;
 
-},{"../utilities":31,"../variables":35}],5:[function(require,module,exports){
+},{"../utilities":32,"../variables":36}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -487,7 +499,7 @@ var Users = function () {
 }();
 var _default = exports["default"] = Users;
 
-},{"../core":19,"../utilities":31,"../variables":35}],6:[function(require,module,exports){
+},{"../core":20,"../utilities":32,"../variables":36}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -615,7 +627,7 @@ var ChangeFormatNumber = function () {
 }();
 var _default = exports["default"] = ChangeFormatNumber;
 
-},{"../utilities":31}],9:[function(require,module,exports){
+},{"../utilities":32}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -660,16 +672,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var _utilities = require("../utilities");
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
-function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); } /* ------------------------------------------------------------------------------
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; } /* ------------------------------------------------------------------------------
 @name: DataTable
 --------------------------------------------------------------------------------- */ // --- utilities
 var DataTable = function () {
@@ -686,10 +694,8 @@ var DataTable = function () {
     var filterSetting = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
     var sortSetting = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
     var columnVisibleSetting = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
-    // --- datatable setting
-    var tableSetting = _defineProperty(_defineProperty({
-      // bLengthChange: false,
-      // ordering: false,
+    // --- DataTable settings
+    var tableSetting = {
       info: false,
       processing: true,
       serverSide: true,
@@ -697,50 +703,41 @@ var DataTable = function () {
       autoWidth: false,
       stateSave: true,
       dom: '<"float-right"f>rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
-      // buttons: ["copy", "excel", "pdf"],
       ajax: {
         url: dataSetting.url,
         type: dataSetting.method,
-        data: dataSetting ? dataSetting.data : "",
+        data: dataSetting.data,
         beforeSend: function beforeSend(xhr) {
-          // Add Bearer token to the request headers
           xhr.setRequestHeader("Authorization", "Bearer " + dataSetting.token);
+        },
+        error: function error(xhr, status, _error) {
+          console.log("Error: " + xhr.status + " - " + _error);
+          _utilities.SweetAlert.config(_error, "error");
         }
       },
-      error: function error(xhr, status, _error) {
-        // Show a popup when the API request fails
-        // showErrorPopup(xhr.status, error);
-        _utilities.SweetAlert.config(_error, "error");
-      },
-      columnDefs: columnSetting
-    }, "processing", true), "language", {
-      processing: '<div class="loader"></div>'
-    });
+      columnDefs: columnSetting,
+      language: {
+        processing: '<div class="table-loader"></div>'
+      }
+    };
     var table = $("." + dataSetting.selector).DataTable(tableSetting);
 
-    // --- filter setting
-    $.each(filterSetting, function (i, v) {
-      if (v.event === "change") {
-        $("#" + v.id).on(v.event, function (e) {
-          table.draw();
-        });
-      } else {
-        $("#" + v.id).on(v.event, function (e) {
-          var value = $(e.currentTarget).val();
-          table.search(value).draw();
-        });
-      }
+    // --- Filter setting
+    filterSetting.forEach(function (filter) {
+      $("#" + filter.id).on(filter.event, function (e) {
+        var value = $(e.currentTarget).val();
+        filter.event === "change" ? table.draw() : table.search(value).draw();
+      });
     });
 
-    // --- sort setting
+    // --- Sort setting
     if (sortSetting) {
       $("#" + sortSetting.id).on(sortSetting.event, function (e) {
-        var value = $(e.currentTarget).val();
-        table.page.len(value).draw();
+        table.page.len($(e.currentTarget).val()).draw();
       });
     }
 
-    // --- setting visibility column
+    // --- Column visibility
     if (columnVisibleSetting) {
       table.columns(columnVisibleSetting.target).visible(columnVisibleSetting.visble);
     }
@@ -750,11 +747,11 @@ var DataTable = function () {
     var deleteButtonHtml = "<button type=\"button\" class=\"btn btn-danger waves-effect w-md waves-light\" id=\"deleteBatch\"><i class=\"mdi mdi-trash-can-outline\"></i> Delete Batch</button>";
     var updateDeleteButton = function updateDeleteButton() {
       if (selectedRows.length > 0) {
-        if (!$("body").find("#deleteBatch").length) {
-          $("body").find(".form-inline").prepend(deleteButtonHtml);
+        if (!$("#deleteBatch").length) {
+          $(".form-inline").prepend(deleteButtonHtml);
         }
       } else {
-        $("body").find(".form-inline").find("#deleteBatch").remove();
+        $("#deleteBatch").remove();
       }
     };
 
@@ -798,7 +795,7 @@ var DataTable = function () {
         }
       };
       _utilities.Form.deleteData(deleteData);
-      $("body").find(".form-inline").find("#deleteBatch").remove();
+      $("#deleteBatch").remove();
     });
   };
 
@@ -813,7 +810,7 @@ var DataTable = function () {
 }();
 var _default = exports["default"] = DataTable;
 
-},{"../utilities":31}],11:[function(require,module,exports){
+},{"../utilities":32}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1030,7 +1027,74 @@ var EditableTables = function () {
 }();
 var _default = exports["default"] = EditableTables;
 
-},{"../variables":35}],15:[function(require,module,exports){
+},{"../variables":36}],15:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+/* ------------------------------------------------------------------------------
+@name: Modal
+@description: Modal Activate
+--------------------------------------------------------------------------------- */
+
+var Modal = function () {
+  // handleShowModal
+  var handleShowModal = function handleShowModal() {
+    $(".modal").on("shown.bs.modal", function () {
+      // Focus on the element with 'autofocus' attribute
+      $(this).find("[autofocus]").focus();
+
+      // Ensure the 'selected' attribute is properly set for options
+      $(this).find("[selected]").prop("selected", true);
+
+      // Find all input fields inside the modal and disable autocomplete
+      $(this).find("input, textarea, select").each(function () {
+        $(this).attr("autocomplete", "off");
+      });
+    });
+  };
+
+  // Handle Run DataTable
+  var handleDisableClick = function handleDisableClick() {
+    $(".disable-click-outside").modal({
+      show: false,
+      backdrop: "static",
+      keyboard: false
+    });
+  };
+  var handleMultipleModal = function handleMultipleModal() {
+    $('button[data-dismiss="modal"]').on("click", function (e) {
+      $("body").find(".modal-backdrop").removeAttr("style");
+    });
+    $(".js-multiple-modal").on("click", function (e) {
+      var _this = $(e.currentTarget);
+      var _target = _this.attr("data-target");
+      $(_target).attr("style", "z-index: 1052");
+      setTimeout(function () {
+        if ($("body").hasClass("modal-open")) {
+          $("body").find(".modal-backdrop").attr("style", "z-index: 1051");
+        }
+      }, 300);
+    });
+  };
+
+  // init
+  var init = function init() {
+    if ($(".disable-click-outside").length) {
+      handleDisableClick();
+    }
+    handleMultipleModal();
+    handleShowModal();
+  };
+  return {
+    init: init
+  };
+}();
+var _default = exports["default"] = Modal;
+
+},{}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1091,7 +1155,7 @@ var Password = function () {
 }();
 var _default = exports["default"] = Password;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1123,7 +1187,7 @@ var SelectInput = function () {
 }();
 var _default = exports["default"] = SelectInput;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1183,7 +1247,7 @@ var SweetAlert = function () {
 }();
 var _default = exports["default"] = SweetAlert;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1216,7 +1280,7 @@ var TemporaryAlert = function () {
 }();
 var _default = exports["default"] = TemporaryAlert;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1270,6 +1334,12 @@ Object.defineProperty(exports, "EditableTables", {
     return _EditableTables["default"];
   }
 });
+Object.defineProperty(exports, "Modal", {
+  enumerable: true,
+  get: function get() {
+    return _Modal["default"];
+  }
+});
 Object.defineProperty(exports, "Password", {
   enumerable: true,
   get: function get() {
@@ -1306,9 +1376,10 @@ var _ChangeFormatNumber = _interopRequireDefault(require("./ChangeFormatNumber")
 var _Password = _interopRequireDefault(require("./Password"));
 var _Dropdown = _interopRequireDefault(require("./Dropdown"));
 var _CheckBox = _interopRequireDefault(require("./CheckBox"));
+var _Modal = _interopRequireDefault(require("./Modal"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./BackButton":7,"./ChangeFormatNumber":8,"./CheckBox":9,"./DataTable":10,"./DatePickerInput":11,"./Dropdown":12,"./Dropify":13,"./EditableTables":14,"./Password":15,"./SelectInput":16,"./SweetAlert":17,"./TemporaryAlert":18}],20:[function(require,module,exports){
+},{"./BackButton":7,"./ChangeFormatNumber":8,"./CheckBox":9,"./DataTable":10,"./DatePickerInput":11,"./Dropdown":12,"./Dropify":13,"./EditableTables":14,"./Modal":15,"./Password":16,"./SelectInput":17,"./SweetAlert":18,"./TemporaryAlert":19}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1365,7 +1436,7 @@ var Alert = function () {
 }();
 var _default = exports["default"] = Alert;
 
-},{"./Scrolllable.js":27}],21:[function(require,module,exports){
+},{"./Scrolllable.js":28}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1428,7 +1499,7 @@ var Currency = function () {
 }();
 var _default = exports["default"] = Currency;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1576,7 +1647,7 @@ var DeleteData = function () {
 }();
 var _default = exports["default"] = DeleteData;
 
-},{"../components":6}],23:[function(require,module,exports){
+},{"../components":6}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1616,7 +1687,7 @@ var EditTable = function () {
 }();
 var _default = exports["default"] = EditTable;
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1914,7 +1985,7 @@ var FilterData = function () {
 }();
 var _default = exports["default"] = FilterData;
 
-},{"../components":6,"../variables":35}],25:[function(require,module,exports){
+},{"../components":6,"../variables":36}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2057,8 +2128,8 @@ var Form = function () {
     });
   };
 
-  // handleRunEmpty
-  var handleRunEmpty = function handleRunEmpty(selectorEl, isAlert) {
+  // handleRunEmptyFormData
+  var handleRunEmptyFormData = function handleRunEmptyFormData(selectorEl, isAlert) {
     if (isAlert) {
       swal({
         title: "Apakah Anda yakin?",
@@ -2385,7 +2456,7 @@ var Form = function () {
   };
   return {
     validation: handleValidation,
-    emptyData: handleRunEmpty,
+    emptyData: handleRunEmptyFormData,
     dataCollection: handleDataCollection,
     getData: handleGetFormData,
     sendData: handleSendData,
@@ -2394,7 +2465,7 @@ var Form = function () {
 }();
 var _default = exports["default"] = Form;
 
-},{"../variables":35,"./index":31}],26:[function(require,module,exports){
+},{"../variables":36,"./index":32}],27:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -2520,7 +2591,7 @@ var HttpRequest = function () {
 }();
 var _default = exports["default"] = HttpRequest;
 
-},{"./index":31}],27:[function(require,module,exports){
+},{"./index":32}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2566,7 +2637,7 @@ var Scrolllable = function () {
 }();
 var _default = exports["default"] = Scrolllable;
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2627,7 +2698,7 @@ var Session = function () {
 }();
 var _default = exports["default"] = Session;
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2677,7 +2748,7 @@ var SweetAlert = function () {
 }();
 var _default = exports["default"] = SweetAlert;
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2790,7 +2861,7 @@ var Validation = function () {
 }();
 var _default = exports["default"] = Validation;
 
-},{"../variables":35}],31:[function(require,module,exports){
+},{"../variables":36}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2875,7 +2946,7 @@ var _Form = _interopRequireDefault(require("./Form"));
 var _HttpRequest = _interopRequireDefault(require("./HttpRequest"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./Alert":20,"./Currency":21,"./DeleteData":22,"./EditTable":23,"./FilterData":24,"./Form":25,"./HttpRequest":26,"./Scrolllable":27,"./Session":28,"./SweetAlert":29,"./Validation":30}],32:[function(require,module,exports){
+},{"./Alert":21,"./Currency":22,"./DeleteData":23,"./EditTable":24,"./FilterData":25,"./Form":26,"./HttpRequest":27,"./Scrolllable":28,"./Session":29,"./SweetAlert":30,"./Validation":31}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2889,11 +2960,12 @@ exports.API_URL = void 0;
 
 var URL_BASE = "http://localhost/codeigniter-api-template/api/";
 var API_URL = exports.API_URL = {
-  login: "".concat(URL_BASE, "auth/login"),
-  USERS: "".concat(URL_BASE, "users")
+  LOGIN: "".concat(URL_BASE, "auth/login"),
+  USERS: "".concat(URL_BASE, "users"),
+  META: "".concat(URL_BASE, "meta")
 };
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2912,7 +2984,7 @@ var PHONE_NUMBER = exports.PHONE_NUMBER = /^(0|\+62)+([0-9]){4,16}/i;
 var FULL_NAME = exports.FULL_NAME = /^(?:[\u00c0-\u01ffa-zA-Z-\s\.']){3,}(?:[\u00c0-\u01ffa-zA-Z-\s\.']{3,})+$/i;
 var PERSON_NAME = exports.PERSON_NAME = /^[a-zA-Z][a-zA-Z\-' ]*[a-zA-Z ]$/i;
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2928,10 +3000,11 @@ var URL_BASE_WEB = $("base").attr("href");
 var WEB_URL = exports.WEB_URL = {
   base: "".concat(URL_BASE_WEB),
   dashboard: "".concat(URL_BASE_WEB, "dashboard"),
-  login: "".concat(URL_BASE_WEB, "login")
+  login: "".concat(URL_BASE_WEB, "login"),
+  meta: "".concat(URL_BASE_WEB, "meta")
 };
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2971,6 +3044,6 @@ Object.keys(_WEB_URL).forEach(function (key) {
   });
 });
 
-},{"./API_URL":32,"./Regex":33,"./WEB_URL":34}]},{},[1])
+},{"./API_URL":33,"./Regex":34,"./WEB_URL":35}]},{},[1])
 
 //# sourceMappingURL=maps/app.js.map

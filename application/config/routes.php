@@ -56,3 +56,6 @@ $route['translate_uri_dashes'] = FALSE;
 /* API ROUTES */
 // -- users
 $route['api/users'] = 'api/users';
+
+// -- meta
+$route['api/meta'] = 'api/meta';

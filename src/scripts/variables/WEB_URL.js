@@ -9,4 +9,5 @@ export const WEB_URL = {
 	base: `${URL_BASE_WEB}`,
 	dashboard: `${URL_BASE_WEB}dashboard`,
 	login: `${URL_BASE_WEB}login`,
+	meta: `${URL_BASE_WEB}meta`,
 };

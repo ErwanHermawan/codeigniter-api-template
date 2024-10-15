@@ -15,6 +15,8 @@ if (!function_exists('template_page')) {
     
     // Retrieve meta data from database
     $meta = $ci->db->where('meta_id', 1)->get('tb_meta')->row();
+		$timestamp = date('ms'); // Cache the timestamp once for the loop
+		$logo = $meta->logo ? FILES . 'meta/logo/' . $meta->logo . '?dt=' . $timestamp : ASSETS_IMG . 'logo/logo.svg' .'?dt=' . $timestamp;
 
     // Check if meta data is retrieved successfully
     if (!$meta) {
@@ -48,7 +50,8 @@ if (!function_exists('template_page')) {
         'theme_color' => $meta->theme_color,
         'domain_name' => $meta->domain_name,
         'twitter_account' => $meta->twitter_account,
-        'navigation_menu' => $navigation_menu
+        'navigation_menu' => $navigation_menu,
+        'logo' => $logo
       ],
       'footer' => [
         'page' => str_replace(' ', '-', strtolower($title)),

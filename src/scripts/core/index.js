@@ -15,6 +15,7 @@ import ChangeFormatNumber from "./ChangeFormatNumber";
 import Password from "./Password";
 import Dropdown from "./Dropdown";
 import CheckBox from "./CheckBox";
+import Modal from "./Modal";
 
 export {
 	DataTable,
@@ -29,4 +30,5 @@ export {
 	Password,
 	Dropdown,
 	CheckBox,
+	Modal,
 };

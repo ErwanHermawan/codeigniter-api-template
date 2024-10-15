@@ -79,6 +79,12 @@
             <label>Email Account</label>
             <p class="card-text"><?= $meta->email_account; ?></p>
           </div>
+					<div class="form-group col-lg-12">
+            <label>Logo Image</label>
+            <div class="img-preview d-block">
+              <img class="img-preview__el" src="<?= FILES . 'meta/logo/' . $meta->logo . '?dt=' .date('ms'); ?>" alt="<?= $meta->logo; ?>" />
+            </div>
+          </div>
           <div class="form-group col-lg-12">
             <label>Default OG Image</label>
             <div class="img-thumb">
@@ -92,7 +98,7 @@
             </div>
           </div>
           <div class="form-group col-lg-4">
-            <a href="<?= base_url('meta/edit/' . $meta->meta_id); ?>" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-icon btn-primary"><i class="mdi mdi-circle-edit-outline"></i> Edit</a>
+            <a href="<?= base_url('meta/edit/' . $meta->meta_id); ?>" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-icon btn-primary"><i class="mdi mdi-pencil-outline"></i> Edit</a>
           </div>
         </div>
       </div>

@@ -22,10 +22,8 @@ const DataTable = (() => {
 		sortSetting = null,
 		columnVisibleSetting = null
 	) => {
-		// --- datatable setting
+		// --- DataTable settings
 		const tableSetting = {
-			// bLengthChange: false,
-			// ordering: false,
 			info: false,
 			processing: true,
 			serverSide: true,
@@ -33,53 +31,44 @@ const DataTable = (() => {
 			autoWidth: false,
 			stateSave: true,
 			dom: '<"float-right"f>rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
-			// buttons: ["copy", "excel", "pdf"],
+
 			ajax: {
 				url: dataSetting.url,
 				type: dataSetting.method,
-				data: dataSetting ? dataSetting.data : "",
+				data: dataSetting.data,
 				beforeSend: function (xhr) {
-					// Add Bearer token to the request headers
 					xhr.setRequestHeader("Authorization", "Bearer " + dataSetting.token);
 				},
+				error: function (xhr, status, error) {
+					console.log("Error: " + xhr.status + " - " + error);
+					SweetAlert.config(error, "error");
+				},
 			},
-			error: function (xhr, status, error) {
-				// Show a popup when the API request fails
-				// showErrorPopup(xhr.status, error);
-				SweetAlert.config(error, "error");
-			},
+
 			columnDefs: columnSetting,
-			processing: true,
 			language: {
-				processing: '<div class="loader"></div>',
+				processing: '<div class="table-loader"></div>',
 			},
 		};
 
 		const table = $("." + dataSetting.selector).DataTable(tableSetting);
 
-		// --- filter setting
-		$.each(filterSetting, (i, v) => {
-			if (v.event === "change") {
-				$("#" + v.id).on(v.event, (e) => {
-					table.draw();
-				});
-			} else {
-				$("#" + v.id).on(v.event, (e) => {
-					let value = $(e.currentTarget).val();
-					table.search(value).draw();
-				});
-			}
+		// --- Filter setting
+		filterSetting.forEach((filter) => {
+			$("#" + filter.id).on(filter.event, function (e) {
+				let value = $(e.currentTarget).val();
+				filter.event === "change" ? table.draw() : table.search(value).draw();
+			});
 		});
 
-		// --- sort setting
+		// --- Sort setting
 		if (sortSetting) {
-			$("#" + sortSetting.id).on(sortSetting.event, (e) => {
-				let value = $(e.currentTarget).val();
-				table.page.len(value).draw();
+			$("#" + sortSetting.id).on(sortSetting.event, function (e) {
+				table.page.len($(e.currentTarget).val()).draw();
 			});
 		}
 
-		// --- setting visibility column
+		// --- Column visibility
 		if (columnVisibleSetting) {
 			table
 				.columns(columnVisibleSetting.target)
@@ -92,11 +81,11 @@ const DataTable = (() => {
 
 		const updateDeleteButton = () => {
 			if (selectedRows.length > 0) {
-				if (!$("body").find("#deleteBatch").length) {
-					$("body").find(".form-inline").prepend(deleteButtonHtml);
+				if (!$("#deleteBatch").length) {
+					$(".form-inline").prepend(deleteButtonHtml);
 				}
 			} else {
-				$("body").find(".form-inline").find("#deleteBatch").remove();
+				$("#deleteBatch").remove();
 			}
 		};
 
@@ -142,15 +131,13 @@ const DataTable = (() => {
 		// Handle batch delete button click
 		$("body").on("click", "#deleteBatch", function () {
 			console.log(selectedRows);
-
 			const deleteData = {
 				url: dataSetting.url,
 				method: "DELETE",
 				data: { user_id: selectedRows },
 			};
-
 			Form.deleteData(deleteData);
-			$("body").find(".form-inline").find("#deleteBatch").remove();
+			$("#deleteBatch").remove();
 		});
 	};
 

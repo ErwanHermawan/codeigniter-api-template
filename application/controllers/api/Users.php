@@ -16,13 +16,8 @@ class Users extends RestController {
 		$token = $this->input->get_request_header('Authorization');
 		$id = $this->get('user_id');
 		
-		if (!$token) {
-			return $this->response(['status' => false, 'message' => 'Authorization token is missing'], RestController::HTTP_UNAUTHORIZED);
-		}
-		
-		// Decode JWT token
-		$decoded = decode_jwt($token);
-		if (!$decoded) {
+		// Validate Authorization token
+		if (!validate_token($token)) {
 			return $this->response(['status' => false, 'message' => 'Unauthorized access'], RestController::HTTP_UNAUTHORIZED);
 		}
 		
@@ -71,8 +66,9 @@ class Users extends RestController {
 			$o_data[] = [
 				render_checkbox($val['user_id']),
 				render_image($path),
-				$val['name'] ?? '',
-				$val['username'] ?? '',
+				$val['name'] ?? '-',
+				$val['username'] ?? '-',
+				$val['email'] ?? '-',
 				$role,
 				render_active_status($val['status']),
 				render_action_button($val['user_id'], ['edit', 'delete'])
@@ -113,6 +109,8 @@ class Users extends RestController {
 		$row['photo'] = $user_photo;
 		$row['name'] = $data->name;
 		$row['username'] = $data->username;
+		$row['email'] = $data->email;
+		$row['phone'] = $data->phone;
 		$row['role'] = $data->role;
 		$row['status'] = $data->status;
 		$o_data = $row;
@@ -174,7 +172,7 @@ class Users extends RestController {
 		}
 
 		// Collect input data
-		$data_collection = ['name', 'username', 'role', 'status'];
+		$data_collection = ['name', 'username', 'email', 'phone', 'role', 'status'];
 		$data = data_collection_add($data_collection);
 
 		// Add password to the collected data
@@ -254,7 +252,7 @@ class Users extends RestController {
 		}
 
 		// Collect input data
-		$data_collection = ['name', 'username', 'role', 'status'];
+		$data_collection = ['name', 'username', 'email', 'phone', 'role', 'status'];
 		$data = data_collection($data_collection);
 
 		// Hash password if provided

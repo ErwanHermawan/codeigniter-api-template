@@ -16,7 +16,7 @@ import {
 } from "./core";
 
 // --- components
-import { Header, Login, Users, Meta } from "./components";
+import { Header, Login, Users, Meta, Profile } from "./components";
 
 // --- App
 const App = (() => {
@@ -55,6 +55,7 @@ const App = (() => {
 			Login.init();
 			Users.init();
 			Meta.init();
+			Profile.init();
 		})(jQuery);
 	};
 

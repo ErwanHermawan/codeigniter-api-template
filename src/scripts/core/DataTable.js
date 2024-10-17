@@ -31,7 +31,6 @@ const DataTable = (() => {
 			autoWidth: false,
 			stateSave: true,
 			dom: '<"float-right"f>rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
-
 			ajax: {
 				url: dataSetting.url,
 				type: dataSetting.method,

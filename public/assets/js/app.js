@@ -44,6 +44,7 @@ var App = function () {
       _components.Login.init();
       _components.Users.init();
       _components.Meta.init();
+      _components.Profile.init();
     })(jQuery);
   };
 
@@ -69,7 +70,7 @@ var App = function () {
 // ---  run main js
 App.init();
 
-},{"./components":6,"./core":20}],2:[function(require,module,exports){
+},{"./components":7,"./core":21}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -119,7 +120,7 @@ var Header = function () {
 }();
 var _default = exports["default"] = Header;
 
-},{"../utilities":32,"../variables":36}],3:[function(require,module,exports){
+},{"../utilities":33,"../variables":37}],3:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -220,7 +221,7 @@ var Login = function () {
 }();
 var _default = exports["default"] = Login;
 
-},{"../utilities":32,"../variables":36}],4:[function(require,module,exports){
+},{"../utilities":33,"../variables":37}],4:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -336,7 +337,166 @@ var Meta = function () {
 }();
 var _default = exports["default"] = Meta;
 
-},{"../utilities":32,"../variables":36}],5:[function(require,module,exports){
+},{"../utilities":33,"../variables":37}],5:[function(require,module,exports){
+"use strict";
+
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _variables = require("../variables");
+var _utilities = require("../utilities");
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; } /* ------------------------------------------------------------------------------
+@name: Users
+@description: Users
+--------------------------------------------------------------------------------- */ // --- variables
+// --- utilities
+var userData = JSON.parse(_utilities.Session.get("userData"));
+
+// Form ElementSelector
+var ElementSelector = [{
+  id: "user_id"
+}, {
+  id: "name",
+  validation: {
+    required: true
+  }
+}, {
+  id: "username",
+  validation: {
+    required: true
+  }
+}, {
+  id: "email",
+  validation: {
+    required: true,
+    email: true
+  }
+}, {
+  id: "phone",
+  validation: {
+    required: true,
+    phone: true
+  }
+}];
+var ElementEvents = ["input", "blur"];
+var Profile = function () {
+  // handleGetData
+  var handleGetData = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var userData, userId, token, data, response, _data;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            userData = JSON.parse(_utilities.Session.get("userData"));
+            userId = userData.user_id;
+            token = userData.token;
+            data = {
+              url: _variables.API_URL.PROFILE,
+              method: "GET",
+              data: {
+                user_id: userId
+              }
+            };
+            _context.next = 6;
+            return _utilities.HttpRequest.data(data, token);
+          case 6:
+            response = _context.sent;
+            _data = response.data;
+            if (response.status) {
+              $(".account-profile__img").attr({
+                src: _data.photo,
+                alt: _data.name
+              });
+              $(".js-profile-name").text("".concat(_data.name));
+              $(".js-profile-username").text("".concat(_data.username));
+              $(".js-profile-email").text("".concat(_data.email));
+              $(".js-profile-phone").text("".concat(_data.phone));
+              $(".js-profile-role").text("".concat(_data.role));
+              $(".js-profile-cd").text("".concat(_data.created_date));
+              $("#user_id").val("".concat(_data.user_id));
+              $("#name").val("".concat(_data.name));
+              $("#username").val("".concat(_data.username));
+              $("#email").val("".concat(_data.email));
+              $("#phone").val("".concat(_data.phone));
+              $(".js-profile-page").find(".skeleton-text").removeClass("skeleton");
+            }
+          case 9:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }));
+    return function handleGetData() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  // handleChangeProfile
+  var handleChangeProfile = function handleChangeProfile() {
+    $(".js-change-profile .account-profile__input").on("change", function (e) {
+      $(".account-profile__img").attr("src", window.URL.createObjectURL(e.currentTarget.files[0]));
+    });
+  };
+
+  // Handle Run Validation
+  var handleRunValidation = function handleRunValidation() {
+    _utilities.Form.validation(ElementEvents, ElementSelector);
+  };
+
+  // Handle Click Validation
+  var handleClickValidation = function handleClickValidation() {
+    $('button[type="submit"]').on("click", function (e) {
+      $.each(ElementSelector, function (i, v) {
+        $("#" + v.id).blur();
+      });
+      if ($(".error").length === 0) {
+        handleSaveData();
+      }
+      e.preventDefault();
+    });
+  };
+
+  // handleSaveData
+  var handleSaveData = function handleSaveData() {
+    var dataCollection = _utilities.Form.dataCollection(ElementSelector);
+    var endpoint = _variables.API_URL.PROFILE;
+    var requestData = {
+      url: endpoint,
+      method: "PUT",
+      data: dataCollection,
+      elementSelector: ElementSelector
+    };
+    _utilities.Form.sendData(requestData);
+  };
+
+  // handleEmptyInput
+  var handleEmptyInput = function handleEmptyInput() {
+    $('button[data-dismiss="modal"]').on("click", function (e) {
+      _utilities.Form.emptyData(ElementSelector);
+    });
+  };
+
+  // init
+  var init = function init() {
+    if ($(".js-profile-page").length) {
+      handleGetData();
+      handleRunValidation();
+      handleClickValidation();
+      handleEmptyInput();
+      handleChangeProfile();
+    }
+  };
+  return {
+    init: init
+  };
+}();
+var _default = exports["default"] = Profile;
+
+},{"../utilities":33,"../variables":37}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -375,6 +535,14 @@ var ElementSelector = [{
     required: true
   }
 }, {
+  id: "email",
+  validation: {
+    required: true
+  }
+}, {
+  id: "phone",
+  phone: true
+}, {
   id: "role",
   validation: {
     selectRequired: true
@@ -397,7 +565,7 @@ var Users = function () {
       token: userData.token
     };
     var columnSetting = [{
-      targets: [5, 6],
+      targets: [6, 7],
       className: "text-center"
     }, {
       targets: 0,
@@ -483,6 +651,13 @@ var Users = function () {
     });
   };
 
+  // handleEmptyInput
+  var handleEmptyInput = function handleEmptyInput() {
+    $('button[data-dismiss="modal"]').on("click", function (e) {
+      _utilities.Form.emptyData(ElementSelector);
+    });
+  };
+
   // init
   var init = function init() {
     if ($(".js-data-users").length) {
@@ -491,6 +666,7 @@ var Users = function () {
       handleClickValidation();
       handleEditData();
       handleDeleteData();
+      handleEmptyInput();
     }
   };
   return {
@@ -499,7 +675,7 @@ var Users = function () {
 }();
 var _default = exports["default"] = Users;
 
-},{"../core":20,"../utilities":32,"../variables":36}],6:[function(require,module,exports){
+},{"../core":21,"../utilities":33,"../variables":37}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -523,6 +699,12 @@ Object.defineProperty(exports, "Meta", {
     return _Meta["default"];
   }
 });
+Object.defineProperty(exports, "Profile", {
+  enumerable: true,
+  get: function get() {
+    return _Profile["default"];
+  }
+});
 Object.defineProperty(exports, "Users", {
   enumerable: true,
   get: function get() {
@@ -533,9 +715,10 @@ var _Header = _interopRequireDefault(require("./Header.js"));
 var _Login = _interopRequireDefault(require("./Login.js"));
 var _Users = _interopRequireDefault(require("./Users.js"));
 var _Meta = _interopRequireDefault(require("./Meta.js"));
+var _Profile = _interopRequireDefault(require("./Profile.js"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./Header.js":2,"./Login.js":3,"./Meta.js":4,"./Users.js":5}],7:[function(require,module,exports){
+},{"./Header.js":2,"./Login.js":3,"./Meta.js":4,"./Profile.js":5,"./Users.js":6}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -571,7 +754,7 @@ var BackButton = function () {
 }();
 var _default = exports["default"] = BackButton;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -627,7 +810,7 @@ var ChangeFormatNumber = function () {
 }();
 var _default = exports["default"] = ChangeFormatNumber;
 
-},{"../utilities":32}],9:[function(require,module,exports){
+},{"../utilities":33}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -664,7 +847,7 @@ var CheckBox = function () {
 }();
 var _default = exports["default"] = CheckBox;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -810,7 +993,7 @@ var DataTable = function () {
 }();
 var _default = exports["default"] = DataTable;
 
-},{"../utilities":32}],11:[function(require,module,exports){
+},{"../utilities":33}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -874,7 +1057,7 @@ var DatePickerInput = function () {
 }();
 var _default = exports["default"] = DatePickerInput;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -936,7 +1119,7 @@ var Dropdown = function () {
 }();
 var _default = exports["default"] = Dropdown;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -974,7 +1157,7 @@ var Dropify = function () {
 }();
 var _default = exports["default"] = Dropify;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1027,7 +1210,7 @@ var EditableTables = function () {
 }();
 var _default = exports["default"] = EditableTables;
 
-},{"../variables":36}],15:[function(require,module,exports){
+},{"../variables":37}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1094,7 +1277,7 @@ var Modal = function () {
 }();
 var _default = exports["default"] = Modal;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1155,7 +1338,7 @@ var Password = function () {
 }();
 var _default = exports["default"] = Password;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1187,7 +1370,7 @@ var SelectInput = function () {
 }();
 var _default = exports["default"] = SelectInput;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1247,7 +1430,7 @@ var SweetAlert = function () {
 }();
 var _default = exports["default"] = SweetAlert;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1280,7 +1463,7 @@ var TemporaryAlert = function () {
 }();
 var _default = exports["default"] = TemporaryAlert;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1379,7 +1562,7 @@ var _CheckBox = _interopRequireDefault(require("./CheckBox"));
 var _Modal = _interopRequireDefault(require("./Modal"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./BackButton":7,"./ChangeFormatNumber":8,"./CheckBox":9,"./DataTable":10,"./DatePickerInput":11,"./Dropdown":12,"./Dropify":13,"./EditableTables":14,"./Modal":15,"./Password":16,"./SelectInput":17,"./SweetAlert":18,"./TemporaryAlert":19}],21:[function(require,module,exports){
+},{"./BackButton":8,"./ChangeFormatNumber":9,"./CheckBox":10,"./DataTable":11,"./DatePickerInput":12,"./Dropdown":13,"./Dropify":14,"./EditableTables":15,"./Modal":16,"./Password":17,"./SelectInput":18,"./SweetAlert":19,"./TemporaryAlert":20}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1436,7 +1619,7 @@ var Alert = function () {
 }();
 var _default = exports["default"] = Alert;
 
-},{"./Scrolllable.js":28}],22:[function(require,module,exports){
+},{"./Scrolllable.js":29}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1499,7 +1682,7 @@ var Currency = function () {
 }();
 var _default = exports["default"] = Currency;
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1647,7 +1830,7 @@ var DeleteData = function () {
 }();
 var _default = exports["default"] = DeleteData;
 
-},{"../components":6}],24:[function(require,module,exports){
+},{"../components":7}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1687,7 +1870,7 @@ var EditTable = function () {
 }();
 var _default = exports["default"] = EditTable;
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1985,7 +2168,7 @@ var FilterData = function () {
 }();
 var _default = exports["default"] = FilterData;
 
-},{"../components":6,"../variables":36}],26:[function(require,module,exports){
+},{"../components":7,"../variables":37}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2465,7 +2648,7 @@ var Form = function () {
 }();
 var _default = exports["default"] = Form;
 
-},{"../variables":36,"./index":32}],27:[function(require,module,exports){
+},{"../variables":37,"./index":33}],28:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -2591,7 +2774,7 @@ var HttpRequest = function () {
 }();
 var _default = exports["default"] = HttpRequest;
 
-},{"./index":32}],28:[function(require,module,exports){
+},{"./index":33}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2637,7 +2820,7 @@ var Scrolllable = function () {
 }();
 var _default = exports["default"] = Scrolllable;
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2698,7 +2881,7 @@ var Session = function () {
 }();
 var _default = exports["default"] = Session;
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2748,7 +2931,7 @@ var SweetAlert = function () {
 }();
 var _default = exports["default"] = SweetAlert;
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2861,7 +3044,7 @@ var Validation = function () {
 }();
 var _default = exports["default"] = Validation;
 
-},{"../variables":36}],32:[function(require,module,exports){
+},{"../variables":37}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2946,7 +3129,7 @@ var _Form = _interopRequireDefault(require("./Form"));
 var _HttpRequest = _interopRequireDefault(require("./HttpRequest"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./Alert":21,"./Currency":22,"./DeleteData":23,"./EditTable":24,"./FilterData":25,"./Form":26,"./HttpRequest":27,"./Scrolllable":28,"./Session":29,"./SweetAlert":30,"./Validation":31}],33:[function(require,module,exports){
+},{"./Alert":22,"./Currency":23,"./DeleteData":24,"./EditTable":25,"./FilterData":26,"./Form":27,"./HttpRequest":28,"./Scrolllable":29,"./Session":30,"./SweetAlert":31,"./Validation":32}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2962,10 +3145,11 @@ var URL_BASE = "http://localhost/codeigniter-api-template/api/";
 var API_URL = exports.API_URL = {
   LOGIN: "".concat(URL_BASE, "auth/login"),
   USERS: "".concat(URL_BASE, "users"),
-  META: "".concat(URL_BASE, "meta")
+  META: "".concat(URL_BASE, "meta"),
+  PROFILE: "".concat(URL_BASE, "profile")
 };
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2984,7 +3168,7 @@ var PHONE_NUMBER = exports.PHONE_NUMBER = /^(0|\+62)+([0-9]){4,16}/i;
 var FULL_NAME = exports.FULL_NAME = /^(?:[\u00c0-\u01ffa-zA-Z-\s\.']){3,}(?:[\u00c0-\u01ffa-zA-Z-\s\.']{3,})+$/i;
 var PERSON_NAME = exports.PERSON_NAME = /^[a-zA-Z][a-zA-Z\-' ]*[a-zA-Z ]$/i;
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3004,7 +3188,7 @@ var WEB_URL = exports.WEB_URL = {
   meta: "".concat(URL_BASE_WEB, "meta")
 };
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3044,6 +3228,6 @@ Object.keys(_WEB_URL).forEach(function (key) {
   });
 });
 
-},{"./API_URL":33,"./Regex":34,"./WEB_URL":35}]},{},[1])
+},{"./API_URL":34,"./Regex":35,"./WEB_URL":36}]},{},[1])
 
 //# sourceMappingURL=maps/app.js.map

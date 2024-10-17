@@ -35,6 +35,16 @@ const ElementSelector = [
 		},
 	},
 	{
+		id: "email",
+		validation: {
+			required: true,
+		},
+	},
+	{
+		id: "phone",
+		phone: true,
+	},
+	{
 		id: "role",
 		validation: {
 			selectRequired: true,
@@ -63,7 +73,7 @@ const Users = (() => {
 
 		const columnSetting = [
 			{
-				targets: [5, 6],
+				targets: [6, 7],
 				className: "text-center",
 			},
 			{
@@ -161,6 +171,13 @@ const Users = (() => {
 		});
 	};
 
+	// handleEmptyInput
+	const handleEmptyInput = () => {
+		$('button[data-dismiss="modal"]').on("click", (e) => {
+			Form.emptyData(ElementSelector);
+		});
+	};
+
 	// init
 	const init = () => {
 		if ($(".js-data-users").length) {
@@ -169,6 +186,7 @@ const Users = (() => {
 			handleClickValidation();
 			handleEditData();
 			handleDeleteData();
+			handleEmptyInput();
 		}
 	};
 

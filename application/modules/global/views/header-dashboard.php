@@ -121,14 +121,19 @@
           <!-- Settings -->
           <ul>
             <li class="text-muted menu-title">Pengaturan</li>
+            <li>
+              <a href="<?= base_url('profile'); ?>" class="waves-effect <?= ($navigation_menu == 'profile' ? 'active' : ''); ?>">
+                <i class="mdi mdi-account-circle"></i><span>Profile</span>
+              </a>
+            </li>
 						 <li>
               <a href="<?= base_url('users'); ?>" class="waves-effect <?= ($navigation_menu == 'users' ? 'active' : ''); ?>">
                 <i class="mdi mdi-account-box"></i><span>Users</span>
               </a>
             </li>
-            <li>
-              <a href="<?= base_url('profile'); ?>" class="waves-effect <?= ($navigation_menu == 'profile' ? 'active' : ''); ?>">
-                <i class="mdi mdi-account-circle"></i><span>Profile</span>
+						<li>
+              <a href="<?= base_url('users/log'); ?>" class="waves-effect <?= ($navigation_menu == 'userslog' ? 'active' : ''); ?>">
+                <i class="mdi mdi-account-clock"></i><span>User Logs</span>
               </a>
             </li>
 						<li>

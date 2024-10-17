@@ -9,4 +9,5 @@ export const API_URL = {
 	LOGIN: `${URL_BASE}auth/login`,
 	USERS: `${URL_BASE}users`,
 	META: `${URL_BASE}meta`,
+	PROFILE: `${URL_BASE}profile`,
 };

@@ -35,6 +35,7 @@
                 <th width="80">Photo</th>
                 <th>Full Name</th>
                 <th>Username</th>
+                <th>Email</th>
                 <th>Role</th>
                 <th class="text-center" width="60">Status</th>
                 <th class="text-center" width="80">Action</th>

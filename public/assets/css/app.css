@@ -36992,6 +36992,65 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
             transform: rotate(1turn);
   }
 }
+.skeleton {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background-color: #ddd;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  background-color: #ededed;
+  background: -webkit-linear-gradient(350deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 60%) #ededed;
+  background: -moz-linear-gradient(350deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 60%) #ededed;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 60%) #ededed;
+  background-size: 200% 100%;
+  background-position-x: 180%;
+  -webkit-animation: 1s loading ease-in-out infinite;
+     -moz-animation: 1s loading ease-in-out infinite;
+          animation: 1s loading ease-in-out infinite;
+}
+
+@-webkit-keyframes loading {
+  to {
+    background-position-x: -20%;
+  }
+}
+
+@-moz-keyframes loading {
+  to {
+    background-position-x: -20%;
+  }
+}
+
+@keyframes loading {
+  to {
+    background-position-x: -20%;
+  }
+}
+.skeleton-text {
+  width: 100%;
+  height: 1.8rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
 @media only screen and (max-width: 991.98px) {
   #wrapper.enlarged .topbar .topbar-left,
   .topbar .topbar-left {

@@ -43,6 +43,7 @@ var App = function () {
       _components.Header.init();
       _components.Login.init();
       _components.Users.init();
+      _components.UserLogs.init();
       _components.Meta.init();
       _components.Profile.init();
     })(jQuery);
@@ -70,7 +71,7 @@ var App = function () {
 // ---  run main js
 App.init();
 
-},{"./components":7,"./core":21}],2:[function(require,module,exports){
+},{"./components":8,"./core":22}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -120,7 +121,7 @@ var Header = function () {
 }();
 var _default = exports["default"] = Header;
 
-},{"../utilities":33,"../variables":37}],3:[function(require,module,exports){
+},{"../utilities":34,"../variables":38}],3:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -221,7 +222,7 @@ var Login = function () {
 }();
 var _default = exports["default"] = Login;
 
-},{"../utilities":33,"../variables":37}],4:[function(require,module,exports){
+},{"../utilities":34,"../variables":38}],4:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -337,7 +338,7 @@ var Meta = function () {
 }();
 var _default = exports["default"] = Meta;
 
-},{"../utilities":33,"../variables":37}],5:[function(require,module,exports){
+},{"../utilities":34,"../variables":38}],5:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -496,7 +497,57 @@ var Profile = function () {
 }();
 var _default = exports["default"] = Profile;
 
-},{"../utilities":33,"../variables":37}],6:[function(require,module,exports){
+},{"../utilities":34,"../variables":38}],6:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _variables = require("../variables");
+var _utilities = require("../utilities");
+var _core = require("../core");
+/* ------------------------------------------------------------------------------
+@name: Users
+@description: Users
+--------------------------------------------------------------------------------- */
+
+// --- variables
+
+// --- utilities
+
+// --- core
+
+var userData = JSON.parse(_utilities.Session.get("userData"));
+var UserLogs = function () {
+  // Handle Run DataTable
+  var handleRunDataTable = function handleRunDataTable() {
+    var dataSetting = {
+      selector: "js-data-user-logs",
+      url: _variables.API_URL.USER_LOGS,
+      method: "GET",
+      token: userData.token
+    };
+    var columnSetting = [{
+      targets: 0,
+      orderable: false
+    }];
+    _core.DataTable.server(dataSetting, columnSetting);
+  };
+
+  // init
+  var init = function init() {
+    if ($(".js-data-user-logs").length) {
+      handleRunDataTable();
+    }
+  };
+  return {
+    init: init
+  };
+}();
+var _default = exports["default"] = UserLogs;
+
+},{"../core":22,"../utilities":34,"../variables":38}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -675,7 +726,7 @@ var Users = function () {
 }();
 var _default = exports["default"] = Users;
 
-},{"../core":21,"../utilities":33,"../variables":37}],7:[function(require,module,exports){
+},{"../core":22,"../utilities":34,"../variables":38}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -705,6 +756,12 @@ Object.defineProperty(exports, "Profile", {
     return _Profile["default"];
   }
 });
+Object.defineProperty(exports, "UserLogs", {
+  enumerable: true,
+  get: function get() {
+    return _UserLogs["default"];
+  }
+});
 Object.defineProperty(exports, "Users", {
   enumerable: true,
   get: function get() {
@@ -714,11 +771,12 @@ Object.defineProperty(exports, "Users", {
 var _Header = _interopRequireDefault(require("./Header.js"));
 var _Login = _interopRequireDefault(require("./Login.js"));
 var _Users = _interopRequireDefault(require("./Users.js"));
+var _UserLogs = _interopRequireDefault(require("./UserLogs.js"));
 var _Meta = _interopRequireDefault(require("./Meta.js"));
 var _Profile = _interopRequireDefault(require("./Profile.js"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./Header.js":2,"./Login.js":3,"./Meta.js":4,"./Profile.js":5,"./Users.js":6}],8:[function(require,module,exports){
+},{"./Header.js":2,"./Login.js":3,"./Meta.js":4,"./Profile.js":5,"./UserLogs.js":6,"./Users.js":7}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -754,7 +812,7 @@ var BackButton = function () {
 }();
 var _default = exports["default"] = BackButton;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -810,7 +868,7 @@ var ChangeFormatNumber = function () {
 }();
 var _default = exports["default"] = ChangeFormatNumber;
 
-},{"../utilities":33}],10:[function(require,module,exports){
+},{"../utilities":34}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -847,14 +905,18 @@ var CheckBox = function () {
 }();
 var _default = exports["default"] = CheckBox;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 var _utilities = require("../utilities");
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -942,13 +1004,22 @@ var DataTable = function () {
     $("#selectAll").on("click", function () {
       var rows = table.rows({
         search: "applied"
-      }).nodes();
-      var isChecked = this.checked;
+      }).nodes(); // Get the nodes of rows
+      var isChecked = this.checked; // Determine if "Select All" is checked or unchecked
+
+      // Set the checkboxes in the rows to the state of "Select All"
       $('input[type="checkbox"]', rows).prop("checked", isChecked);
-      selectedRows = isChecked ? _toConsumableArray(new Set(selectedRows.concat($(rows).map(function (i, el) {
-        return $(el).val();
-      }).get()))) : [];
-      updateDeleteButton();
+      if (isChecked) {
+        // If "Select All" is checked, add all row values to selectedRows
+        selectedRows = _toConsumableArray(new Set(selectedRows.concat($(rows).map(function (i, el) {
+          return $(el).find('input[type="checkbox"]').val();
+        }) // Ensure we're capturing checkbox values
+        .get())));
+      } else {
+        // If "Select All" is unchecked, clear selectedRows
+        selectedRows = [];
+      }
+      updateDeleteButton(); // Update the UI with the delete button if needed
     });
 
     // Handle individual row checkboxes
@@ -959,26 +1030,29 @@ var DataTable = function () {
           selectedRows.push(id);
         }
       } else {
+        // Remove the unchecked row from selectedRows
         selectedRows = selectedRows.filter(function (item) {
           return item !== id;
         });
+        // Uncheck the "Select All" checkbox if any row is unchecked
         $("#selectAll").prop("checked", false);
       }
-      updateDeleteButton();
+      updateDeleteButton(); // Update the state of the delete button
     });
 
     // Handle batch delete button click
     $("body").on("click", "#deleteBatch", function () {
-      console.log(selectedRows);
+      var propsDelete = $("." + dataSetting.selector).find(".js-select-all-checkbox").attr("data-delete");
+      var _data = _defineProperty({}, propsDelete, selectedRows);
       var deleteData = {
         url: dataSetting.url,
         method: "DELETE",
-        data: {
-          user_id: selectedRows
-        }
+        data: _data
       };
       _utilities.Form.deleteData(deleteData);
-      $("#deleteBatch").remove();
+      selectedRows = []; // Clear selectedRows after successful deletion
+      $("#selectAll").prop("checked", false); // Uncheck selectAll checkbox
+      $("#deleteBatch").remove(); // Remove the delete button
     });
   };
 
@@ -993,7 +1067,7 @@ var DataTable = function () {
 }();
 var _default = exports["default"] = DataTable;
 
-},{"../utilities":33}],12:[function(require,module,exports){
+},{"../utilities":34}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1057,7 +1131,7 @@ var DatePickerInput = function () {
 }();
 var _default = exports["default"] = DatePickerInput;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1119,7 +1193,7 @@ var Dropdown = function () {
 }();
 var _default = exports["default"] = Dropdown;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1157,7 +1231,7 @@ var Dropify = function () {
 }();
 var _default = exports["default"] = Dropify;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1210,7 +1284,7 @@ var EditableTables = function () {
 }();
 var _default = exports["default"] = EditableTables;
 
-},{"../variables":37}],16:[function(require,module,exports){
+},{"../variables":38}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1277,7 +1351,7 @@ var Modal = function () {
 }();
 var _default = exports["default"] = Modal;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1338,7 +1412,7 @@ var Password = function () {
 }();
 var _default = exports["default"] = Password;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1370,7 +1444,7 @@ var SelectInput = function () {
 }();
 var _default = exports["default"] = SelectInput;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1430,7 +1504,7 @@ var SweetAlert = function () {
 }();
 var _default = exports["default"] = SweetAlert;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1463,7 +1537,7 @@ var TemporaryAlert = function () {
 }();
 var _default = exports["default"] = TemporaryAlert;
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1562,7 +1636,7 @@ var _CheckBox = _interopRequireDefault(require("./CheckBox"));
 var _Modal = _interopRequireDefault(require("./Modal"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./BackButton":8,"./ChangeFormatNumber":9,"./CheckBox":10,"./DataTable":11,"./DatePickerInput":12,"./Dropdown":13,"./Dropify":14,"./EditableTables":15,"./Modal":16,"./Password":17,"./SelectInput":18,"./SweetAlert":19,"./TemporaryAlert":20}],22:[function(require,module,exports){
+},{"./BackButton":9,"./ChangeFormatNumber":10,"./CheckBox":11,"./DataTable":12,"./DatePickerInput":13,"./Dropdown":14,"./Dropify":15,"./EditableTables":16,"./Modal":17,"./Password":18,"./SelectInput":19,"./SweetAlert":20,"./TemporaryAlert":21}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1619,7 +1693,7 @@ var Alert = function () {
 }();
 var _default = exports["default"] = Alert;
 
-},{"./Scrolllable.js":29}],23:[function(require,module,exports){
+},{"./Scrolllable.js":30}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1682,7 +1756,7 @@ var Currency = function () {
 }();
 var _default = exports["default"] = Currency;
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1830,7 +1904,7 @@ var DeleteData = function () {
 }();
 var _default = exports["default"] = DeleteData;
 
-},{"../components":7}],25:[function(require,module,exports){
+},{"../components":8}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1870,7 +1944,7 @@ var EditTable = function () {
 }();
 var _default = exports["default"] = EditTable;
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2168,7 +2242,7 @@ var FilterData = function () {
 }();
 var _default = exports["default"] = FilterData;
 
-},{"../components":7,"../variables":37}],27:[function(require,module,exports){
+},{"../components":8,"../variables":38}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2648,7 +2722,7 @@ var Form = function () {
 }();
 var _default = exports["default"] = Form;
 
-},{"../variables":37,"./index":33}],28:[function(require,module,exports){
+},{"../variables":38,"./index":34}],29:[function(require,module,exports){
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -2774,7 +2848,7 @@ var HttpRequest = function () {
 }();
 var _default = exports["default"] = HttpRequest;
 
-},{"./index":33}],29:[function(require,module,exports){
+},{"./index":34}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2820,7 +2894,7 @@ var Scrolllable = function () {
 }();
 var _default = exports["default"] = Scrolllable;
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2881,7 +2955,7 @@ var Session = function () {
 }();
 var _default = exports["default"] = Session;
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2931,7 +3005,7 @@ var SweetAlert = function () {
 }();
 var _default = exports["default"] = SweetAlert;
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3044,7 +3118,7 @@ var Validation = function () {
 }();
 var _default = exports["default"] = Validation;
 
-},{"../variables":37}],33:[function(require,module,exports){
+},{"../variables":38}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3129,7 +3203,7 @@ var _Form = _interopRequireDefault(require("./Form"));
 var _HttpRequest = _interopRequireDefault(require("./HttpRequest"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 
-},{"./Alert":22,"./Currency":23,"./DeleteData":24,"./EditTable":25,"./FilterData":26,"./Form":27,"./HttpRequest":28,"./Scrolllable":29,"./Session":30,"./SweetAlert":31,"./Validation":32}],34:[function(require,module,exports){
+},{"./Alert":23,"./Currency":24,"./DeleteData":25,"./EditTable":26,"./FilterData":27,"./Form":28,"./HttpRequest":29,"./Scrolllable":30,"./Session":31,"./SweetAlert":32,"./Validation":33}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3145,11 +3219,12 @@ var URL_BASE = "http://localhost/codeigniter-api-template/api/";
 var API_URL = exports.API_URL = {
   LOGIN: "".concat(URL_BASE, "auth/login"),
   USERS: "".concat(URL_BASE, "users"),
+  USER_LOGS: "".concat(URL_BASE, "users/log"),
   META: "".concat(URL_BASE, "meta"),
   PROFILE: "".concat(URL_BASE, "profile")
 };
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3168,7 +3243,7 @@ var PHONE_NUMBER = exports.PHONE_NUMBER = /^(0|\+62)+([0-9]){4,16}/i;
 var FULL_NAME = exports.FULL_NAME = /^(?:[\u00c0-\u01ffa-zA-Z-\s\.']){3,}(?:[\u00c0-\u01ffa-zA-Z-\s\.']{3,})+$/i;
 var PERSON_NAME = exports.PERSON_NAME = /^[a-zA-Z][a-zA-Z\-' ]*[a-zA-Z ]$/i;
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3188,7 +3263,7 @@ var WEB_URL = exports.WEB_URL = {
   meta: "".concat(URL_BASE_WEB, "meta")
 };
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3228,6 +3303,6 @@ Object.keys(_WEB_URL).forEach(function (key) {
   });
 });
 
-},{"./API_URL":34,"./Regex":35,"./WEB_URL":36}]},{},[1])
+},{"./API_URL":35,"./Regex":36,"./WEB_URL":37}]},{},[1])
 
 //# sourceMappingURL=maps/app.js.map

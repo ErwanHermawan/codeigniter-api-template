@@ -90,23 +90,29 @@ const DataTable = (() => {
 
 		// Handle 'Select All' checkbox
 		$("#selectAll").on("click", function () {
-			const rows = table.rows({ search: "applied" }).nodes();
-			const isChecked = this.checked;
+			const rows = table.rows({ search: "applied" }).nodes(); // Get the nodes of rows
+			const isChecked = this.checked; // Determine if "Select All" is checked or unchecked
+
+			// Set the checkboxes in the rows to the state of "Select All"
 			$('input[type="checkbox"]', rows).prop("checked", isChecked);
 
-			selectedRows = isChecked
-				? [
-						...new Set(
-							selectedRows.concat(
-								$(rows)
-									.map((i, el) => $(el).val())
-									.get()
-							)
-						),
-				  ]
-				: [];
+			if (isChecked) {
+				// If "Select All" is checked, add all row values to selectedRows
+				selectedRows = [
+					...new Set(
+						selectedRows.concat(
+							$(rows)
+								.map((i, el) => $(el).find('input[type="checkbox"]').val()) // Ensure we're capturing checkbox values
+								.get()
+						)
+					),
+				];
+			} else {
+				// If "Select All" is unchecked, clear selectedRows
+				selectedRows = [];
+			}
 
-			updateDeleteButton();
+			updateDeleteButton(); // Update the UI with the delete button if needed
 		});
 
 		// Handle individual row checkboxes
@@ -115,28 +121,40 @@ const DataTable = (() => {
 			'input[type="checkbox"]',
 			function () {
 				const id = $(this).val();
+
 				if (this.checked) {
 					if (!selectedRows.includes(id)) {
 						selectedRows.push(id);
 					}
 				} else {
+					// Remove the unchecked row from selectedRows
 					selectedRows = selectedRows.filter((item) => item !== id);
+					// Uncheck the "Select All" checkbox if any row is unchecked
 					$("#selectAll").prop("checked", false);
 				}
-				updateDeleteButton();
+
+				updateDeleteButton(); // Update the state of the delete button
 			}
 		);
 
 		// Handle batch delete button click
 		$("body").on("click", "#deleteBatch", function () {
-			console.log(selectedRows);
+			const propsDelete = $("." + dataSetting.selector)
+				.find(".js-select-all-checkbox")
+				.attr("data-delete");
+
+			const _data = { [propsDelete]: selectedRows };
+
 			const deleteData = {
 				url: dataSetting.url,
 				method: "DELETE",
-				data: { user_id: selectedRows },
+				data: _data,
 			};
+
 			Form.deleteData(deleteData);
-			$("#deleteBatch").remove();
+			selectedRows = []; // Clear selectedRows after successful deletion
+			$("#selectAll").prop("checked", false); // Uncheck selectAll checkbox
+			$("#deleteBatch").remove(); // Remove the delete button
 		});
 	};
 

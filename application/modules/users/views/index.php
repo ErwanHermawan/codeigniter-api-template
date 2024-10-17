@@ -25,7 +25,7 @@
             <thead>
               <tr role="row">
                 <th class="text-center" width="20">
-                  <div class="custom-checkbox js-select-all-checkbox">
+                  <div class="custom-checkbox js-select-all-checkbox" data-delete="user_id">
                     <label class="custom-checkbox__wrapper">
                       <input type="checkbox" id="selectAll" />
                       <div class="custom-checkbox__checkmark"></div>

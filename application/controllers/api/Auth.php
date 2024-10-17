@@ -8,6 +8,7 @@ class Auth extends RestController {
 	public function __construct() {
 		parent::__construct();
 		cross_origin();
+		$this->load->library('input');
 	}
 	
 	// Endpoint for login to issue JWT

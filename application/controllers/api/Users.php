@@ -52,7 +52,7 @@ class Users extends RestController {
 			'sorting' => ['field' => 'user_id', 'order' => 'ASC'],
 			'output_data' => 'num_rows'
 		];
-		$total_row = $this->global_model->get_data($config);;
+		$total_row = $this->global_model->get_data($config);
 		$data = $this->get_user_data($limit, $start, $search);
 		
 		$o_data = [];
@@ -128,9 +128,8 @@ class Users extends RestController {
 		$config = [
 			'table' => 'tb_users',
 			'search' => ['name' => $search],
-			'sorting' => ['field' => 'user_id', 'order' => 'DESC'],
 			'limit' => $limit,
-			'ofset' => $start
+			'offset' => $start
 		];
 		
 		return $this->global_model->get_data($config);
@@ -315,4 +314,88 @@ class Users extends RestController {
 		return api_print('User(s) deleted successfully', true, 200);
 	}
 	
+	public function log_get() {
+		$token = $this->input->get_request_header('Authorization');
+		
+		// Validate Authorization token
+		if (!validate_token($token)) {
+			return $this->response(['status' => false, 'message' => 'Unauthorized access'], RestController::HTTP_UNAUTHORIZED);
+		}
+
+		// Sanitize and validate DataTable inputs
+		$draw = $this->get('draw');
+		$start = sanitize($this->get('start'));
+		$limit = sanitize($this->get('length'));
+		$search = htmlspecialchars($this->get('search')['value'] ?? '');
+
+		$config = [
+			'table' => 'vw_user_logs',
+			'search' => ['username' => $search],
+			'output_data' => 'num_rows'
+		];
+		$total_row = $this->global_model->get_data($config);
+
+		$config = [
+			'table' => 'vw_user_logs',
+			'search' => ['username' => $search],
+			'limit' => $limit,
+			'offset' => $start,
+			'sorting' => ['field' => 'log_id', 'order' => 'DESC'],
+		];
+		$data = $this->global_model->get_data($config);
+		
+		$o_data = [];
+		
+		foreach ($data as $val) {
+			$o_data[] = [
+				render_checkbox($val['log_id']),
+				$val['username'],
+				$val['date_log'],
+				$val['user_ip'],
+			];
+		}
+		
+		$result = [
+			"draw" => $draw,
+			"recordsTotal" => $total_row,
+			"recordsFiltered" => $total_row,
+			"data" => $o_data
+		];
+		
+		echo json_encode($result);
+		exit();
+	}
+
+	public function log_delete() {
+		// Get Authorization token from headers
+		$token = $this->input->get_request_header('Authorization');
+		$log_ids = $this->delete('log_id'); // Can be single or an array of IDs
+
+		// Validate Authorization token
+		if (!validate_token($token)) {
+			return $this->response(['status' => false, 'message' => 'Unauthorized access'], RestController::HTTP_UNAUTHORIZED);
+		}
+
+		// Validate presence of user_id
+		if (empty($log_ids)) {
+			api_print('User Log ID is required', false, 400);
+		}
+
+		// Ensure $log_ids is always an array for uniform handling
+		$log_ids = is_array($log_ids) ? $log_ids : [$log_ids];
+
+		// Iterate through each log_id and handle the deletion
+		foreach ($log_ids as $log_id) {
+			// Delete user from database
+			$result = $this->global_model->delete('tb_users_log', 'log_id', $log_id);
+
+			// Check for deletion failure
+			if (!$result) {
+				return api_print("Failed to delete user with ID: $log_id", false, 400);
+			}
+		}
+
+		// If all users are deleted successfully
+		return api_print('User(s) deleted successfully', true, 200);
+	}
 }

@@ -432,6 +432,7 @@ const Form = (() => {
 				const response = HttpRequest.data(data, token);
 				$(".modal").modal("hide");
 				SweetAlert.config("success", response.status);
+
 				$("#dataTable").DataTable().ajax.reload();
 			},
 			(dismiss) => {
